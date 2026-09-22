@@ -15,19 +15,25 @@ struct ReusableButton: View {
             Text(title)
                 .foregroundStyle(.textMain)
                 .font(.bodyBold)
-                .frame(width: 343, height: 60)
+                .frame(width: Constants.width, height: Constants.height)
                 .background(Color.button)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
         }
     }
 }
 
-#Preview {
+private enum Constants {
+    static let width: CGFloat = 343
+    static let height: CGFloat = 60
+    static let cornerRadius: CGFloat = 16
+}
+
+#Preview("light") {
     ReusableButton(title: "Оплатить", action: {})
         .preferredColorScheme(.light)
 }
 
-#Preview {
+#Preview("Dark") {
     ReusableButton(title: "Оплатить", action: {})
         .preferredColorScheme(.dark)
 }
