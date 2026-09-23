@@ -11,6 +11,13 @@ struct TabBarView: View {
                     )
                 }
                 .backgroundStyle(.background)
+            CartView(viewModel: CartViewModel(cartService: MockCartService(), onPayScreen: {}))
+                .tabItem {
+                    Label(NSLocalizedString("Tab.cart", comment: ""),
+                          image: .basket
+                    )
+                }
+                .backgroundStyle(.background)
         }
     }
 }
