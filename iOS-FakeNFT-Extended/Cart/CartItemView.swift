@@ -37,7 +37,7 @@ struct CartItemView: View {
                 info
                 priceInfo
             }
-            .padding([.top, .bottom], Constants.topBottomPadding)
+            .padding(.vertical, Constants.topBottomPadding)
             .padding(.leading, Constants.leadingPadding)
             
             Spacer()

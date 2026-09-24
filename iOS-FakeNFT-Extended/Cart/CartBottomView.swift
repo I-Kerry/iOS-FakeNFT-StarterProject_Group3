@@ -29,7 +29,6 @@ struct CartBottomView: View {
         .clipShape(UnevenRoundedRectangle(topLeadingRadius: Constants.trailingLeadingCornerRadius, topTrailingRadius: Constants.trailingLeadingCornerRadius))
     }
     
-    @ViewBuilder
     private var payButton: some View {
         Button(action: onPay) {
             Text(Constants.buttonTitle)

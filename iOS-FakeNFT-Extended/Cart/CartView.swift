@@ -58,6 +58,7 @@ struct CartView: View {
             }
             .blur(radius: nftToDelete != nil ? 10 : 0)
             .toolbar(nftToDelete != nil ? .hidden : .visible, for: .navigationBar)
+            .toolbar(nftToDelete != nil ? .hidden : .visible, for: .tabBar)
             .overlay {
                 if let nft = nftToDelete {
                     DeleteConfirmationView(
