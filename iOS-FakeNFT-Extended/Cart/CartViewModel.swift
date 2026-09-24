@@ -35,14 +35,8 @@ final class CartViewModel {
     var nfts: [Nft] = []
     var state: CartState = .idle
     var sortOption: SortOption {
-        get {
-            let raw = UserDefaults.standard.string(forKey: "cartSort") ?? "byName"
-            return SortOption(rawValue: raw) ?? .byName
-        }
-        
-        set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: "cartSort")
-        }
+        get { SortOption(rawValue: UserDefaultsService.shared.cartSort) ?? .byName }
+        set { UserDefaultsService.shared.cartSort = newValue.rawValue }
     }
     
     var totalPrice: Double {
