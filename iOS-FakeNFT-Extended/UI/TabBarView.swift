@@ -11,6 +11,11 @@ struct TabBarView: View {
                     )
                 }
                 .backgroundStyle(.background)
+            CartView(viewModel: CartViewModel(cartService: MockCartService(), onPayScreen: {}))
+                .tabItem {
+                    Label("Tab.catalog", image: .basket)
+                }
+                .backgroundStyle(.background)
         }
     }
 }
