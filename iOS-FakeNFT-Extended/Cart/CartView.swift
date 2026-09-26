@@ -12,6 +12,7 @@ struct CartView: View {
     @State private var viewModel: CartViewModel
     @State private var nftToDelete: Nft?
     @State private var showSortSheet = false
+    @State private var showCurrencyView = false
     
     init(viewModel: CartViewModel) {
         _viewModel = State(initialValue: viewModel)
@@ -42,8 +43,13 @@ struct CartView: View {
                         CartBottomView(
                             nftAmount: viewModel.nfts.count,
                             totalPrice: viewModel.totalPrice,
-                            onPay: { viewModel.onPayScreen() }
+                            onPay: { showCurrencyView = true }
                         )
+                        .navigationDestination(isPresented: $showCurrencyView) {
+                            CurrencyPaymentView(viewModel: CurrencyViewModel(service: viewModel.cartService, onCompletePayment: {
+                                showCurrencyView = true
+                            }))
+                        }
                     }
                 case .error(let error):
                     Text(error.localizedDescription)
@@ -113,7 +119,7 @@ private enum Constants {
 }
 
 #Preview("Items") {
-    let vm = CartViewModel(cartService: MockCartService(), onPayScreen: {})
+    let vm = CartViewModel(cartService: MockCartService())
     vm.state = .data
     vm.nfts = MockCartService.sampleNfts
     return CartView(viewModel: vm)

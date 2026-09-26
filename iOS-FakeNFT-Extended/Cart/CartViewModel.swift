@@ -31,7 +31,7 @@ enum SortOption: String {
 @Observable
 @MainActor
 final class CartViewModel {
-    private let cartService: CartService
+    let cartService: CartService
     var nfts: [Nft] = []
     var state: CartState = .idle
     var sortOption: SortOption {
@@ -43,11 +43,8 @@ final class CartViewModel {
         nfts.reduce(0) { $0 + $1.price }
     }
     
-    var onPayScreen: () -> Void = {}
-    
-    init(cartService: CartService, onPayScreen: @escaping () -> Void) {
+    init(cartService: CartService) {
         self.cartService = cartService
-        self.onPayScreen = onPayScreen
     }
     
     func loadCart() async {

@@ -11,7 +11,7 @@ struct TabBarView: View {
                     )
                 }
                 .backgroundStyle(.background)
-            CartView(viewModel: CartViewModel(cartService: MockCartService(), onPayScreen: {}))
+            CartView(viewModel: CartViewModel(cartService: MockCartService()))
                 .tabItem {
                     Label("Tab.catalog", image: .basket)
                 }
