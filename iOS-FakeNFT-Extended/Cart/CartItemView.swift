@@ -31,9 +31,9 @@ struct CartItemView: View {
                         .frame(width: Constants.imageSize, height: Constants.imageSize)
                         .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
                 }
-                    
             }
-            VStack(spacing: Constants.infoPriceSpacing) {
+            
+            VStack(alignment: .leading, spacing: Constants.infoPriceSpacing) {
                 info
                 priceInfo
             }

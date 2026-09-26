@@ -11,7 +11,7 @@ final class MockCurrencyService: CartService {
     var currencies: [Currency]
     var shouldThrow: Bool
     var payResult: Bool
-    
+
     init(
         currencies: [Currency] = MockCurrencyService.sampleCurrencies,
         shouldThrow: Bool = false,

@@ -10,8 +10,11 @@ import SwiftUI
 struct CurrencyItemView: View {
     private let currency: Currency
     
-    init(currency: Currency) {
+    var isSelected: Bool
+    
+    init(currency: Currency, isSelected: Bool) {
         self.currency = currency
+        self.isSelected = isSelected
     }
     
     var body: some View {
@@ -49,9 +52,13 @@ struct CurrencyItemView: View {
         .background(.graySecondaryBackground)
         .frame(width: 168, height: 46)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(isSelected ? .button : .clear, lineWidth: 1)
+        )
     }
 }
 
 #Preview {
-    CurrencyItemView(currency: Currency(id: "1", title: "MAIN", name: "USD", image: URL(string: "https://picsum.photos/400/400?random=2")!))
+    CurrencyItemView(currency: Currency(id: "1", title: "MAIN", name: "USD", image: URL(string: "https://picsum.photos/400/400?random=2")!), isSelected: true)
 }

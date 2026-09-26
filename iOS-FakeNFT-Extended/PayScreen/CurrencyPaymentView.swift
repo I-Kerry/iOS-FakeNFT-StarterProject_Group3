@@ -28,7 +28,10 @@ struct CurrencyPaymentView: View {
                 ScrollView {
                     LazyVGrid(columns: columns, alignment: .leading, spacing: 7) {
                         ForEach(viewModel.currencies) { currency in
-                            CurrencyItemView(currency: currency)
+                            CurrencyItemView(currency: currency, isSelected: viewModel.selectedCurrencyID == currency.id)
+                                .onTapGesture {
+                                    viewModel.selectedCurrencyID = currency.id
+                                }
                         }
                     }
                     .padding(16)
