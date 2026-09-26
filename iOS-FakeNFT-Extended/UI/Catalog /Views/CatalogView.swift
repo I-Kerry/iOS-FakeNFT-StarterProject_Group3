@@ -4,38 +4,48 @@ struct CatalogView: View {
 	@State private var viewModel = CatalogViewModel()
 	
 	var body: some View {
-		ZStack(alignment: .topTrailing) {
-			if viewModel.isLoading {
-				ProgressView()
-					.scaleEffect(1.5)
-					.frame(maxWidth: .infinity, maxHeight: .infinity)
-			} else {
-				ScrollView {
-					LazyVStack(spacing: 8) {
-						ForEach(viewModel.collections) { collection in
-							CatalogRowView(collection: collection)
+		NavigationStack {
+			ZStack {
+				if viewModel.isLoading {
+					ProgressView()
+						.scaleEffect(1.5)
+						.frame(maxWidth: .infinity, maxHeight: .infinity)
+				} else {
+					VStack(spacing: 0) {
+						HStack {
+							Spacer()
+							Button {
+								
+							} label: {
+								Image("sort_icon")
+									.resizable()
+									.aspectRatio(contentMode: .fit)
+									.frame(width: 21, height: 13)
+							}
+							.frame(width: 42, height: 42)
+							.foregroundColor(.primary)
 						}
+						.padding(.trailing, 9)
+						.padding(.top, 44)
+						.padding(.bottom, 20)
+						
+						ScrollView {
+							LazyVStack(spacing: 8) {
+								ForEach(viewModel.collections) { collection in
+									NavigationLink(destination: CollectionDetailView(collection: collection)) {
+										CatalogRowView(collection: collection)
+									}
+									.buttonStyle(PlainButtonStyle())
+								}
+							}
+							.padding(.horizontal, 16)
+							.padding(.bottom, 16)
+						}
+						.scrollIndicators(.hidden)
 					}
-					.padding(.top, 108)
-					.padding(.horizontal, 16)
-					.padding(.bottom, 16)
+					.ignoresSafeArea(edges: .top)
 				}
-				.scrollIndicators(.hidden)
-				.ignoresSafeArea(edges: .top)
 			}
-			
-			Button {
-				
-			} label: {
-				Image("sort_icon")
-					.resizable()
-					.aspectRatio(contentMode: .fit)
-					.frame(width: 21, height: 13)
-			}
-			.frame(width: 42, height: 42)
-			.foregroundColor(.primary)
-			.padding(.trailing, 9)
-			.padding(.top, 2)
 		}
 	}
 }
