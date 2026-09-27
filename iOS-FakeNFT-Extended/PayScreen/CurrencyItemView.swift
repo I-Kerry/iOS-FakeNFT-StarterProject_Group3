@@ -18,24 +18,24 @@ struct CurrencyItemView: View {
     }
     
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: Constants.hStackSpacing) {
             ZStack {
                 Color.iconBackground
-                    .frame(width: 36, height: 36)
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
+                    .frame(width: Constants.iconBackgroundFrame, height: Constants.iconBackgroundFrame)
+                    .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadiusSmall))
                 AsyncImage(url: currency.image) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: 31.5, height: 31.5)
+                            .frame(width: Constants.imageFrame, height: Constants.imageFrame)
                             .clipShape(Circle())
                     default:
                         EmptyView()
                     }
                 }
             }
-            VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: Constants.zeroSpacing) {
                 Group {
                     Text(currency.title)
                         .foregroundStyle(.button)
@@ -47,16 +47,30 @@ struct CurrencyItemView: View {
             Spacer()
             
         }
-        .padding(.leading, 12)
-        .padding(.vertical, 5)
+        .padding(.leading, Constants.leadingPadding)
+        .padding(.vertical, Constants.verticalPadding)
         .background(.graySecondaryBackground)
-        .frame(width: 168, height: 46)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .frame(width: Constants.itemViewWidth, height: Constants.itemViewHeight)
+        .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadiusBig))
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(isSelected ? .button : .clear, lineWidth: 1)
+            RoundedRectangle(cornerRadius: Constants.cornerRadiusBig)
+                .stroke(isSelected ? .button : .clear, lineWidth: Constants.strokeLineWidth)
         )
     }
+}
+
+private enum Constants {
+    static let hStackSpacing: CGFloat = 4
+    static let iconBackgroundFrame: CGFloat = 36
+    static let cornerRadiusSmall: CGFloat = 6
+    static let cornerRadiusBig: CGFloat = 12
+    static let imageFrame: CGFloat = 31.5
+    static let zeroSpacing: CGFloat = 0
+    static let leadingPadding: CGFloat = 12
+    static let verticalPadding: CGFloat = 8
+    static let itemViewWidth: CGFloat = 168
+    static let itemViewHeight: CGFloat = 46
+    static let strokeLineWidth: CGFloat = 1
 }
 
 #Preview {

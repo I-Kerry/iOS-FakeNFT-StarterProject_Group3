@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct CurrencyPaymentView: View {
-    @State private var  viewModel: CurrencyViewModel
+    
+    @State private var viewModel: CurrencyViewModel
+    @State private var showSuccess = false
     
     private let columns = [
-        GridItem(.flexible() ,spacing: 7),
-        GridItem(.flexible() ,spacing: 7)
+        GridItem(.flexible() ,spacing: Constants.columnSpacing),
+        GridItem(.flexible() ,spacing: Constants.columnSpacing)
     ]
     
     init(viewModel: CurrencyViewModel) {
@@ -26,7 +28,7 @@ struct CurrencyPaymentView: View {
                 EmptyView()
             case .data:
                 ScrollView {
-                    LazyVGrid(columns: columns, alignment: .leading, spacing: 7) {
+                    LazyVGrid(columns: columns, alignment: .leading, spacing: Constants.vGridSpacing) {
                         ForEach(viewModel.currencies) { currency in
                             CurrencyItemView(currency: currency, isSelected: viewModel.selectedCurrencyID == currency.id)
                                 .onTapGesture {
@@ -34,7 +36,7 @@ struct CurrencyPaymentView: View {
                                 }
                         }
                     }
-                    .padding(16)
+                    .padding(Constants.padding)
                 }
                 .safeAreaInset(edge: .bottom) {
                     AgreementView(onPay: { Task { await viewModel.pay() } })
@@ -47,9 +49,23 @@ struct CurrencyPaymentView: View {
         .task {
             await viewModel.loadCurrencies()
         }
-        .navigationTitle("Выберите способ оплаты")
+        .navigationTitle(Constants.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
+        .fullScreenCover(isPresented: $viewModel.didPaySuccessfully) {
+            PaymentSuccessView(backToCart: {
+                viewModel.didPaySuccessfully = false
+                viewModel.onCompletePayment()
+            })
+        }
     }
+}
+
+private enum Constants {
+    static let columnSpacing: CGFloat = 7
+    static let vGridSpacing: CGFloat = 7
+    static let padding: CGFloat = 16
+    
+    static let navigationTitle = "Выберите способ оплаты"
 }
 
 #Preview {

@@ -47,7 +47,8 @@ struct CartView: View {
                         )
                         .navigationDestination(isPresented: $showCurrencyView) {
                             CurrencyPaymentView(viewModel: CurrencyViewModel(service: viewModel.cartService, onCompletePayment: {
-                                showCurrencyView = true
+                                showCurrencyView = false
+                                viewModel.clearCart()
                             }))
                         }
                     }

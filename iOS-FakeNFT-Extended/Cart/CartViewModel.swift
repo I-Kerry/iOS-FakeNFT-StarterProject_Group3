@@ -78,4 +78,8 @@ final class CartViewModel {
             nfts.sort { $0.name < $1.name }
         }
     }
+    
+    func clearCart() {
+        nfts = []
+    }
 }
