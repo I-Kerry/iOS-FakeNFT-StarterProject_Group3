@@ -10,12 +10,6 @@ final class ProfileViewModel {
     var isLoading = false
     var error: Error?
 
-    var name = "Имя пользователя"
-    var description = "Описание профиля"
-    var website = "Сайт"
-    var nftCount = 112
-    var favoritesCount = 11
-
     init(profileService: ProfileService) {
         self.profileService = profileService
     }

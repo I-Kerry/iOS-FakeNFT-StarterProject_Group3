@@ -1,7 +1,9 @@
 import SwiftUI
+import Kingfisher
 
 struct ProfileView: View {
     @State private var viewModel: ProfileViewModel
+    @State private var isWebViewPresented = false
 
     init(viewModel: ProfileViewModel) {
         _viewModel = State(initialValue: viewModel)
@@ -9,12 +11,12 @@ struct ProfileView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-
+            
             HStack {
                 Spacer()
-
+                
                 Button {
-
+                    
                 } label: {
                     Image(systemName: "square.and.pencil")
                         .font(.system(size: 26))
@@ -23,53 +25,83 @@ struct ProfileView: View {
             }
             .padding(.horizontal, 16)
             .padding(.top, 2)
-
-
+            
+            
             HStack(spacing: 16) {
-                Circle()
-                    .fill(.gray.opacity(0.3))
+                KFImage(viewModel.profile?.avatar)
+                    .placeholder {
+                        Circle()
+                            .fill(.gray.opacity(0.3))
+                    }
+                    .resizable()
+                    .scaledToFill()
                     .frame(width: 70, height: 70)
-
-                Text(viewModel.name)
+                    .clipShape(Circle())
+                
+                Text(viewModel.profile?.name ?? "")
                     .font(Font(UIFont.headline3))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
-
+                
                 Spacer()
             }
             .padding(.horizontal, 16)
             .padding(.top, 20)
-
+            
             VStack(alignment: .leading, spacing: 8) {
-                Text(viewModel.description)            .font(Font(UIFont.caption2))
+                Text(viewModel.profile?.description ?? "")            .font(Font(UIFont.caption2))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
-
-                Text(viewModel.website)                   .font(Font(UIFont.caption1))
-                    .foregroundStyle(Color(uiColor: .blueUniversal))
+                
+                Button {
+                    isWebViewPresented = true
+                } label: {
+                    Text(viewModel.profile?.website.absoluteString ?? "")
+                        .font(Font(UIFont.caption1))
+                        .foregroundStyle(Color(uiColor: .blueUniversal))
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
             .padding(.top, 20)
-
-
+            
+            
             VStack(spacing: 0) {
                 ProfileNavigationRow(
                     title: "Мои NFT",
-                    count: viewModel.nftCount
+                    count: viewModel.profile?.nfts.count ?? 0
                 )
-
-
+                
+                
                 ProfileNavigationRow(
                     title: "Избранные NFT",
-                    count: viewModel.favoritesCount
+                    count: viewModel.profile?.likes.count ?? 0
                 )
             }
             .padding(.top, 40)
-
+            
             Spacer()
         }
         .background(.background)
         .task {
             await viewModel.loadProfile()
+        }
+        .sheet(isPresented: $isWebViewPresented) {
+            if let website = viewModel.profile?.website {
+                NavigationStack {
+                    WebView(url: website)
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                Button {
+                                    isWebViewPresented = false
+                                } label: {
+                                    Image(systemName: "chevron.left")
+                                        .foregroundStyle(Color(uiColor: .yaBlackLight))
+                                }
+                            }
+                        }
+                }
+            }
         }
     }
 }

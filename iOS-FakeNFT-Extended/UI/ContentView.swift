@@ -2,6 +2,12 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        TabBarView()
+        ProfileView(
+            viewModel: ProfileViewModel(
+                profileService: ProfileServiceImpl(
+                    networkClient: DefaultNetworkClient()
+                )
+            )
+        )
     }
 }
