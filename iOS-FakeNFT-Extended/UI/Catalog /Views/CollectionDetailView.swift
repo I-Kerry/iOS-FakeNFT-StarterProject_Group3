@@ -1,6 +1,11 @@
 import SwiftUI
 
 struct CollectionDetailView: View {
+	// MARK: - Constants
+	private enum AssetImages {
+		static let backButton = "chevron.backward"
+	}
+	
 	// MARK: - Properties
 	let collection: NFTCollection
 	@Environment(\.dismiss) private var dismiss
@@ -43,16 +48,16 @@ struct CollectionDetailView: View {
 			Button {
 				dismiss()
 			} label: {
-				Image(systemName: "chevron.backward")
+				Image(systemName: AssetImages.backButton)
 					.resizable()
 					.aspectRatio(contentMode: .fit)
 					.frame(width: 8.97, height: 15.59)
 					.font(.system(size: 24, weight: .medium))
 			}
 			.frame(width: 24, height: 24)
-			.foregroundColor(.primary)
+			.foregroundStyle(.primary)
 			.padding(.top, 55)
-			.padding(.leading, 9) // Исправлена опечатка из макета
+			.padding(.leading, 9)
 		}
 		.ignoresSafeArea(edges: .top)
 	}
@@ -62,23 +67,21 @@ struct CollectionDetailView: View {
 			Text(collection.name)
 				.font(.system(size: 22, weight: .bold))
 				.tracking(0.35)
-				.foregroundColor(.primary)
+				.foregroundStyle(.primary)
 				.padding(.horizontal, 16)
 				.padding(.top, 16)
 			
 			HStack(alignment: .firstTextBaseline, spacing: 4) {
-				Text(String(localized: "Автор коллекции:"))
+				Text("Автор коллекции:")
 					.font(.system(size: 13, weight: .regular))
 					.tracking(-0.08)
-					.foregroundColor(.primary)
-				
+					.foregroundStyle(.primary)
 				Button {
-					// Действие при клике на автора
 				} label: {
 					Text("John Doe")
 						.font(.system(size: 15, weight: .regular))
 						.tracking(-0.24)
-						.foregroundColor(.blue)
+						.foregroundStyle(.blue)
 				}
 			}
 			.padding(.horizontal, 16)
@@ -87,7 +90,7 @@ struct CollectionDetailView: View {
 			Text(collection.description)
 				.font(.system(size: 13, weight: .regular))
 				.tracking(-0.08)
-				.foregroundColor(.primary)
+				.foregroundStyle(.primary)
 				.lineSpacing(5)
 				.padding(.horizontal, 16)
 				.padding(.top, 8)
@@ -101,8 +104,7 @@ struct CollectionDetailView: View {
 			}
 		}
 		.padding(.horizontal, 16)
-		.padding(.top, 24)
-		.padding(.bottom, 24)
+		.padding(.vertical, 24)
 	}
 }
 

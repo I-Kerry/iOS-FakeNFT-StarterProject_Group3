@@ -30,7 +30,7 @@ struct NFTItemView: View {
 		ZStack(alignment: .topTrailing) {
 			Color.gray.opacity(0.3)
 				.frame(width: 108, height: 108)
-				.cornerRadius(12)
+				.clipShape(RoundedRectangle(cornerRadius: 12))
 			
 			Button {
 				isLiked.toggle()
@@ -65,14 +65,12 @@ struct NFTItemView: View {
 				Text("Archie")
 					.font(.system(size: 17, weight: .bold))
 					.tracking(0)
-					.foregroundColor(.primary)
-					.frame(height: 22)
+					.foregroundStyle(.primary)					.frame(height: 22)
 				
 				Text("1 ETH")
 					.font(.system(size: 10, weight: .medium))
 					.tracking(-0.24)
-					.foregroundColor(.primary)
-					.frame(height: 12)
+					.foregroundStyle(.primary)					.frame(height: 12)
 			}
 			
 			Spacer()
@@ -84,7 +82,7 @@ struct NFTItemView: View {
 					.resizable()
 					.aspectRatio(contentMode: .fit)
 					.frame(width: 19, height: 19)
-					.foregroundColor(.primary)
+					.foregroundStyle(.primary)
 			}
 			.frame(width: 40, height: 40)
 		}
