@@ -68,6 +68,9 @@ struct ProfileView: View {
             Spacer()
         }
         .background(.background)
+        .task {
+            await viewModel.loadProfile()
+        }
     }
 }
 

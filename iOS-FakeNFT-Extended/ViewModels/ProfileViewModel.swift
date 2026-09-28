@@ -19,4 +19,17 @@ final class ProfileViewModel {
     init(profileService: ProfileService) {
         self.profileService = profileService
     }
+    
+    func loadProfile() async {
+        isLoading = true
+        error = nil
+
+        do {
+            profile = try await profileService.loadProfile()
+        } catch {
+            self.error = error
+        }
+
+        isLoading = false
+    }
 }
