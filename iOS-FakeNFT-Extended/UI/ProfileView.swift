@@ -4,19 +4,22 @@ import Kingfisher
 struct ProfileView: View {
     @State private var viewModel: ProfileViewModel
     @State private var isWebViewPresented = false
-
+    @State private var isMyNFTPresented = false
+    @State private var isFavoritesNFTPresented = false
+    
     init(viewModel: ProfileViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
-
+    
     var body: some View {
         VStack(spacing: 0) {
             
             HStack {
                 Spacer()
                 
-                Button {
-                    
+                NavigationLink {
+                    EditProfileView()
+                        .toolbar(.hidden, for: .tabBar)
                 } label: {
                     Image(systemName: "square.and.pencil")
                         .font(.system(size: 26))
@@ -67,16 +70,26 @@ struct ProfileView: View {
             
             
             VStack(spacing: 0) {
-                ProfileNavigationRow(
-                    title: "Мои NFT",
-                    count: viewModel.profile?.nfts.count ?? 0
-                )
+                Button {
+                    isMyNFTPresented = true
+                } label: {
+                    ProfileNavigationRow(
+                        title: "Мои NFT",
+                        count: viewModel.profile?.nfts.count ?? 0
+                    )
+                }
+                .buttonStyle(.plain)
                 
                 
-                ProfileNavigationRow(
-                    title: "Избранные NFT",
-                    count: viewModel.profile?.likes.count ?? 0
-                )
+                Button {
+                    isFavoritesNFTPresented = true
+                } label: {
+                    ProfileNavigationRow(
+                        title: "Избранные NFT",
+                        count: viewModel.profile?.likes.count ?? 0
+                    )
+                }
+                .buttonStyle(.plain)
             }
             .padding(.top, 40)
             
@@ -103,21 +116,29 @@ struct ProfileView: View {
                 }
             }
         }
+        .navigationDestination(isPresented: $isMyNFTPresented) {
+            MyNFTView()
+                .toolbar(.hidden, for: .tabBar)
+        }
+        .navigationDestination(isPresented: $isFavoritesNFTPresented) {
+            FavoritesNFTView()
+                .toolbar(.hidden, for: .tabBar)
+        }
     }
 }
 
 private struct ProfileNavigationRow: View {
     let title: String
     let count: Int
-
+    
     var body: some View {
         HStack {
             Text("\(title) (\(count))")
                 .font(Font(UIFont.bodyBold))
                 .foregroundStyle(Color(uiColor: .yaBlackLight))
-
+            
             Spacer()
-
+            
             Image(systemName: "chevron.right")
                 .font(.system(size: 14, weight: .medium))
                 .foregroundStyle(Color(uiColor: .yaBlackLight))
