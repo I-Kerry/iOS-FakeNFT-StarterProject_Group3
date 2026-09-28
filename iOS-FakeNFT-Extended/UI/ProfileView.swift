@@ -94,8 +94,22 @@ struct ProfileView: View {
             .padding(.top, 40)
             
             Spacer()
-        }
-        .background(.background)
+            }
+            .background(.background)
+            .overlay {
+                if viewModel.isLoading {
+                    ProgressView()
+                        .scaleEffect(1.2)
+                }
+            }
+        
+            .alert("Ошибка", isPresented: .constant(viewModel.error != nil)) {
+                Button("OK") {
+                    viewModel.error = nil
+                }
+            } message: {
+                Text("Не удалось загрузить профиль")
+            }
         .task {
             await viewModel.loadProfile()
         }
