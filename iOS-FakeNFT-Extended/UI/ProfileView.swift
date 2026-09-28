@@ -1,13 +1,12 @@
-//
-//  ProfileView.swift
-//  iOS-FakeNFT-Extended
-//
-//  Created by Maria Reshetnikova on 28/09/2026.
-//
-
 import SwiftUI
 
 struct ProfileView: View {
+    @State private var viewModel: ProfileViewModel
+
+    init(viewModel: ProfileViewModel) {
+        _viewModel = State(initialValue: viewModel)
+    }
+
     var body: some View {
         VStack(spacing: 0) {
 
@@ -31,7 +30,7 @@ struct ProfileView: View {
                     .fill(.gray.opacity(0.3))
                     .frame(width: 70, height: 70)
 
-                Text("Имя пользователя")
+                Text(viewModel.name)
                     .font(Font(UIFont.headline3))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
 
@@ -41,12 +40,10 @@ struct ProfileView: View {
             .padding(.top, 20)
 
             VStack(alignment: .leading, spacing: 8) {
-                Text("Описание профиля")
-                    .font(Font(UIFont.caption2))
+                Text(viewModel.description)            .font(Font(UIFont.caption2))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
 
-                Text("Сайт")
-                    .font(Font(UIFont.caption1))
+                Text(viewModel.website)                   .font(Font(UIFont.caption1))
                     .foregroundStyle(Color(uiColor: .blueUniversal))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -57,13 +54,13 @@ struct ProfileView: View {
             VStack(spacing: 0) {
                 ProfileNavigationRow(
                     title: "Мои NFT",
-                    count: 112
+                    count: viewModel.nftCount
                 )
 
 
                 ProfileNavigationRow(
                     title: "Избранные NFT",
-                    count: 11
+                    count: viewModel.favoritesCount
                 )
             }
             .padding(.top, 40)
@@ -97,5 +94,11 @@ private struct ProfileNavigationRow: View {
 }
 
 #Preview {
-    ProfileView()
+    ProfileView(
+        viewModel: ProfileViewModel(
+            profileService: ProfileServiceImpl(
+                networkClient: DefaultNetworkClient()
+            )
+        )
+    )
 }
