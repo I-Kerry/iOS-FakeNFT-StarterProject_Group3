@@ -13,7 +13,7 @@ struct TabBarView: View {
                 .backgroundStyle(.background)
             CartView(viewModel: CartViewModel(cartService: CartServiceImpl(networkClient: DefaultNetworkClient(), nftService: NftServiceImpl(networkClient: DefaultNetworkClient(), storage: NftStorageImpl()))))
                 .tabItem {
-                    Label("Tab.catalog", image: .basket)
+                    Label("Tab.cart", image: .basket)
                 }
                 .backgroundStyle(.background)
         }

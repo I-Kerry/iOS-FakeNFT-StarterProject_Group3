@@ -32,4 +32,13 @@ enum CartRequest: NetworkRequest {
         default: .get
         }
     }
+    
+    var formBody: String? {
+        switch self {
+        case .updateOrder(let nftIds):
+            return nftIds.map { "nfts=\($0)" }.joined(separator: "&")
+        default:
+            return nil
+        }
+    }
 }
