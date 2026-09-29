@@ -1,6 +1,6 @@
 import Foundation
 
-struct Profile: Decodable {
+struct Profile: Decodable, Sendable {
     let name: String
     let avatar: URL
     let description: String

@@ -1,11 +1,10 @@
 import Foundation
 
-protocol ProfileService {
+protocol ProfileService: Sendable {
     func loadProfile() async throws -> Profile
 }
 
-@MainActor
-final class ProfileServiceImpl: ProfileService {
+actor ProfileServiceImpl: ProfileService {
     private let networkClient: NetworkClient
 
     init(networkClient: NetworkClient) {

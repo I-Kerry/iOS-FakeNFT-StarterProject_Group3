@@ -2,6 +2,8 @@ import SwiftUI
 
 struct TabBarView: View {
     
+    @Environment(ServicesAssembly.self) private var services
+    
     init() {
         let appearance = UITabBarAppearance()
         appearance.configureWithDefaultBackground()
@@ -19,9 +21,7 @@ struct TabBarView: View {
             NavigationStack {
                 ProfileView(
                     viewModel: ProfileViewModel(
-                        profileService: ProfileServiceImpl(
-                            networkClient: DefaultNetworkClient()
-                        )
+                        profileService: services.profileService
                     )
                 )
             }
