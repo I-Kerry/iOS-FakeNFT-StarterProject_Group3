@@ -12,7 +12,13 @@ final class CatalogViewModel {
 	}
 	
 	func sortByNftCount() {
-		collections.sort { $0.nftCount > $1.nftCount }
+		let sorted = collections.sorted { $0.nftCount > $1.nftCount }
+		self.collections = sorted
+	}
+	
+	func sortByName() {
+		let sorted = collections.sorted { $0.name < $1.name }
+		self.collections = sorted
 	}
 	
 	private func loadLocalMockData() {
