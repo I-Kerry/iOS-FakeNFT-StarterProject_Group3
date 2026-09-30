@@ -18,8 +18,10 @@ struct ProfileView: View {
                 Spacer()
                 
                 NavigationLink {
-                    EditProfileView()
-                        .toolbar(.hidden, for: .tabBar)
+                    if let profile = viewModel.profile {
+                        EditProfileView(profile: profile)
+                            .toolbar(.hidden, for: .tabBar)
+                    }
                 } label: {
                     Image(systemName: "square.and.pencil")
                         .font(.system(size: 26))
