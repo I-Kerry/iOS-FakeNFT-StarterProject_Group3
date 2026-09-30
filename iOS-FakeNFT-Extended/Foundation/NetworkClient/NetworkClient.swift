@@ -54,6 +54,12 @@ actor DefaultNetworkClient: NetworkClient {
 
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = request.httpMethod.rawValue
+        
+        if let cartRequest = request as? CartRequest,
+           let formBody = cartRequest.formBody {
+            urlRequest.httpBody = formBody.data(using: .utf8)
+            urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        }
 
         if let dto = request.dto,
            let dtoEncoded = try? encoder.encode(dto) {
@@ -61,7 +67,7 @@ actor DefaultNetworkClient: NetworkClient {
             urlRequest.httpBody = dtoEncoded
         }
         urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
-
+        
         return urlRequest
     }
 

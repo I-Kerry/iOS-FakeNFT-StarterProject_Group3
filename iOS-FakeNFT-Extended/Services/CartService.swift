@@ -52,6 +52,4 @@ actor CartServiceImpl: CartService {
         let updated = order.nfts.filter { $0 != itemId }
         let _: Data = try await networkClient.send(request: CartRequest.updateOrder(nftIds: updated))
     }
-    
-    
 }
