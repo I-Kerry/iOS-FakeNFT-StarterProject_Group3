@@ -11,6 +11,10 @@ final class CatalogViewModel {
 		loadLocalMockData()
 	}
 	
+	func sortByNftCount() {
+		collections.sort { $0.nftCount > $1.nftCount }
+	}
+	
 	private func loadLocalMockData() {
 		guard let url = Bundle.main.url(forResource: "collections_mock", withExtension: "json"),
 			  let data = try? Data(contentsOf: url),

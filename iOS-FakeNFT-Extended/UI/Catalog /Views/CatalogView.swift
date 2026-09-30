@@ -15,8 +15,8 @@ struct CatalogView: View {
 						HStack {
 							Spacer()
 							Button {
-								
-							} label: {
+								viewModel.sortByNftCount()
+								} label: {
 								Image(.sortIcon)
 									.resizable()
 									.aspectRatio(contentMode: .fit)
