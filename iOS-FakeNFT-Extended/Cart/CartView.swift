@@ -12,6 +12,7 @@ struct CartView: View {
     @State private var viewModel: CartViewModel
     @State private var nftToDelete: Nft?
     @State private var showSortSheet = false
+    @State private var showCurrencyView = false
     
     init(viewModel: CartViewModel) {
         _viewModel = State(initialValue: viewModel)
@@ -28,22 +29,29 @@ struct CartView: View {
                         Text(Constants.emptyCartTitle)
                             .font(.bodyBold)
                             .foregroundStyle(.button)
-                    }
-                    List(viewModel.nfts) { nft in
-                        CartItemView(nft: nft) {
-                            nftToDelete = nft
+                    } else {
+                        List(viewModel.nfts) { nft in
+                            CartItemView(nft: nft) {
+                                nftToDelete = nft
+                            }
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                            .listRowInsets(EdgeInsets())
                         }
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color.clear)
-                        .listRowInsets(EdgeInsets())
-                    }
-                    .listStyle(.plain)
-                    .safeAreaInset(edge: .bottom) {
-                        CartBottomView(
-                            nftAmount: viewModel.nfts.count,
-                            totalPrice: viewModel.totalPrice,
-                            onPay: { viewModel.onPayScreen() }
-                        )
+                        .listStyle(.plain)
+                        .safeAreaInset(edge: .bottom) {
+                            CartBottomView(
+                                nftAmount: viewModel.nfts.count,
+                                totalPrice: viewModel.totalPrice,
+                                onPay: { showCurrencyView = true }
+                            )
+                            .navigationDestination(isPresented: $showCurrencyView) {
+                                CurrencyPaymentView(viewModel: CurrencyViewModel(service: viewModel.cartService, onCompletePayment: {
+                                    showCurrencyView = false
+                                    viewModel.clearCart()
+                                }))
+                            }
+                        }
                     }
                 case .error(let error):
                     Text(error.localizedDescription)
@@ -59,6 +67,7 @@ struct CartView: View {
             .blur(radius: nftToDelete != nil ? 10 : 0)
             .toolbar(nftToDelete != nil ? .hidden : .visible, for: .navigationBar)
             .toolbar(nftToDelete != nil ? .hidden : .visible, for: .tabBar)
+            .toolbar(showCurrencyView ? .hidden : .visible, for: .tabBar)
             .overlay {
                 if let nft = nftToDelete {
                     DeleteConfirmationView(
@@ -74,18 +83,20 @@ struct CartView: View {
                 }
             }
             .toolbarBackground(.hidden, for: .navigationBar)
-
+            
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showSortSheet = true
-                    } label: {
-                        Image(.contextMenu)
-                            .renderingMode(.template)
-                            .foregroundStyle(.button)
-                            .frame(width: Constants.imageWidth, height: Constants.imageHeight)
+                if !viewModel.nfts.isEmpty {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            showSortSheet = true
+                        } label: {
+                            Image(.contextMenu)
+                                .renderingMode(.template)
+                                .foregroundStyle(.button)
+                                .frame(width: Constants.imageWidth, height: Constants.imageHeight)
+                        }
+                        .frame(width: Constants.imageFrameSize, height: Constants.imageFrameSize)
                     }
-                    .frame(width: Constants.imageFrameSize, height: Constants.imageFrameSize)
                 }
             }
             
@@ -113,10 +124,16 @@ private enum Constants {
 }
 
 #Preview("Items") {
-    let vm = CartViewModel(cartService: MockCartService(), onPayScreen: {})
+    let vm = CartViewModel(cartService: MockCartService())
     vm.state = .data
     vm.nfts = MockCartService.sampleNfts
     return CartView(viewModel: vm)
         .preferredColorScheme(.dark)
 }
-
+#Preview("Empty") {
+    let vm = CartViewModel(cartService: MockCartService(nfts: []))
+    vm.state = .data
+    vm.nfts = []
+    return CartView(viewModel: vm)
+        .preferredColorScheme(.light)
+}

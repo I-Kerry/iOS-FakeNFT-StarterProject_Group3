@@ -25,8 +25,14 @@ struct CartBottomView: View {
         }
         .padding(Constants.padding)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.graySecondaryBackground)
-        .clipShape(UnevenRoundedRectangle(topLeadingRadius: Constants.trailingLeadingCornerRadius, topTrailingRadius: Constants.trailingLeadingCornerRadius))
+        .background {
+            UnevenRoundedRectangle(
+                topLeadingRadius: Constants.trailingLeadingCornerRadius,
+                topTrailingRadius: Constants.trailingLeadingCornerRadius
+            )
+            .fill(.graySecondaryBackground)
+            .ignoresSafeArea(edges: .bottom)
+        }
     }
     
     private var payButton: some View {

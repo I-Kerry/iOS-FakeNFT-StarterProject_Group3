@@ -8,14 +8,9 @@
 import SwiftUI
 
 struct CartItemView: View {
-    private let nft: Nft
+    let nft: Nft
     var onDelete: () -> Void = {}
-    
-    init(nft: Nft, onDelete: @escaping () -> Void) {
-        self.nft = nft
-        self.onDelete = onDelete
-    }
-    
+
     var body: some View {
         HStack {
             AsyncImage(url: nft.images.first) { phase in
@@ -31,9 +26,9 @@ struct CartItemView: View {
                         .frame(width: Constants.imageSize, height: Constants.imageSize)
                         .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
                 }
-                    
             }
-            VStack(spacing: Constants.infoPriceSpacing) {
+            
+            VStack(alignment: .leading, spacing: Constants.infoPriceSpacing) {
                 info
                 priceInfo
             }
@@ -101,5 +96,4 @@ private enum Constants {
 
 #Preview {
     CartItemView(nft: Nft(id: "1", name: "lol", images: [URL(string: "https://picsum.photos/400/400?random=2")!], rating: 4, price: 5.39, author: "Alonso"), onDelete: {})
-        .preferredColorScheme(.dark)
 }
