@@ -3,6 +3,19 @@ import Kingfisher
 
 struct EditProfileView: View {
     let profile: Profile
+    
+    @State private var name: String
+    @State private var description: String
+    
+    private var hasChanges: Bool {
+        name != profile.name || description != profile.description
+    }
+    
+    init(profile: Profile) {
+        self.profile = profile
+        _name = State(initialValue: profile.name)
+        _description = State(initialValue: profile.description)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -47,7 +60,7 @@ struct EditProfileView: View {
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .padding(.top, 24)
 
-                    Text(profile.name)
+                    TextField("", text: $name)
                         .font(Font(UIFont.bodyRegular))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -62,12 +75,13 @@ struct EditProfileView: View {
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .padding(.top, 24)
 
-                    Text(profile.description)
+                    TextEditor(text: $description)
                         .font(Font(UIFont.bodyRegular))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
-                        .frame(maxWidth: .infinity, alignment: .topLeading)
-                        .padding(16)
-                        .frame(minHeight: 132, alignment: .topLeading)
+                        .scrollContentBackground(.hidden)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 10)
+                        .frame(height: 132)
                         .background(Color(uiColor: .yaLightGrayLight))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .padding(.top, 8)
@@ -97,9 +111,13 @@ struct EditProfileView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 60)
-                    .background(Color(uiColor: .yaBlackLight))
+                    .background(
+                        Color(uiColor: .yaBlackLight)
+                            .opacity(hasChanges ? 1 : 0)
+                    )
                     .clipShape(RoundedRectangle(cornerRadius: 16))
             }
+            .disabled(!hasChanges)
             .padding(.horizontal, 16)
             .padding(.vertical, 16)
         }
