@@ -20,7 +20,7 @@ final class CurrencyViewModel {
     private var service: CartService
     var currencies: [Currency] = []
     var state: CurrencyState = .idle
-    var selectedCurrencyID: String? = nil
+    var selectedCurrencyID: String?
     var paymentError: Error? = nil
     var didPaySuccessfully = false
     
