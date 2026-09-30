@@ -50,7 +50,7 @@ final class CurrencyViewModel {
             if success {
                 didPaySuccessfully = true
             } else {
-                paymentError
+                paymentError = CartErrors.paymentFailed
             }
         } catch {
             paymentError = error

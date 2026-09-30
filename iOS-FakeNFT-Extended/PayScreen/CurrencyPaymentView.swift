@@ -57,6 +57,19 @@ struct CurrencyPaymentView: View {
                 viewModel.onCompletePayment()
             })
         }
+        .alert(
+            "",
+            isPresented: Binding(
+                get: { viewModel.paymentError != nil },
+                set: { if !$0 { viewModel.paymentError = nil }})) {
+                    
+                        Button("Отмена", role: .cancel, action: { viewModel.paymentError = nil })
+                        Button("Повторить", action: { Task { await viewModel.pay()}})
+                    
+                } message: {
+                    Text("Не удалось произвести оплату")
+                        .font(.bodyBold)
+                }
     }
 }
 
