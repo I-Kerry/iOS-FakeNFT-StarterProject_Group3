@@ -8,6 +8,7 @@ final class ProfileViewModel {
 
     var profile: Profile?
     var isLoading = false
+    var isSaving = false
     var error: Error?
 
     init(profileService: ProfileService) {
@@ -25,5 +26,34 @@ final class ProfileViewModel {
         }
 
         isLoading = false
+    }
+    
+    @discardableResult
+    func updateProfile(
+        name: String,
+        description: String,
+        avatar: String,
+        website: String
+    ) async -> Bool {
+        guard let currentProfile = profile else { return false }
+
+        isSaving = true
+        error = nil
+
+        do {
+            profile = try await profileService.updateProfile(
+                name: name,
+                description: description,
+                avatar: avatar,
+                website: website,
+                likes: currentProfile.likes
+            )
+            isSaving = false
+            return true
+        } catch {
+            self.error = error
+            isSaving = false
+            return false
+        }
     }
 }

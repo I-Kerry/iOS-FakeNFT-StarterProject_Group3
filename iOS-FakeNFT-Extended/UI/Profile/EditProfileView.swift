@@ -4,6 +4,11 @@ import Kingfisher
 struct EditProfileView: View {
     let profile: Profile
     
+    @State private var viewModel: ProfileViewModel
+    
+    @Environment(ServicesAssembly.self) private var services
+    @Environment(\.dismiss) private var dismiss
+    
     @State private var name: String
     @State private var description: String
     @State private var avatarURL: URL
@@ -18,8 +23,9 @@ struct EditProfileView: View {
             || website != profile.website.absoluteString
     }
     
-    init(profile: Profile) {
+    init(profile: Profile, viewModel: ProfileViewModel) {
         self.profile = profile
+        _viewModel = State(initialValue: viewModel)
         _name = State(initialValue: profile.name)
         _description = State(initialValue: profile.description)
         _avatarURL = State(initialValue: profile.avatar)
@@ -125,8 +131,19 @@ struct EditProfileView: View {
                 }
                 .padding(.horizontal, 16)
             }
-            
             Button {
+                Task {
+                    let isSaved = await viewModel.updateProfile(
+                        name: name,
+                        description: description,
+                        avatar: avatarURL.absoluteString,
+                        website: website
+                    )
+
+                    if isSaved {
+                        dismiss()
+                    }
+                }
             } label: {
                 Text("Сохранить")
                     .font(Font(UIFont.bodyBold))
@@ -170,6 +187,15 @@ struct EditProfileView: View {
 }
 
 #Preview {
+    let services = ServicesAssembly(
+        networkClient: DefaultNetworkClient(),
+        nftStorage: NftStorageImpl()
+    )
+
+    let viewModel = ProfileViewModel(
+        profileService: services.profileService
+    )
+
     EditProfileView(
         profile: Profile(
             name: "Joaquin Phoenix",
@@ -179,6 +205,7 @@ struct EditProfileView: View {
             nfts: [],
             likes: [],
             id: "1"
-        )
+        ),
+        viewModel: viewModel
     )
 }

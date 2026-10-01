@@ -19,7 +19,10 @@ struct ProfileView: View {
                 
                 NavigationLink {
                     if let profile = viewModel.profile {
-                        EditProfileView(profile: profile)
+                        EditProfileView(
+                            profile: profile,
+                            viewModel: viewModel
+                        )
                             .toolbar(.hidden, for: .tabBar)
                     }
                 } label: {
