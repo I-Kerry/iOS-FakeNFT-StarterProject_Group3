@@ -56,7 +56,7 @@ private enum Constants {
     static let buttonHeight: CGFloat = 44
     static let cornerRadius: CGFloat = 16
 
-    static let buttonTitle = "К оплате"
+    static let buttonTitle = String(localized: "Cart.toPayment")
 }
 
 #Preview("light") {

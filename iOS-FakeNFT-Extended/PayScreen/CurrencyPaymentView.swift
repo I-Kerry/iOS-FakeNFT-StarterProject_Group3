@@ -63,11 +63,11 @@ struct CurrencyPaymentView: View {
                 get: { viewModel.paymentError != nil },
                 set: { if !$0 { viewModel.paymentError = nil }})) {
                     
-                        Button("Отмена", role: .cancel, action: { viewModel.paymentError = nil })
-                        Button("Повторить", action: { Task { await viewModel.pay()}})
+                        Button("Payment.cancel", role: .cancel, action: { viewModel.paymentError = nil })
+                        Button("Payment.repeat", action: { Task { await viewModel.pay()}})
                     
                 } message: {
-                    Text("Не удалось произвести оплату")
+                    Text("Cart.paymentFailedError")
                         .font(.bodyBold)
                 }
     }
@@ -78,7 +78,7 @@ private enum Constants {
     static let vGridSpacing: CGFloat = 7
     static let padding: CGFloat = 16
     
-    static let navigationTitle = "Выберите способ оплаты"
+    static let navigationTitle = String(localized: "Payment.method")
 }
 
 #Preview {

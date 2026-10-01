@@ -42,9 +42,9 @@ private enum Constants {
     static let smallSpacing: CGFloat = 5
     static let padding: CGFloat = 16
     
-    static let agreementTitle = "Совершая покупку, вы соглашаетесь с условиями"
-    static let agreementButtonTitle = "Пользовательского соглашения"
-    static let buttonTitle = "Оплатить"
+    static let agreementTitle = String(localized: "Payment.agreement")
+    static let agreementButtonTitle = String(localized: "Payment.agreementTitle")
+    static let buttonTitle = String(localized: "Payment.pay")
     static let urlString = "https://yandex.ru/legal/practicum_termsofuse"
 }
 

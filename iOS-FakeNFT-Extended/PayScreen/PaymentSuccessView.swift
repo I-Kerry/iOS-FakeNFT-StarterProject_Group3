@@ -34,8 +34,8 @@ private enum Constants {
     static let spacing: CGFloat = 20
     static let imageFrame: CGFloat = 278
     
-    static let paymentSuccess = "Успех! Оплата прошла,\nпоздравляем с покупкой!"
-    static let backTitle = "Вернуться в корзину"
+    static let paymentSuccess = String(localized: "Payment.success")
+    static let backTitle = String(localized: "Payment.backToCart")
 }
 
 #Preview {

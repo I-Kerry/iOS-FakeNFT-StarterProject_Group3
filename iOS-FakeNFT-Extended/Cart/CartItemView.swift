@@ -91,7 +91,7 @@ private enum Constants {
     static let deleteButtonHeight: CGFloat = 18.56
     static let buttonSize: CGFloat = 40
     
-    static let priceTitle = "Цена"
+    static let priceTitle = String(localized: "Cart.price")
 }
 
 #Preview {

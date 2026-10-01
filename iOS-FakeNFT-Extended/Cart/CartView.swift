@@ -112,15 +112,16 @@ struct CartView: View {
 }
 
 private enum Constants {
-    static let emptyCartTitle = "Корзина пуста"
     static let imageWidth: CGFloat = 21
     static let imageHeight: CGFloat = 12.6
     static let imageFrameSize: CGFloat = 42
-    static let contextMenuTitle = "Сортировка"
-    static let byName = "По названию"
-    static let byRating = "По рейтингу"
-    static let byPrice = "По цене"
-    static let close = "Закрыть"
+    
+    static let emptyCartTitle = String(localized: "Cart.isEmpty")
+    static let contextMenuTitle = String(localized: "Cart.sort")
+    static let byName = String(localized: "Cart.byName")
+    static let byRating = String(localized: "Cart.byRating")
+    static let byPrice = String(localized: "Cart.byPrice")
+    static let close = String(localized: "Cart.close")
 }
 
 #Preview("Items") {

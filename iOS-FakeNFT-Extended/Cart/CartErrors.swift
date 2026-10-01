@@ -12,6 +12,6 @@ enum CartErrors: LocalizedError {
     
     var errorDescription: String? {
         switch self {
-        case .paymentFailed: "Не удалось произвести оплату" }
+        case .paymentFailed: String(localized: "Cart.paymentFailedError") }
     }
 }

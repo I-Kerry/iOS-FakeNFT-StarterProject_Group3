@@ -5,8 +5,7 @@ struct TabBarView: View {
         TabView {
             TestCatalogView()
                 .tabItem {
-                    Label(
-                        NSLocalizedString("Tab.catalog", comment: ""),
+                    Label("Tab.catalog",
                         systemImage: "square.stack.3d.up.fill"
                     )
                 }
