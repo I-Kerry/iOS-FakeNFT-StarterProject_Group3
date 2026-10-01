@@ -4,7 +4,7 @@ import SwiftUI
 struct iOS_FakeNFT_ExtendedApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CatalogView()
                 .environment(ServicesAssembly(networkClient: DefaultNetworkClient(), nftStorage: NftStorageImpl()))
         }
     }

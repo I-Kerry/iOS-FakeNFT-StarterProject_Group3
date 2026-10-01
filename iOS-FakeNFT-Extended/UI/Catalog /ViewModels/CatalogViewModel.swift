@@ -1,24 +1,51 @@
 import Foundation
 import Observation
 
+enum SortType: String {
+	case none
+	case name
+	case nftCount
+}
+
 @Observable
 @MainActor
 final class CatalogViewModel {
 	var collections: [NFTCollection] = []
 	var isLoading: Bool = false
 	
+	private var currentSortType: SortType {
+		get {
+			let savedValue = UserDefaults.standard.string(forKey: "selectedSortType") ?? ""
+			return SortType(rawValue: savedValue) ?? .none
+		}
+		set {
+			UserDefaults.standard.set(newValue.rawValue, forKey: "selectedSortType")
+		}
+	}
+	
 	init() {
 		loadLocalMockData()
 	}
 	
 	func sortByNftCount() {
-		let sorted = collections.sorted { $0.nftCount > $1.nftCount }
-		self.collections = sorted
+		currentSortType = .nftCount
+		applyCurrentSort()
 	}
 	
 	func sortByName() {
-		let sorted = collections.sorted { $0.name < $1.name }
-		self.collections = sorted
+		currentSortType = .name
+		applyCurrentSort()
+	}
+	
+	private func applyCurrentSort() {
+		switch currentSortType {
+		case .name:
+			self.collections = collections.sorted { $0.name < $1.name }
+		case .nftCount:
+			self.collections = collections.sorted { $0.nftCount > $1.nftCount }
+		case .none:
+			break
+		}
 	}
 	
 	private func loadLocalMockData() {
@@ -28,5 +55,7 @@ final class CatalogViewModel {
 			return
 		}
 		self.collections = decoded
+		
+		applyCurrentSort()
 	}
 }
