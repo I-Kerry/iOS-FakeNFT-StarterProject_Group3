@@ -7,12 +7,15 @@ struct EditProfileView: View {
     @State private var name: String
     @State private var description: String
     @State private var avatarURL: URL
+    @State private var website: String
     @State private var isPhotoMenuPresented = false
     @State private var isPhotoURLAlertPresented = false
     @State private var isAvatarDeleted = false
     
     private var hasChanges: Bool {
-        name != profile.name || description != profile.description
+        name != profile.name
+            || description != profile.description
+            || website != profile.website.absoluteString
     }
     
     init(profile: Profile) {
@@ -20,6 +23,7 @@ struct EditProfileView: View {
         _name = State(initialValue: profile.name)
         _description = State(initialValue: profile.description)
         _avatarURL = State(initialValue: profile.avatar)
+        _website = State(initialValue: profile.website.absoluteString)
     }
     
     var body: some View {
@@ -109,7 +113,7 @@ struct EditProfileView: View {
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .padding(.top, 24)
                     
-                    Text(profile.website.absoluteString)
+                    TextField("", text: $website)
                         .font(Font(UIFont.bodyRegular))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .frame(maxWidth: .infinity, alignment: .leading)
