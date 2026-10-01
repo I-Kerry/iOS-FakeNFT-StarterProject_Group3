@@ -16,6 +16,7 @@ struct EditProfileView: View {
     @State private var isPhotoMenuPresented = false
     @State private var isPhotoURLAlertPresented = false
     @State private var isAvatarDeleted = false
+    @State private var isDiscardAlertPresented = false
     
     private var hasChanges: Bool {
         name != profile.name
@@ -36,6 +37,11 @@ struct EditProfileView: View {
         VStack(spacing: 0) {
             HStack {
                 Button {
+                    if hasChanges {
+                        isDiscardAlertPresented = true
+                    } else {
+                        dismiss()
+                    }
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.system(size: 24))
@@ -156,7 +162,7 @@ struct EditProfileView: View {
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 16))
             }
-            .disabled(!hasChanges)
+            .disabled(!hasChanges || viewModel.isSaving)
             .padding(.horizontal, 16)
             .padding(.vertical, 16)
         }
@@ -182,6 +188,13 @@ struct EditProfileView: View {
             }
             
             .navigationBarBackButtonHidden(true)
+        }
+        .alert("Уверены,\nчто хотите выйти?", isPresented: $isDiscardAlertPresented) {
+            Button("Остаться", role: .cancel) {}
+
+            Button("Выйти") {
+                dismiss()
+            }
         }
     }
 }
