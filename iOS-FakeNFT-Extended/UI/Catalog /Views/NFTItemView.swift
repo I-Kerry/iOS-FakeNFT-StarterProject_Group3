@@ -1,18 +1,15 @@
 import SwiftUI
 
-// MARK: - View
 struct NFTItemView: View {
-	// MARK: - Properties
 	let nftId: String
 	let rating: Int
+	let isLiked: Bool
+	let isInCart: Bool
+	let onLikeTapped: () -> Void
+	let onCartTapped: () -> Void
 	
-	@State private var isLiked: Bool = false
-	@State private var isInCart: Bool = false
-	
-	// MARK: - Design Constants
 	private let activeHeartColor = Color(red: 245/255, green: 107/255, blue: 108/255)
 	
-	// MARK: - Body
 	var body: some View {
 		VStack(alignment: .leading, spacing: 0) {
 			previewSection
@@ -24,8 +21,6 @@ struct NFTItemView: View {
 		.frame(width: 108, height: 192, alignment: .top)
 	}
 	
-	// MARK: - Subviews
-	
 	private var previewSection: some View {
 		ZStack(alignment: .topTrailing) {
 			Color.gray.opacity(0.3)
@@ -33,7 +28,7 @@ struct NFTItemView: View {
 				.clipShape(RoundedRectangle(cornerRadius: 12))
 			
 			Button {
-				isLiked.toggle()
+				onLikeTapped()
 			} label: {
 				Image(systemName: "heart.fill")
 					.resizable()
@@ -65,18 +60,20 @@ struct NFTItemView: View {
 				Text("Archie")
 					.font(.system(size: 17, weight: .bold))
 					.tracking(0)
-					.foregroundStyle(.primary)					.frame(height: 22)
+					.foregroundStyle(.primary)
+					.frame(height: 22)
 				
 				Text("1 ETH")
 					.font(.system(size: 10, weight: .medium))
 					.tracking(-0.24)
-					.foregroundStyle(.primary)					.frame(height: 12)
+					.foregroundStyle(.primary)
+					.frame(height: 12)
 			}
 			
 			Spacer()
 			
 			Button {
-				isInCart.toggle()
+				onCartTapped()
 			} label: {
 				Image(isInCart ? "cart_remove_icon" : "cart_empty_icon")
 					.resizable()
@@ -91,7 +88,13 @@ struct NFTItemView: View {
 	}
 }
 
-// MARK: - Preview
 #Preview {
-	NFTItemView(nftId: "1", rating: 3)
+	NFTItemView(
+		nftId: "1",
+		rating: 3,
+		isLiked: true,
+		isInCart: false,
+		onLikeTapped: {},
+		onCartTapped: {}
+	)
 }
