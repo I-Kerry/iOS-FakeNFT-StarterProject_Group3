@@ -8,6 +8,9 @@ struct CollectionDetailView: View {
 	
 	// MARK: - Properties
 	let collection: NFTCollection
+	
+	@State private var viewModel = CollectionDetailViewModel()
+	
 	@State private var isShowingAuthorWebView = false
 	@State private var webViewProgress: Double = 0.0
 	@State private var isWebViewLoading = false
@@ -123,7 +126,14 @@ struct CollectionDetailView: View {
 	private var nftGridSection: some View {
 		LazyVGrid(columns: columns, spacing: 9) {
 			ForEach(collection.nfts, id: \.self) { nftId in
-				NFTItemView(nftId: nftId, rating: 4)
+				NFTItemView(
+					nftId: nftId,
+					rating: 4,
+					isLiked: viewModel.isLiked(nftId: nftId),
+					isInCart: viewModel.isInCart(nftId: nftId),
+					onLikeTapped: { viewModel.toggleLike(for: nftId) },
+					onCartTapped: { viewModel.toggleCart(for: nftId) }
+				)
 			}
 		}
 		.padding(.horizontal, 16)
