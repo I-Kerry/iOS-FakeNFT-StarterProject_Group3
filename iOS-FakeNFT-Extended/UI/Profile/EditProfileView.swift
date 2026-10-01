@@ -2,152 +2,183 @@ import SwiftUI
 import Kingfisher
 
 struct EditProfileView: View {
-    let profile: Profile
-    
+
+    private enum Constants {
+        static let avatarSize: CGFloat = 73
+        static let cameraButtonSize: CGFloat = 23
+        static let backIconSize: CGFloat = 24
+        static let cameraIconSize: CGFloat = 12
+
+        static let textFieldHeight: CGFloat = 44
+        static let descriptionHeight: CGFloat = 132
+        static let saveButtonHeight: CGFloat = 60
+
+        static let fieldCornerRadius: CGFloat = 12
+        static let buttonCornerRadius: CGFloat = 16
+
+        static let horizontalPadding: CGFloat = 16
+    }
+
     @State private var viewModel: ProfileViewModel
-    
-    @Environment(ServicesAssembly.self) private var services
+
     @Environment(\.dismiss) private var dismiss
-    
-    @State private var name: String
-    @State private var description: String
-    @State private var avatarURL: URL
-    @State private var website: String
+
+    @State private var editViewModel: EditProfileViewModel
+
     @State private var isPhotoMenuPresented = false
     @State private var isPhotoURLAlertPresented = false
-    @State private var isAvatarDeleted = false
     @State private var isDiscardAlertPresented = false
-    
-    private var hasChanges: Bool {
-        name != profile.name
-            || description != profile.description
-            || website != profile.website.absoluteString
-    }
-    
+    @State private var isSaveErrorAlertPresented = false
+    @State private var photoURL = ""
+
     init(profile: Profile, viewModel: ProfileViewModel) {
-        self.profile = profile
         _viewModel = State(initialValue: viewModel)
-        _name = State(initialValue: profile.name)
-        _description = State(initialValue: profile.description)
-        _avatarURL = State(initialValue: profile.avatar)
-        _website = State(initialValue: profile.website.absoluteString)
+        _editViewModel = State(
+            initialValue: EditProfileViewModel(profile: profile)
+        )
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
                 Button {
-                    if hasChanges {
+                    if editViewModel.hasChanges {
                         isDiscardAlertPresented = true
                     } else {
                         dismiss()
                     }
                 } label: {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 24))
+                        .font(.system(size: Constants.backIconSize))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                 }
-                
+
                 Spacer()
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, Constants.horizontalPadding)
             .padding(.top, 8)
-            
+
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     Button {
                         isPhotoMenuPresented = true
                     } label: {
                         ZStack(alignment: .bottomTrailing) {
-                            if isAvatarDeleted {
+                            if editViewModel.isAvatarDeleted {
                                 Circle()
                                     .fill(.gray.opacity(0.3))
-                                    .frame(width: 73, height: 73)
+                                    .frame(
+                                        width: Constants.avatarSize,
+                                        height: Constants.avatarSize
+                                    )
                             } else {
-                                KFImage(avatarURL)
+                                KFImage(editViewModel.avatarURL)
                                     .placeholder {
                                         Circle()
                                             .fill(.gray.opacity(0.3))
                                     }
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width: 73, height: 73)
+                                    .frame(
+                                        width: Constants.avatarSize,
+                                        height: Constants.avatarSize
+                                    )
                                     .clipShape(Circle())
                             }
-                            
+
                             Image(systemName: "camera.fill")
-                                .font(.system(size: 12))
+                                .font(.system(size: Constants.cameraIconSize))
                                 .foregroundStyle(Color(uiColor: .yaBlackLight))
-                                .frame(width: 23, height: 23)
-                                .background(Color(uiColor: .yaLightGrayLight))
+                                .frame(
+                                    width: Constants.cameraButtonSize,
+                                    height: Constants.cameraButtonSize
+                                )
+                                .background(
+                                    Color(uiColor: .yaLightGrayLight)
+                                )
                                 .clipShape(Circle())
                         }
                     }
                     .buttonStyle(.plain)
                     .frame(maxWidth: .infinity)
-                    .padding(.top, 0)
-                    .frame(maxWidth: .infinity)
                     .padding(.top, 4)
-                    
+
                     Text("Имя")
                         .font(Font(UIFont.headline3))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .padding(.top, 24)
-                    
-                    TextField("", text: $name)
+
+                    TextField("", text: $editViewModel.name)
                         .font(Font(UIFont.bodyRegular))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 16)
-                        .frame(height: 44)
+                        .padding(.horizontal, Constants.horizontalPadding)
+                        .frame(height: Constants.textFieldHeight)
                         .background(Color(uiColor: .yaLightGrayLight))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .clipShape(
+                            RoundedRectangle(
+                                cornerRadius: Constants.fieldCornerRadius
+                            )
+                        )
                         .padding(.top, 8)
-                    
+
                     Text("Описание")
                         .font(Font(UIFont.headline3))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .padding(.top, 24)
-                    
-                    TextEditor(text: $description)
+
+                    TextEditor(text: $editViewModel.description)
                         .font(Font(UIFont.bodyRegular))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .scrollContentBackground(.hidden)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 10)
-                        .frame(height: 132)
+                        .frame(height: Constants.descriptionHeight)
                         .background(Color(uiColor: .yaLightGrayLight))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .clipShape(
+                            RoundedRectangle(
+                                cornerRadius: Constants.fieldCornerRadius
+                            )
+                        )
                         .padding(.top, 8)
-                    
+
                     Text("Сайт")
                         .font(Font(UIFont.headline3))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .padding(.top, 24)
-                    
-                    TextField("", text: $website)
+
+                    TextField("", text: $editViewModel.website)
                         .font(Font(UIFont.bodyRegular))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 16)
-                        .frame(height: 44)
+                        .padding(.horizontal, Constants.horizontalPadding)
+                        .frame(height: Constants.textFieldHeight)
                         .background(Color(uiColor: .yaLightGrayLight))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .clipShape(
+                            RoundedRectangle(
+                                cornerRadius: Constants.fieldCornerRadius
+                            )
+                        )
                         .padding(.top, 8)
                 }
-                .padding(.horizontal, 16)
+                .padding(.horizontal, Constants.horizontalPadding)
             }
+
             Button {
                 Task {
                     let isSaved = await viewModel.updateProfile(
-                        name: name,
-                        description: description,
-                        avatar: avatarURL.absoluteString,
-                        website: website
+                        name: editViewModel.name,
+                        description: editViewModel.description,
+                        avatar: editViewModel.isAvatarDeleted
+                            ? ""
+                            : editViewModel.avatarURL?.absoluteString ?? "",
+                        website: editViewModel.website
                     )
 
                     if isSaved {
                         dismiss()
+                    } else {
+                        isSaveErrorAlertPresented = true
                     }
                 }
             } label: {
@@ -155,46 +186,75 @@ struct EditProfileView: View {
                     .font(Font(UIFont.bodyBold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
-                    .frame(height: 60)
+                    .frame(height: Constants.saveButtonHeight)
                     .background(
                         Color(uiColor: .yaBlackLight)
-                            .opacity(hasChanges ? 1 : 0)
+                            .opacity(editViewModel.hasChanges ? 1 : 0)
                     )
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .clipShape(
+                        RoundedRectangle(
+                            cornerRadius: Constants.buttonCornerRadius
+                        )
+                    )
             }
-            .disabled(!hasChanges || viewModel.isSaving)
-            .padding(.horizontal, 16)
+            .disabled(!editViewModel.hasChanges || viewModel.isSaving)
+            .allowsHitTesting(editViewModel.hasChanges && !viewModel.isSaving)
+            .padding(.horizontal, Constants.horizontalPadding)
             .padding(.vertical, 16)
         }
         .background(.background)
-        .background {
-            PhotoActionSheet(
-                isPresented: $isPhotoMenuPresented,
-                onChangePhoto: {
-                    isPhotoURLAlertPresented = true
-                },
-                onDeletePhoto: {
-                    isAvatarDeleted = true
-                }
+        .navigationBarBackButtonHidden(true)
+        .confirmationDialog(
+            "Фото профиля",
+            isPresented: $isPhotoMenuPresented,
+            titleVisibility: .visible
+        ) {
+            Button("Изменить фото") {
+                photoURL = editViewModel.avatarURL?.absoluteString ?? ""
+                isPhotoURLAlertPresented = true
+            }
+
+            Button("Удалить фото", role: .destructive) {
+                editViewModel.isAvatarDeleted = true
+            }
+
+            Button("Отмена", role: .cancel) {}
+        }
+        .alert(
+            "Ссылка на фото",
+            isPresented: $isPhotoURLAlertPresented
+        ) {
+            TextField(
+                "URL фотографии",
+                text: $photoURL
             )
-            
-            PhotoURLAlert(
-                isPresented: $isPhotoURLAlertPresented,
-                initialURL: avatarURL.absoluteString
-            ) { newURL in
-                if let url = URL(string: newURL) {
-                    avatarURL = url
+
+            Button("Отмена", role: .cancel) {}
+
+            Button("Сохранить") {
+                if let url = URL(string: photoURL) {
+                    editViewModel.avatarURL = url
+                    editViewModel.isAvatarDeleted = false
                 }
             }
-            
-            .navigationBarBackButtonHidden(true)
         }
-        .alert("Уверены,\nчто хотите выйти?", isPresented: $isDiscardAlertPresented) {
+        .alert(
+            "Уверены,\nчто хотите выйти?",
+            isPresented: $isDiscardAlertPresented
+        ) {
             Button("Остаться", role: .cancel) {}
 
             Button("Выйти") {
                 dismiss()
             }
+        }
+        .alert(
+            "Ошибка",
+            isPresented: $isSaveErrorAlertPresented
+        ) {
+            Button("ОК", role: .cancel) {}
+        } message: {
+            Text("Не удалось сохранить профиль")
         }
     }
 }

@@ -61,8 +61,8 @@ actor DefaultNetworkClient: NetworkClient {
             }
 
             urlRequest.httpBody = body
-        } else if let dto = request.dto,
-                  let dtoEncoded = try? encoder.encode(dto) {
+        } else if let dto = request.dto {
+            let dtoEncoded = try encoder.encode(dto)
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             urlRequest.httpBody = dtoEncoded
         }

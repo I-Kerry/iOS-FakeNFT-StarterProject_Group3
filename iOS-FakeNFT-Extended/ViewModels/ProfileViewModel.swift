@@ -9,7 +9,8 @@ final class ProfileViewModel {
     var profile: Profile?
     var isLoading = false
     var isSaving = false
-    var error: Error?
+    var loadError: Error?
+    var saveError: Error?
 
     init(profileService: ProfileService) {
         self.profileService = profileService
@@ -17,12 +18,12 @@ final class ProfileViewModel {
     
     func loadProfile() async {
         isLoading = true
-        error = nil
+        loadError = nil
 
         do {
             profile = try await profileService.loadProfile()
         } catch {
-            self.error = error
+            loadError = error
         }
 
         isLoading = false
@@ -38,7 +39,7 @@ final class ProfileViewModel {
         guard let currentProfile = profile else { return false }
 
         isSaving = true
-        error = nil
+        saveError = nil
 
         do {
             profile = try await profileService.updateProfile(
@@ -51,7 +52,7 @@ final class ProfileViewModel {
             isSaving = false
             return true
         } catch {
-            self.error = error
+            saveError = error
             isSaving = false
             return false
         }
