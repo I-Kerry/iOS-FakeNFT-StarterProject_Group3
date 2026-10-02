@@ -13,14 +13,19 @@ final class EditProfileViewModel {
     var isAvatarDeleted = false
 
     var hasChanges: Bool {
-        !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        && (
-            name != profile.name
+        name != profile.name
             || description != profile.description
             || website != profile.website.absoluteString
             || avatarURL != profile.avatar
             || isAvatarDeleted
-        )
+    }
+
+    var isNameValid: Bool {
+        !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    var canSave: Bool {
+        hasChanges && isNameValid
     }
 
     init(profile: Profile) {

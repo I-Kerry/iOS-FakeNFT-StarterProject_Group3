@@ -40,6 +40,8 @@ struct UpdateProfileRequest: NetworkRequest {
             )
         }
 
-        return components.percentEncodedQuery?.data(using: .utf8)
+        return components.percentEncodedQuery?
+            .replacingOccurrences(of: "+", with: "%2B")
+            .data(using: .utf8)
     }
 }
