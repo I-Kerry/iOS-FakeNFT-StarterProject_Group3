@@ -45,7 +45,7 @@ extension UIColor {
     static let yaBlackLight = UIColor(hexString: "1A1B22")
     static let blueUniversal = UIColor(hexString: "0A84FF")
     private static let yaBlackDark = UIColor.white
-    private static let yaLightGrayLight = UIColor(hexString: "#F7F7F8")
+   static let yaLightGrayLight = UIColor(hexString: "#F7F7F8")
     private static let yaLightGrayDark = UIColor(hexString: "#2C2C2E")
 
     static let segmentActive = UIColor { traits in
