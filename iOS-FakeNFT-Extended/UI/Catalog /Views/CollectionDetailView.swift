@@ -7,7 +7,12 @@ struct CollectionDetailView: View {
 	}
 	
 	let collection: NFTCollection
+	
 	@State private var viewModel = CollectionDetailViewModel()
+	
+	@State private var isShowingAuthorWebView = false
+	@State private var webViewProgress: Double = 0.0
+	@State private var isWebViewLoading = false
 	@Environment(\.dismiss) private var dismiss
 	
 	private let columns = [
@@ -73,7 +78,9 @@ struct CollectionDetailView: View {
 					.font(.system(size: 13, weight: .regular))
 					.tracking(-0.08)
 					.foregroundStyle(.primary)
+				
 				Button {
+					isShowingAuthorWebView = true
 				} label: {
 					Text("John Doe")
 						.font(.system(size: 15, weight: .regular))
@@ -83,6 +90,24 @@ struct CollectionDetailView: View {
 			}
 			.padding(.horizontal, 16)
 			.padding(.top, 13)
+			.sheet(isPresented: $isShowingAuthorWebView) {
+				if let authorURL = URL(string: collection.author) {
+					ZStack(alignment: .top) {
+						WebView(url: authorURL, progress: $webViewProgress, isLoading: $isWebViewLoading)
+							.ignoresSafeArea()
+						
+						if isWebViewLoading {
+							ProgressView(value: webViewProgress, total: 1.0)
+								.progressViewStyle(.linear)
+								.tint(.blue)
+								.background(Color.clear)
+								.frame(height: 4)
+						}
+					}
+				} else {
+					Text("Неверная ссылка на автора")
+				}
+			}
 			
 			Text(collection.description)
 				.font(.system(size: 13, weight: .regular))

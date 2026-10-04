@@ -16,18 +16,19 @@ final class CatalogViewModel {
 	var alertErrorMessage: String = ""
 	
 	private let service: NftService
+	private let storage = UserDefaultsService.shared
 	
 	@ObservationIgnored
 	private var currentSortType: SortType {
 		didSet {
-			UserDefaults.standard.set(currentSortType.rawValue, forKey: "selectedSortType")
+			storage.selectedSortType = currentSortType.rawValue
 		}
 	}
 	
 	init(service: NftService) {
 		self.service = service
 		
-		let savedRawValue = UserDefaults.standard.string(forKey: "selectedSortType") ?? ""
+		let savedRawValue = storage.selectedSortType
 		currentSortType = SortType(rawValue: savedRawValue) ?? .none
 		
 		fetchCatalogData()
