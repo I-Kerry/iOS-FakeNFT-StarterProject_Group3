@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct CatalogView: View {
-	@State private var viewModel = CatalogViewModel()
+	@State private var viewModel: CatalogViewModel
+	
+	init(servicesAssembly: ServicesAssembly) {
+		_viewModel = State(wrappedValue: CatalogViewModel(service: servicesAssembly.nftService))
+	}
 	
 	var body: some View {
 		NavigationStack {
@@ -72,6 +76,6 @@ struct CatalogRowView: View {
 	}
 }
 
-#Preview {
-	CatalogView()
-}
+//#Preview {
+//	CatalogView()
+//}
