@@ -1,13 +1,13 @@
 import SwiftUI
 
+@MainActor
 struct CollectionDetailView: View {
-	// MARK: - Constants
 	private enum AssetImages {
 		static let backButton = "chevron.backward"
 	}
 	
-	// MARK: - Properties
 	let collection: NFTCollection
+	@State private var viewModel = CollectionDetailViewModel()
 	@Environment(\.dismiss) private var dismiss
 	
 	private let columns = [
@@ -16,7 +16,6 @@ struct CollectionDetailView: View {
 		GridItem(.flexible(), spacing: 9)
 	]
 	
-	// MARK: - Body
 	var body: some View {
 		ScrollView {
 			VStack(alignment: .leading, spacing: 0) {
@@ -29,8 +28,6 @@ struct CollectionDetailView: View {
 		.navigationBarBackButtonHidden(true)
 		.navigationBarHidden(true)
 	}
-	
-	// MARK: - Subviews
 	
 	private var headerCoverView: some View {
 		ZStack(alignment: .topLeading) {
@@ -100,7 +97,14 @@ struct CollectionDetailView: View {
 	private var nftGridSection: some View {
 		LazyVGrid(columns: columns, spacing: 9) {
 			ForEach(collection.nfts, id: \.self) { nftId in
-				NFTItemView(nftId: nftId, rating: 4)
+				NFTItemView(
+					nftId: nftId,
+					rating: 4,
+					isLiked: viewModel.isLiked(nftId: nftId),
+					isInCart: viewModel.isInCart(nftId: nftId),
+					onLikeTapped: { viewModel.toggleLike(for: nftId) },
+					onCartTapped: { viewModel.toggleCart(for: nftId) }
+				)
 			}
 		}
 		.padding(.horizontal, 16)
@@ -108,7 +112,6 @@ struct CollectionDetailView: View {
 	}
 }
 
-// MARK: - Preview
 #Preview {
 	NavigationStack {
 		CollectionDetailView(collection: NFTCollection(

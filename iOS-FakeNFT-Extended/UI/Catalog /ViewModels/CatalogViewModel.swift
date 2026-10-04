@@ -58,7 +58,8 @@ final class CatalogViewModel {
 		guard !isLoading else { return }
 		isLoading = true
 		
-		Task {
+		Task { [weak self] in
+			guard let self else { return }
 			do {
 				try await Task.sleep(nanoseconds: 1_500_000_000)
 				loadLocalMockData()
