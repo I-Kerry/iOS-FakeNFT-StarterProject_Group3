@@ -1,6 +1,10 @@
 import SwiftUI
 
 struct NFTItemView: View {
+	private enum AssetImages {
+		static let heartFill = "heart.fill"
+	}
+	
 	let nftId: String
 	let rating: Int
 	let isLiked: Bool
@@ -30,7 +34,7 @@ struct NFTItemView: View {
 			Button {
 				onLikeTapped()
 			} label: {
-				Image(systemName: "heart.fill")
+				Image(systemName: AssetImages.heartFill)
 					.resizable()
 					.aspectRatio(contentMode: .fit)
 					.frame(width: 21, height: 18)
@@ -75,7 +79,7 @@ struct NFTItemView: View {
 			Button {
 				onCartTapped()
 			} label: {
-				Image(isInCart ? "cart_remove_icon" : "cart_empty_icon")
+				Image(isInCart ? .cartRemoveIcon : .cartEmptyIcon)
 					.resizable()
 					.aspectRatio(contentMode: .fit)
 					.frame(width: 19, height: 19)

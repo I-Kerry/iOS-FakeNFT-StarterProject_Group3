@@ -43,8 +43,7 @@ struct CatalogView: View {
 				.ignoresSafeArea(edges: .top)
 				
 				if isShowingSortMenu {
-					Color(red: 26/255, green: 27/255, blue: 34/255)
-						.opacity(0.5)
+					Color(.bgSortMenu)						.opacity(0.5)
 						.ignoresSafeArea()
 						.onTapGesture {
 							withAnimation(.easeInOut(duration: 0.2)) {

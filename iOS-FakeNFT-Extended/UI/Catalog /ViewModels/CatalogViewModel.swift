@@ -10,20 +10,22 @@ enum SortType: String {
 @Observable
 @MainActor
 final class CatalogViewModel {
-	var collections: [NFTCollection] = []
+	private(set) var collections: [NFTCollection] = []
 	var isLoading: Bool = false
 	
+	private let storage = UserDefaultsService.shared
+	
+	@ObservationIgnored
 	private var currentSortType: SortType {
-		get {
-			let savedValue = UserDefaults.standard.string(forKey: "selectedSortType") ?? ""
-			return SortType(rawValue: savedValue) ?? .none
-		}
-		set {
-			UserDefaults.standard.set(newValue.rawValue, forKey: "selectedSortType")
+		didSet {
+			storage.selectedSortType = currentSortType.rawValue
 		}
 	}
 	
 	init() {
+		let savedRawValue = storage.selectedSortType
+		currentSortType = SortType(rawValue: savedRawValue) ?? .none
+		
 		loadLocalMockData()
 	}
 	
@@ -40,22 +42,26 @@ final class CatalogViewModel {
 	private func applyCurrentSort() {
 		switch currentSortType {
 		case .name:
-			self.collections = collections.sorted { $0.name < $1.name }
+			collections = collections.sorted { $0.name < $1.name }
 		case .nftCount:
-			self.collections = collections.sorted { $0.nftCount > $1.nftCount }
+			collections = collections.sorted { $0.nftCount > $1.nftCount }
 		case .none:
 			break
 		}
 	}
 	
 	private func loadLocalMockData() {
-		guard let url = Bundle.main.url(forResource: "collections_mock", withExtension: "json"),
-			  let data = try? Data(contentsOf: url),
-			  let decoded = try? JSONDecoder().decode([NFTCollection].self, from: data) else {
+		guard let url = Bundle.main.url(forResource: "collections_mock", withExtension: "json") else {
 			return
 		}
-		self.collections = decoded
 		
-		applyCurrentSort()
+		do {
+			let data = try Data(contentsOf: url)
+			let decoded = try JSONDecoder().decode([NFTCollection].self, from: data)
+			collections = decoded
+			applyCurrentSort()
+		} catch {
+			print(error)
+		}
 	}
 }
