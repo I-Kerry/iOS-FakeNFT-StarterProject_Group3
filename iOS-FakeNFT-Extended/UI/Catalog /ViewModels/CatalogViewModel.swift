@@ -57,7 +57,17 @@ final class CatalogViewModel {
 	func fetchCatalogData() {
 		guard !isLoading else { return }
 		isLoading = true
-		loadLocalMockData()
+		
+		Task {
+			do {
+				try await Task.sleep(nanoseconds: 1_500_000_000)
+				loadLocalMockData()
+			} catch {
+				alertErrorMessage = error.localizedDescription
+				showNetworkAlert = true
+				isLoading = false
+			}
+		}
 	}
 	
 	private func loadLocalMockData() {
