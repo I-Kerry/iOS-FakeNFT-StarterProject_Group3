@@ -19,7 +19,6 @@ struct CatalogView: View {
 						HStack {
 							Spacer()
 							Button {
-								
 							} label: {
 								Image(.sortIcon)
 									.resizable()
@@ -48,6 +47,14 @@ struct CatalogView: View {
 					}
 					.ignoresSafeArea(edges: .top)
 				}
+			}
+			.alert("Ошибка", isPresented: $viewModel.showNetworkAlert) {
+				Button("Повторить") {
+					viewModel.fetchCatalogData()
+				}
+				Button("Отмена", role: .cancel) { }
+			} message: {
+				Text(viewModel.alertErrorMessage)
 			}
 		}
 	}

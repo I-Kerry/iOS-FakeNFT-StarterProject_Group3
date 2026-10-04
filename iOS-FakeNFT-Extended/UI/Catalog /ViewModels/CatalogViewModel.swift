@@ -12,6 +12,8 @@ enum SortType: String {
 final class CatalogViewModel {
 	private(set) var collections: [NFTCollection] = []
 	var isLoading: Bool = false
+	var showNetworkAlert: Bool = false
+	var alertErrorMessage: String = ""
 	
 	private let service: NftService
 	
@@ -52,7 +54,7 @@ final class CatalogViewModel {
 		}
 	}
 	
-	private func fetchCatalogData() {
+	func fetchCatalogData() {
 		guard !isLoading else { return }
 		isLoading = true
 		loadLocalMockData()
@@ -60,6 +62,9 @@ final class CatalogViewModel {
 	
 	private func loadLocalMockData() {
 		guard let url = Bundle.main.url(forResource: "collections_mock", withExtension: "json") else {
+			alertErrorMessage = "Не удалось найти файл данных"
+			showNetworkAlert = true
+			isLoading = false
 			return
 		}
 		
@@ -70,7 +75,8 @@ final class CatalogViewModel {
 			isLoading = false
 			applyCurrentSort()
 		} catch {
-			print(error)
+			alertErrorMessage = error.localizedDescription
+			showNetworkAlert = true
 			isLoading = false
 		}
 	}
