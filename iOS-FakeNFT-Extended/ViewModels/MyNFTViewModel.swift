@@ -5,7 +5,7 @@ import Observation
 @Observable
 final class MyNFTViewModel {
     
-    enum SortType {
+    enum SortType: String {
         case price
         case rating
         case name
@@ -13,11 +13,23 @@ final class MyNFTViewModel {
     
     private let nftService: NftService
     private let nftIDs: [String]
+    
+    private enum Constants {
+        static let sortTypeKey = "myNFTSortType"
+    }
 
     var nfts: [Nft] = []
     var isLoading = false
     var loadError: Error?
-    var sortType: SortType = .rating
+    
+    var sortType: SortType {
+        didSet {
+            UserDefaults.standard.set(
+                sortType.rawValue,
+                forKey: Constants.sortTypeKey
+            )
+        }
+    }
 
     init(
         nftService: NftService,
@@ -27,6 +39,12 @@ final class MyNFTViewModel {
         self.nftService = nftService
         self.nftIDs = nftIDs
         self.nfts = previewNFTs
+
+        let savedSortType = UserDefaults.standard.string(
+            forKey: Constants.sortTypeKey
+        )
+
+        self.sortType = SortType(rawValue: savedSortType ?? "") ?? .rating
     }
     
     func sortNFTs() {
