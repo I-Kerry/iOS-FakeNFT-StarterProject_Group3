@@ -10,6 +10,8 @@ struct ProfileView: View {
         static let chevronSize: CGFloat = 14
         static let horizontalPadding: CGFloat = 16
     }
+    
+    @Environment(ServicesAssembly.self) private var services
 
     @State private var viewModel: ProfileViewModel
     @State private var isWebViewPresented = false
@@ -150,8 +152,12 @@ struct ProfileView: View {
             }
         }
         .navigationDestination(isPresented: $isMyNFTPresented) {
-            MyNFTView()
-                .toolbar(.hidden, for: .tabBar)
+            MyNFTView(
+                viewModel: MyNFTViewModel(
+                    nftService: services.nftService
+                )
+            )
+            .toolbar(.hidden, for: .tabBar)
         }
         .navigationDestination(isPresented: $isFavoritesNFTPresented) {
             FavoritesNFTView()
