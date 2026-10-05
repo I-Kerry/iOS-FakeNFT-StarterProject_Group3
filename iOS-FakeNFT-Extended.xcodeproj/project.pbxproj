@@ -45,6 +45,7 @@
 		C5CF9485306037DA0048C967 /* CatalogRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CF9484306037D50048C967 /* CatalogRequest.swift */; };
 		C5CF9487306038180048C967 /* NFTCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CF9486306038170048C967 /* NFTCollection.swift */; };
 		C5CF949A306AB9880048C967 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C5CF9499306AB9880048C967 /* Config.xcconfig */; };
+		C5CF95223072500F0048C967 /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CF95213072500D0048C967 /* UserDefaultsService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,10 +106,12 @@
 		C5CF9486306038170048C967 /* NFTCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCollection.swift; sourceTree = "<group>"; };
 		C5CF9499306AB9880048C967 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		C5CF949B306ABB030048C967 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C5CF95213072500D0048C967 /* UserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C5CF948130602EC80048C967 /* Catalog  */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Catalog "; sourceTree = "<group>"; };
+		C5CF94D7306C37B10048C967 /* Docs */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Docs; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +164,7 @@
 		ABC5E16A2C31F5AF002B4068 /* iOS-FakeNFT-Extended */ = {
 			isa = PBXGroup;
 			children = (
+				C5CF94D7306C37B10048C967 /* Docs */,
 				C5CF949B306ABB030048C967 /* Info.plist */,
 				ABC5E16B2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift */,
 				ABC5E1E92C32084F002B4068 /* Localizable.strings */,
@@ -266,6 +270,7 @@
 		ABC5E1AC2C31FB6C002B4068 /* Requests */ = {
 			isa = PBXGroup;
 			children = (
+				C5CF95213072500D0048C967 /* UserDefaultsService.swift */,
 				C5CF9484306037D50048C967 /* CatalogRequest.swift */,
 				ABC5E1B12C31FBD4002B4068 /* ExampleRequest.swift */,
 				ABC5E1AD2C31FB7F002B4068 /* NftByIdRequest.swift */,
@@ -338,6 +343,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				C5CF948130602EC80048C967 /* Catalog  */,
+				C5CF94D7306C37B10048C967 /* Docs */,
 			);
 			name = "iOS-FakeNFT-Extended";
 			packageProductDependencies = (
@@ -488,6 +494,7 @@
 				ABC5E1CB2C3203FC002B4068 /* NftDetailCellModel.swift in Sources */,
 				ABC5E1AB2C31FACD002B4068 /* NftService.swift in Sources */,
 				C5CF9485306037DA0048C967 /* CatalogRequest.swift in Sources */,
+				C5CF95223072500F0048C967 /* UserDefaultsService.swift in Sources */,
 				ABC5E1B22C31FBD4002B4068 /* ExampleRequest.swift in Sources */,
 				ABC5E1CD2C32040C002B4068 /* NftImageCollectionViewCell.swift in Sources */,
 				ABC5E1A82C31FA90002B4068 /* DateFormatters+Presets.swift in Sources */,
