@@ -154,7 +154,8 @@ struct ProfileView: View {
         .navigationDestination(isPresented: $isMyNFTPresented) {
             MyNFTView(
                 viewModel: MyNFTViewModel(
-                    nftService: services.nftService
+                    nftService: services.nftService,
+                    nftIDs: viewModel.profile?.nfts ?? []
                 )
             )
             .toolbar(.hidden, for: .tabBar)

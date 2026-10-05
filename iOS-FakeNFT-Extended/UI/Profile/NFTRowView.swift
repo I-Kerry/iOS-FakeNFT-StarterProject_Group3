@@ -11,44 +11,48 @@ struct NFTRowView: View {
         static let starSize: CGFloat = 12
         static let ratingSpacing: CGFloat = 2
         static let heartSize: CGFloat = 18
-        static let heartPadding: CGFloat = 12
-        static let priceTrailingPadding: CGFloat = 39
+        static let heartTopPadding: CGFloat = 10
+        static let heartTrailingPadding: CGFloat = 8
+        static let infoToPriceSpacing: CGFloat = 30
+        static let zeroSpacing: CGFloat = 0
+        static let priceWidth: CGFloat = 85
     }
 
     let nft: Nft
 
     var body: some View {
-        HStack(spacing: Constants.imageToInfoSpacing) {
+        HStack(spacing: Constants.zeroSpacing) {
             nftImage
+                    .padding(.trailing, Constants.imageToInfoSpacing)
 
-            VStack(alignment: .leading, spacing: Constants.infoSpacing) {
-                Text(nft.name)
-                    .font(Font(UIFont.bodyBold))
+                VStack(alignment: .leading, spacing: Constants.infoSpacing) {
+                    Text(nft.name)
+                        .font(Font(UIFont.bodyBold))
 
-                rating
+                    rating
 
-                HStack(spacing: Constants.authorSpacing) {
-                    Text("от")
-                        .font(Font(UIFont.caption1))
+                    HStack(spacing: Constants.authorSpacing) {
+                        Text("от")
+                            .font(Font(UIFont.caption1))
 
-                    Text(nft.author)
-                        .font(Font(UIFont.caption2))
+                        Text(nft.author)
+                            .font(Font(UIFont.caption2))
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.trailing, Constants.infoToPriceSpacing)
+
+                VStack(alignment: .leading, spacing: Constants.priceSpacing) {
+                    Text("Цена")
+                        .font(Font(UIFont.caption2))
+
+                    Text("\(nft.price, specifier: "%.2f") ETH")
+                        .font(Font(UIFont.bodyBold))
+                        .lineLimit(1)
+                        .fixedSize()
+                }
+                .frame(width: Constants.priceWidth, alignment: .leading)
             }
-
-            Spacer()
-
-            VStack(alignment: .leading, spacing: Constants.priceSpacing) {
-                Text("Цена")
-                    .font(Font(UIFont.caption2))
-
-                Text("\(nft.price, specifier: "%.2f") ETH")
-                    .font(Font(UIFont.bodyBold))
-                    .lineLimit(1)
-                    .fixedSize()
-            }
-        }
-        .padding(.trailing, Constants.priceTrailingPadding)
     }
 }
 
@@ -85,7 +89,8 @@ private extension NFTRowView {
             Image(systemName: "heart.fill")
                 .font(.system(size: Constants.heartSize))
                 .foregroundStyle(.white)
-                .padding(Constants.heartPadding)
+                .padding(.top, Constants.heartTopPadding)
+                .padding(.trailing, Constants.heartTrailingPadding)
         }
     }
 

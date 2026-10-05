@@ -9,7 +9,10 @@ struct MyNFTView: View {
         static let backIconSize: CGFloat = 20
         static let sortIconSize: CGFloat = 24
         
-        static let rowSpacing: CGFloat = 16
+        static let rowSpacing: CGFloat = 32
+        
+        static let contentTopPadding: CGFloat = 36
+        static let zeroSpacing: CGFloat = 0
     }
     
     @Environment(\.dismiss) private var dismiss
@@ -21,21 +24,42 @@ struct MyNFTView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: Constants.zeroSpacing) {
             header
             
             ScrollView {
                 VStack(spacing: Constants.rowSpacing) {
                     ForEach(viewModel.nfts, id: \.id) { nft in
                         NFTRowView(nft: nft)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
                 .padding(.horizontal, Constants.horizontalPadding)
+                .padding(.top, Constants.contentTopPadding)
             }
         }
         .background(.background)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)
+        .overlay {
+            if viewModel.isLoading {
+                ProgressView()
+                    .scaleEffect(1.2)
+            }
+        }
+        .alert(
+            "Ошибка",
+            isPresented: .constant(viewModel.loadError != nil)
+        ) {
+            Button("OK") {
+                viewModel.loadError = nil
+            }
+        } message: {
+            Text("Не удалось загрузить NFT")
+        }
+        .task {
+            await viewModel.loadNFTs()
+        }
     }
 }
 
