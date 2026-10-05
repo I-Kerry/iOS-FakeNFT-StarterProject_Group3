@@ -161,7 +161,9 @@ struct ProfileView: View {
             .toolbar(.hidden, for: .tabBar)
         }
         .navigationDestination(isPresented: $isFavoritesNFTPresented) {
-            FavoritesNFTView()
+            FavoritesNFTView(
+                viewModel: FavoritesNFTViewModel()
+            )
                 .toolbar(.hidden, for: .tabBar)
         }
     }
