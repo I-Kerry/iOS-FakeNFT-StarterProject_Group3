@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol CartService {
+protocol CartService: Sendable {
     func loadCart() async throws -> [Nft]
     func loadCurrencies() async throws -> [Currency]
     func pay(currencyId: String) async throws -> Bool

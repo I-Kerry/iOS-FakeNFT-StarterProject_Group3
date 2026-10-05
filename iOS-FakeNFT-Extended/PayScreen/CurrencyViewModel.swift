@@ -23,6 +23,7 @@ final class CurrencyViewModel {
     var selectedCurrencyID: String?
     var paymentError: Error? = nil
     var didPaySuccessfully = false
+    var isPaying = false
     
     var onCompletePayment: () -> Void
     
@@ -42,8 +43,13 @@ final class CurrencyViewModel {
     }
     
     func pay() async {
-        guard let currencyID = selectedCurrencyID else { return }
-
+        
+        guard !isPaying,
+              let currencyID = selectedCurrencyID else { return }
+        
+        isPaying = true
+        defer { isPaying = false }
+        
         do {
             let success = try await service.pay(currencyId: currencyID)
 

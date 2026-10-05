@@ -25,7 +25,7 @@ struct CurrencyPaymentView: View {
         ZStack {
             switch viewModel.state {
             case .idle, .loading:
-                EmptyView()
+                ProgressView()
             case .data:
                 ScrollView {
                     LazyVGrid(columns: columns, alignment: .leading, spacing: Constants.vGridSpacing) {
@@ -39,10 +39,17 @@ struct CurrencyPaymentView: View {
                     .padding(Constants.padding)
                 }
                 .safeAreaInset(edge: .bottom) {
-                    AgreementView(onPay: { Task { await viewModel.pay() } })
+                    AgreementView(
+                        onPay: { Task { await viewModel.pay() } },
+                        isEnabled: viewModel.selectedCurrencyID != nil && !viewModel.isPaying)
                 }
             case .error(let error):
                 Text(error.localizedDescription)
+            }
+            if viewModel.isPaying {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(.gray.opacity(0.3))
             }
             
         }

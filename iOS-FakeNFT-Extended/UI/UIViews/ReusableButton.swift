@@ -13,6 +13,7 @@ struct ReusableButton: View {
     var body: some View {
         Button(action: action) {
             Text(title)
+                .buttonStyle(.plain)
                 .foregroundStyle(.textMain)
                 .font(.bodyBold)
                 .frame(width: Constants.width, height: Constants.height)
@@ -30,6 +31,7 @@ private enum Constants {
 
 #Preview("light") {
     ReusableButton(title: "Оплатить", action: {})
+        .disabled(true)
         .preferredColorScheme(.light)
 }
 

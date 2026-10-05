@@ -10,6 +10,7 @@ import SwiftUI
 struct AgreementView: View {
     @State private var showWebView = false
     let onPay: () -> Void
+    var isEnabled = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: Constants.normalSpacing) {
@@ -25,6 +26,7 @@ struct AgreementView: View {
             }
             
             ReusableButton(title: Constants.buttonTitle, action: onPay)
+                .disabled(!isEnabled)
         }
         .padding(Constants.padding)
         .frame(maxWidth: .infinity)
@@ -49,5 +51,5 @@ private enum Constants {
 }
 
 #Preview {
-    AgreementView(onPay: {})
+    AgreementView(onPay: {}, isEnabled: true)
 }

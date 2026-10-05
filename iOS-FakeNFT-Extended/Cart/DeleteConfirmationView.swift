@@ -36,7 +36,7 @@ struct DeleteConfirmationView: View {
                     Button(action: onDelete) {
                         Text(Constants.delete)
                         }
-                    .foregroundStyle(.destract)
+                    .foregroundStyle(.destractive)
                     
                     Button(action: onCancel) {
                         Text(Constants.cancel)

@@ -31,7 +31,7 @@ struct CurrencyItemView: View {
                             .frame(width: Constants.imageFrame, height: Constants.imageFrame)
                             .clipShape(Circle())
                     default:
-                        EmptyView()
+                        ProgressView()
                     }
                 }
             }

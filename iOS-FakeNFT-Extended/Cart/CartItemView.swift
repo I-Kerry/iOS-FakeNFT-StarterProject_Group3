@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct CartItemView: View {
     let nft: Nft
@@ -13,21 +14,12 @@ struct CartItemView: View {
 
     var body: some View {
         HStack {
-            AsyncImage(url: nft.images.first) { phase in
-                switch phase {
-                case .success(let image):
-                    image.resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: Constants.imageSize, height: Constants.imageSize)
-                        .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
-                default:
-                    Color.gray.opacity(Constants.opacity)
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: Constants.imageSize, height: Constants.imageSize)
-                        .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
-                }
-            }
-            
+            KFImage(nft.images.first)
+                .placeholder{ Color.gray.opacity(Constants.opacity) }
+                .resizable()
+                .scaledToFill()
+                .frame(width: Constants.imageSize, height: Constants.imageSize)
+                .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
             VStack(alignment: .leading, spacing: Constants.infoPriceSpacing) {
                 info
                 priceInfo
@@ -73,6 +65,7 @@ struct CartItemView: View {
                 .foregroundStyle(.button)
                 .frame(width: Constants.deleteButtonWidth, height: Constants.deleteButtonHeight)
         }
+        .buttonStyle(.plain)
         .frame(width: Constants.buttonSize, height: Constants.buttonSize)
     }
 }
