@@ -18,6 +18,7 @@ struct MyNFTView: View {
     @Environment(\.dismiss) private var dismiss
     
     @State private var viewModel: MyNFTViewModel
+    @State private var isSortDialogPresented = false
     
     init(viewModel: MyNFTViewModel) {
         _viewModel = State(initialValue: viewModel)
@@ -60,6 +61,28 @@ struct MyNFTView: View {
         .task {
             await viewModel.loadNFTs()
         }
+        .confirmationDialog(
+            "Сортировка",
+            isPresented: $isSortDialogPresented,
+            titleVisibility: .visible
+        ) {
+            Button("По цене") {
+                viewModel.sortType = .price
+                viewModel.sortNFTs()
+            }
+
+            Button("По рейтингу") {
+                viewModel.sortType = .rating
+                viewModel.sortNFTs()
+            }
+
+            Button("По названию") {
+                viewModel.sortType = .name
+                viewModel.sortNFTs()
+            }
+
+            Button("Закрыть", role: .cancel) {}
+        }
     }
 }
 
@@ -76,17 +99,17 @@ private extension MyNFTView {
                     ))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
             }
-
+            
             Spacer()
-
+            
             Text("Мои NFT")
                 .font(Font(UIFont.bodyBold))
                 .foregroundStyle(Color(uiColor: .yaBlackLight))
-
+            
             Spacer()
-
+            
             Button {
-                // Сортировка будет добавлена в задаче 3.3
+                isSortDialogPresented = true
             } label: {
                 Image(systemName: "line.3.horizontal.decrease")
                     .font(.system(
