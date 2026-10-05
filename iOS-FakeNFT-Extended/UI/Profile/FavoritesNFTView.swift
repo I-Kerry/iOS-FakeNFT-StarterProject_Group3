@@ -32,25 +32,32 @@ struct FavoritesNFTView: View {
             header
             
             ScrollView {
-                LazyVGrid(
-                    columns: Constants.gridColumns,
-                    spacing: Constants.gridVerticalSpacing
-                ) {
-                    ForEach(viewModel.nfts, id: \.id) { nft in
-                        FavoriteNFTCardView(
-                            nft: nft,
-                            onFavoriteTapped: {
-                                Task {
-                                    await viewModel.toggleFavorite(for: nft)
+                if viewModel.nfts.isEmpty {
+                    Text("У Вас ещё нет избранных NFT")
+                        .font(Font(UIFont.bodyBold))
+                        .foregroundStyle(Color(uiColor: .yaBlackLight))
+                        .frame(maxWidth: .infinity, minHeight: 600)
+                } else {
+                    LazyVGrid(
+                        columns: Constants.gridColumns,
+                        spacing: Constants.gridVerticalSpacing
+                    ) {
+                        ForEach(viewModel.nfts, id: \.id) { nft in
+                            FavoriteNFTCardView(
+                                nft: nft,
+                                onFavoriteTapped: {
+                                    Task {
+                                        await viewModel.toggleFavorite(for: nft)
+                                    }
                                 }
-                            }
-                        )
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                            )
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                     }
                 }
-                .padding(.horizontal, Constants.horizontalPadding)
-                .padding(.top, Constants.contentTopPadding)
             }
+            .padding(.horizontal, Constants.horizontalPadding)
+            .padding(.top, Constants.contentTopPadding)
         }
         .background(.background)
         .navigationBarBackButtonHidden(true)
@@ -92,27 +99,30 @@ private extension FavoritesNFTView {
                     )
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
             }
-            
-            Spacer()
-            
-            Text("Избранные NFT")
-                .font(Font(UIFont.bodyBold))
-                .foregroundStyle(Color(uiColor: .yaBlackLight))
-            
-            Spacer()
-            
-            Color.clear
-                .frame(
-                    width: Constants.backIconSize,
-                    height: Constants.backIconSize
-                )
+
+            if !viewModel.nfts.isEmpty {
+                Spacer()
+
+                Text("Избранные NFT")
+                    .font(Font(UIFont.bodyBold))
+                    .foregroundStyle(Color(uiColor: .yaBlackLight))
+
+                Spacer()
+
+                Color.clear
+                    .frame(
+                        width: Constants.backIconSize,
+                        height: Constants.backIconSize
+                    )
+            }
         }
         .padding(.horizontal, Constants.horizontalPadding)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: Constants.headerHeight)
     }
 }
 
-#Preview {
+#Preview("With NFT") {
     FavoritesNFTView(
         viewModel: FavoritesNFTViewModel(
             nftService: PreviewNftService(),
@@ -168,6 +178,17 @@ private extension FavoritesNFTView {
                     author: "John Doe"
                 )
             ]
+        )
+    )
+}
+
+#Preview("Empty") {
+    FavoritesNFTView(
+        viewModel: FavoritesNFTViewModel(
+            nftService: PreviewNftService(),
+            profileService: PreviewProfileService(),
+            profile: nil,
+            previewNFTs: []
         )
     )
 }

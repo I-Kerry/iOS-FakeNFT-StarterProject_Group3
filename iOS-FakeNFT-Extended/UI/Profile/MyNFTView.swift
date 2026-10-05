@@ -29,23 +29,30 @@ struct MyNFTView: View {
             header
             
             ScrollView {
-                VStack(spacing: Constants.rowSpacing) {
-                    ForEach(viewModel.nfts, id: \.id) { nft in
-                        NFTRowView(
-                            nft: nft,
-                            isFavorite: viewModel.isFavorite(nft),
-                            onFavoriteTapped: {
-                                Task {
-                                    await viewModel.toggleFavorite(for: nft)
+                if viewModel.nfts.isEmpty {
+                    Text("У Вас ещё нет NFT")
+                        .font(Font(UIFont.bodyBold))
+                        .foregroundStyle(Color(uiColor: .yaBlackLight))
+                        .frame(maxWidth: .infinity, minHeight: 600)
+                } else {
+                    VStack(spacing: Constants.rowSpacing) {
+                        ForEach(viewModel.nfts, id: \.id) { nft in
+                            NFTRowView(
+                                nft: nft,
+                                isFavorite: viewModel.isFavorite(nft),
+                                onFavoriteTapped: {
+                                    Task {
+                                        await viewModel.toggleFavorite(for: nft)
+                                    }
                                 }
-                            }
-                        )
+                            )
                             .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                     }
                 }
-                .padding(.horizontal, Constants.horizontalPadding)
-                .padding(.top, Constants.contentTopPadding)
             }
+            .padding(.horizontal, Constants.horizontalPadding)
+            .padding(.top, Constants.contentTopPadding)
         }
         .background(.background)
         .navigationBarBackButtonHidden(true)
@@ -107,32 +114,35 @@ private extension MyNFTView {
                     ))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
             }
-            
-            Spacer()
-            
-            Text("Мои NFT")
-                .font(Font(UIFont.bodyBold))
-                .foregroundStyle(Color(uiColor: .yaBlackLight))
-            
-            Spacer()
-            
-            Button {
-                isSortDialogPresented = true
-            } label: {
-                Image(systemName: "line.3.horizontal.decrease")
-                    .font(.system(
-                        size: Constants.sortIconSize,
-                        weight: .medium
-                    ))
+
+            if !viewModel.nfts.isEmpty {
+                Spacer()
+
+                Text("Мои NFT")
+                    .font(Font(UIFont.bodyBold))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
+
+                Spacer()
+
+                Button {
+                    isSortDialogPresented = true
+                } label: {
+                    Image(systemName: "line.3.horizontal.decrease")
+                        .font(.system(
+                            size: Constants.sortIconSize,
+                            weight: .medium
+                        ))
+                        .foregroundStyle(Color(uiColor: .yaBlackLight))
+                }
             }
         }
         .padding(.horizontal, Constants.horizontalPadding)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: Constants.headerHeight)
     }
 }
 
-#Preview {
+#Preview("With NFT") {
     MyNFTView(
         viewModel: MyNFTViewModel(
             nftService: PreviewNftService(),
@@ -167,4 +177,13 @@ private extension MyNFTView {
     )
 }
 
+#Preview("Empty") {
+    MyNFTView(
+        viewModel: MyNFTViewModel(
+            nftService: PreviewNftService(),
+            profileService: PreviewProfileService(),
+            previewNFTs: []
+        )
+    )
+}
 
