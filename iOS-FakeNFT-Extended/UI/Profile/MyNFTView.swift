@@ -31,7 +31,15 @@ struct MyNFTView: View {
             ScrollView {
                 VStack(spacing: Constants.rowSpacing) {
                     ForEach(viewModel.nfts, id: \.id) { nft in
-                        NFTRowView(nft: nft)
+                        NFTRowView(
+                            nft: nft,
+                            isFavorite: viewModel.isFavorite(nft),
+                            onFavoriteTapped: {
+                                Task {
+                                    await viewModel.toggleFavorite(for: nft)
+                                }
+                            }
+                        )
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
@@ -128,6 +136,7 @@ private extension MyNFTView {
     MyNFTView(
         viewModel: MyNFTViewModel(
             nftService: PreviewNftService(),
+            profileService: PreviewProfileService(),
             previewNFTs: [
                 Nft(
                     id: "1",
@@ -159,8 +168,3 @@ private extension MyNFTView {
 }
 
 
-private struct PreviewNftService: NftService {
-    func loadNft(id: String) async throws -> Nft {
-        fatalError("PreviewNftService is not used")
-    }
-}

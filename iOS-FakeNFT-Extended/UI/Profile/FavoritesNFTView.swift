@@ -5,12 +5,12 @@ struct FavoritesNFTView: View {
         static let horizontalPadding: CGFloat = 16
         static let headerHeight: CGFloat = 42
         static let contentTopPadding: CGFloat = 20
-
+        
         static let backIconSize: CGFloat = 20
-
+        
         static let gridHorizontalSpacing: CGFloat = 7
         static let gridVerticalSpacing: CGFloat = 20
-
+        
         static let zeroSpacing: CGFloat = 0
         
         static let gridColumns = [
@@ -18,27 +18,34 @@ struct FavoritesNFTView: View {
             GridItem(.flexible())
         ]
     }
-
+    
     @Environment(\.dismiss) private var dismiss
-
+    
     @State private var viewModel: FavoritesNFTViewModel
-
+    
     init(viewModel: FavoritesNFTViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
-
+    
     var body: some View {
         VStack(spacing: Constants.zeroSpacing) {
             header
-
+            
             ScrollView {
                 LazyVGrid(
                     columns: Constants.gridColumns,
                     spacing: Constants.gridVerticalSpacing
                 ) {
                     ForEach(viewModel.nfts, id: \.id) { nft in
-                        FavoriteNFTCardView(nft: nft)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        FavoriteNFTCardView(
+                            nft: nft,
+                            onFavoriteTapped: {
+                                Task {
+                                    await viewModel.toggleFavorite(for: nft)
+                                }
+                            }
+                        )
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
                 .padding(.horizontal, Constants.horizontalPadding)
@@ -48,6 +55,25 @@ struct FavoritesNFTView: View {
         .background(.background)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)
+        .task {
+            await viewModel.loadNFTs()
+        }
+        .overlay {
+            if viewModel.isLoading {
+                ProgressView()
+                    .scaleEffect(1.2)
+            }
+        }
+        .alert(
+            "Ошибка",
+            isPresented: .constant(viewModel.loadError != nil)
+        ) {
+            Button("OK") {
+                viewModel.loadError = nil
+            }
+        } message: {
+            Text("Не удалось загрузить избранные NFT")
+        }
     }
 }
 
@@ -66,15 +92,15 @@ private extension FavoritesNFTView {
                     )
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
             }
-
+            
             Spacer()
-
+            
             Text("Избранные NFT")
                 .font(Font(UIFont.bodyBold))
                 .foregroundStyle(Color(uiColor: .yaBlackLight))
-
+            
             Spacer()
-
+            
             Color.clear
                 .frame(
                     width: Constants.backIconSize,
@@ -89,6 +115,9 @@ private extension FavoritesNFTView {
 #Preview {
     FavoritesNFTView(
         viewModel: FavoritesNFTViewModel(
+            nftService: PreviewNftService(),
+            profileService: PreviewProfileService(),
+            profile: nil,
             previewNFTs: [
                 Nft(
                     id: "1",

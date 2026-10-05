@@ -11,7 +11,7 @@ struct FavoriteNFTCardView: View {
 
         static let heartSize: CGFloat = 21
         static let heartTopPadding: CGFloat = 6
-        static let heartTrailingPadding: CGFloat = 6
+        static let heartTrailingPadding: CGFloat = 4
 
         static let starSize: CGFloat = 12
         static let ratingSpacing: CGFloat = 2
@@ -20,6 +20,7 @@ struct FavoriteNFTCardView: View {
     }
 
     let nft: Nft
+    let onFavoriteTapped: () -> Void
 
     var body: some View {
         HStack(
@@ -75,12 +76,13 @@ private extension FavoriteNFTCardView {
                 )
             )
 
-            Image(systemName: "heart.fill")
-                .font(.system(size: Constants.heartSize))
-                .foregroundStyle(Color(uiColor: .redUniversal))
-                .padding(.top, Constants.heartTopPadding)
-                .padding(.trailing, Constants.heartTrailingPadding)
-        }
+            Button(action: onFavoriteTapped) {
+                Image(systemName: "heart.fill")
+                    .font(.system(size: Constants.heartSize))
+                    .foregroundStyle(Color(uiColor: .redUniversal))
+                    .padding(.top, Constants.heartTopPadding)
+                    .padding(.trailing, Constants.heartTrailingPadding)
+            }        }
     }
 
     var rating: some View {
@@ -111,7 +113,8 @@ private extension FavoriteNFTCardView {
             rating: 4,
             price: 1.78,
             author: "John Doe"
-        )
+        ),
+        onFavoriteTapped: {}
     )
     .padding()
 }

@@ -13,6 +13,9 @@ final class MyNFTViewModel {
     
     private let nftService: NftService
     private let nftIDs: [String]
+    private var likedNFTIDs: Set<String> = []
+    private let profileService: ProfileService
+    private var profile: Profile?
     
     private enum Constants {
         static let sortTypeKey = "myNFTSortType"
@@ -21,6 +24,7 @@ final class MyNFTViewModel {
     var nfts: [Nft] = []
     var isLoading = false
     var loadError: Error?
+    var onProfileUpdated: ((Profile) -> Void)?
     
     var sortType: SortType {
         didSet {
@@ -33,11 +37,19 @@ final class MyNFTViewModel {
 
     init(
         nftService: NftService,
+        profileService: ProfileService,
         nftIDs: [String] = [],
+        likedNFTIDs: Set<String> = [],
+        profile: Profile? = nil,
+        onProfileUpdated: ((Profile) -> Void)? = nil,
         previewNFTs: [Nft] = []
-    ) {
+    ){
         self.nftService = nftService
+        self.profileService = profileService
         self.nftIDs = nftIDs
+        self.likedNFTIDs = likedNFTIDs
+        self.profile = profile
+        self.onProfileUpdated = onProfileUpdated
         self.nfts = previewNFTs
 
         let savedSortType = UserDefaults.standard.string(
@@ -73,5 +85,34 @@ final class MyNFTViewModel {
             }
         }
         sortNFTs()
+    }
+    
+    func isFavorite(_ nft: Nft) -> Bool {
+        likedNFTIDs.contains(nft.id)
+    }
+    
+    func toggleFavorite(for nft: Nft) async {
+        if likedNFTIDs.contains(nft.id) {
+            likedNFTIDs.remove(nft.id)
+        } else {
+            likedNFTIDs.insert(nft.id)
+        }
+
+        guard let currentProfile = profile else { return }
+
+        do {
+            let updatedProfile = try await profileService.updateProfile(
+                name: currentProfile.name,
+                description: currentProfile.description,
+                avatar: currentProfile.avatar?.absoluteString ?? "",
+                website: currentProfile.website.absoluteString,
+                likes: Array(likedNFTIDs)
+            )
+
+            profile = updatedProfile
+            onProfileUpdated?(updatedProfile)
+        } catch {
+            loadError = error
+        }
     }
 }

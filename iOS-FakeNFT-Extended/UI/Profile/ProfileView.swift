@@ -155,14 +155,27 @@ struct ProfileView: View {
             MyNFTView(
                 viewModel: MyNFTViewModel(
                     nftService: services.nftService,
-                    nftIDs: viewModel.profile?.nfts ?? []
+                    profileService: services.profileService,
+                    nftIDs: viewModel.profile?.nfts ?? [],
+                    likedNFTIDs: Set(viewModel.profile?.likes ?? []),
+                    profile: viewModel.profile,
+                    onProfileUpdated: { updatedProfile in
+                        viewModel.profile = updatedProfile
+                    }
                 )
             )
             .toolbar(.hidden, for: .tabBar)
         }
         .navigationDestination(isPresented: $isFavoritesNFTPresented) {
             FavoritesNFTView(
-                viewModel: FavoritesNFTViewModel()
+                viewModel: FavoritesNFTViewModel(
+                    nftService: services.nftService,
+                    profileService: services.profileService,
+                    profile: viewModel.profile,
+                    onProfileUpdated: { updatedProfile in
+                        viewModel.profile = updatedProfile
+                    }
+                )
             )
                 .toolbar(.hidden, for: .tabBar)
         }

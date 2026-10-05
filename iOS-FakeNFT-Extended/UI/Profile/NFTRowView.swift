@@ -19,6 +19,8 @@ struct NFTRowView: View {
     }
 
     let nft: Nft
+    let isFavorite: Bool
+    let onFavoriteTapped: () -> Void
 
     var body: some View {
         HStack(spacing: Constants.zeroSpacing) {
@@ -86,11 +88,20 @@ private extension NFTRowView {
                 )
             )
 
-            Image(systemName: "heart.fill")
-                .font(.system(size: Constants.heartSize))
-                .foregroundStyle(.white)
-                .padding(.top, Constants.heartTopPadding)
-                .padding(.trailing, Constants.heartTrailingPadding)
+            Button {
+                onFavoriteTapped()
+            } label: {
+                Image(systemName: "heart.fill")
+                    .font(.system(size: Constants.heartSize))
+                    .foregroundStyle(
+                        isFavorite
+                            ? Color(uiColor: .redUniversal)
+                            : .white
+                    )
+            }
+            .buttonStyle(.plain)
+            .padding(.top, Constants.heartTopPadding)
+            .padding(.trailing, Constants.heartTrailingPadding)
         }
     }
 
@@ -122,7 +133,9 @@ private extension NFTRowView {
             rating: 3,
             price: 1.78,
             author: "John Doe"
-        )
+        ),
+        isFavorite: true,
+        onFavoriteTapped: {}
     )
     .padding()
 }
