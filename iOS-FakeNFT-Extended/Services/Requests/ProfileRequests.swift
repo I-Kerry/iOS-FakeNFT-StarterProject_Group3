@@ -34,12 +34,18 @@ struct UpdateProfileRequest: NetworkRequest {
             URLQueryItem(name: "website", value: website)
         ]
 
-        likes.forEach { like in
+        if likes.isEmpty {
             components.queryItems?.append(
-                URLQueryItem(name: "likes", value: like)
+                URLQueryItem(name: "likes", value: "null")
             )
+        } else {
+            likes.forEach { like in
+                components.queryItems?.append(
+                    URLQueryItem(name: "likes", value: like)
+                )
+            }
         }
-
+        
         return components.percentEncodedQuery?
             .replacingOccurrences(of: "+", with: "%2B")
             .data(using: .utf8)
