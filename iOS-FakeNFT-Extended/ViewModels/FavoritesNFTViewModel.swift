@@ -33,6 +33,8 @@ final class FavoritesNFTViewModel {
     
     func loadNFTs() async {
         isLoading = true
+        nfts = []
+        loadError = nil
         defer { isLoading = false }
         
         for id in nftIDs {
@@ -67,7 +69,7 @@ final class FavoritesNFTViewModel {
                 website: currentProfile.website.absoluteString,
                 likes: Array(likedNFTIDs)
             )
-
+            
             profile = updatedProfile
             onProfileUpdated?(updatedProfile)
         } catch {

@@ -2,7 +2,7 @@ import SwiftUI
 import Kingfisher
 
 struct ProfileView: View {
-
+    
     private enum Constants {
         static let editIconSize: CGFloat = 26
         static let profileImageSize: CGFloat = 70
@@ -12,22 +12,22 @@ struct ProfileView: View {
     }
     
     @Environment(ServicesAssembly.self) private var services
-
+    
     @State private var viewModel: ProfileViewModel
     @State private var isWebViewPresented = false
     @State private var isMyNFTPresented = false
     @State private var isFavoritesNFTPresented = false
-
+    
     init(viewModel: ProfileViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
-
+    
     var body: some View {
         VStack(spacing: 0) {
-
+            
             HStack {
                 Spacer()
-
+                
                 NavigationLink {
                     if let profile = viewModel.profile {
                         EditProfileView(
@@ -44,7 +44,7 @@ struct ProfileView: View {
             }
             .padding(.horizontal, Constants.horizontalPadding)
             .padding(.top, 2)
-
+            
             HStack(spacing: 16) {
                 KFImage(viewModel.profile?.avatar)
                     .placeholder {
@@ -58,21 +58,21 @@ struct ProfileView: View {
                         height: Constants.profileImageSize
                     )
                     .clipShape(Circle())
-
+                
                 Text(viewModel.profile?.name ?? "")
                     .font(Font(UIFont.headline3))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
-
+                
                 Spacer()
             }
             .padding(.horizontal, Constants.horizontalPadding)
             .padding(.top, 20)
-
+            
             VStack(alignment: .leading, spacing: 8) {
                 Text(viewModel.profile?.description ?? "")
                     .font(Font(UIFont.caption2))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
-
+                
                 Button {
                     isWebViewPresented = true
                 } label: {
@@ -86,7 +86,7 @@ struct ProfileView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, Constants.horizontalPadding)
             .padding(.top, 20)
-
+            
             VStack(spacing: 0) {
                 Button {
                     isMyNFTPresented = true
@@ -97,7 +97,7 @@ struct ProfileView: View {
                     )
                 }
                 .buttonStyle(.plain)
-
+                
                 Button {
                     isFavoritesNFTPresented = true
                 } label: {
@@ -109,7 +109,7 @@ struct ProfileView: View {
                 .buttonStyle(.plain)
             }
             .padding(.top, 40)
-
+            
             Spacer()
         }
         .background(.background)
@@ -177,30 +177,30 @@ struct ProfileView: View {
                     }
                 )
             )
-                .toolbar(.hidden, for: .tabBar)
+            .toolbar(.hidden, for: .tabBar)
         }
     }
 }
 
 private struct ProfileNavigationRow: View {
-
+    
     let title: String
     let count: Int
-
+    
     private enum Constants {
         static let chevronSize: CGFloat = 14
         static let horizontalPadding: CGFloat = 16
         static let rowHeight: CGFloat = 54
     }
-
+    
     var body: some View {
         HStack {
             Text("\(title) (\(count))")
                 .font(Font(UIFont.bodyBold))
                 .foregroundStyle(Color(uiColor: .yaBlackLight))
-
+            
             Spacer()
-
+            
             Image(systemName: "chevron.right")
                 .font(
                     .system(

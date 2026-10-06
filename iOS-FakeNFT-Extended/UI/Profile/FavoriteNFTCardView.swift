@@ -4,39 +4,39 @@ struct FavoriteNFTCardView: View {
     private enum Constants {
         static let imageSize: CGFloat = 80
         static let cornerRadius: CGFloat = 12
-
+        
         static let imageToInfoSpacing: CGFloat = 12
         static let infoSpacing: CGFloat = 4
         static let ratingToPriceSpacing: CGFloat = 8
-
+        
         static let heartSize: CGFloat = 21
         static let heartTopPadding: CGFloat = 6
         static let heartTrailingPadding: CGFloat = 4
-
+        
         static let starSize: CGFloat = 12
         static let ratingSpacing: CGFloat = 2
-
+        
         static let priceSpacing: CGFloat = 4
     }
-
+    
     let nft: Nft
     let onFavoriteTapped: () -> Void
-
+    
     var body: some View {
         HStack(
             alignment: .top,
             spacing: Constants.imageToInfoSpacing
         ) {
             nftImage
-
+            
             VStack(alignment: .leading, spacing: Constants.infoSpacing) {
                 Text(nft.name)
                     .font(Font(UIFont.bodyBold))
                     .lineLimit(2)
-
+                
                 rating
                     .padding(.bottom, Constants.ratingToPriceSpacing)
-
+                
                 Text("\(nft.price, specifier: "%.2f") ETH")
                     .font(Font(UIFont.bodyRegular))
                     .lineLimit(1)
@@ -55,13 +55,13 @@ private extension FavoriteNFTCardView {
                     image
                         .resizable()
                         .scaledToFill()
-
+                    
                 case .failure:
                     Color.gray
-
+                    
                 case .empty:
                     ProgressView()
-
+                    
                 @unknown default:
                     Color.gray
                 }
@@ -75,7 +75,7 @@ private extension FavoriteNFTCardView {
                     cornerRadius: Constants.cornerRadius
                 )
             )
-
+            
             Button(action: onFavoriteTapped) {
                 Image(systemName: "heart.fill")
                     .font(.system(size: Constants.heartSize))
@@ -84,20 +84,20 @@ private extension FavoriteNFTCardView {
                     .padding(.trailing, Constants.heartTrailingPadding)
             }        }
     }
-
+    
     var rating: some View {
         HStack(spacing: Constants.ratingSpacing) {
             ForEach(0..<5, id: \.self) { index in
                 Image(
                     systemName: index < nft.rating
-                        ? "star.fill"
-                        : "star"
+                    ? "star.fill"
+                    : "star"
                 )
                 .font(.system(size: Constants.starSize))
                 .foregroundStyle(
                     index < nft.rating
-                        ? .yellow
-                        : .gray
+                    ? .yellow
+                    : .gray
                 )
             }
         }

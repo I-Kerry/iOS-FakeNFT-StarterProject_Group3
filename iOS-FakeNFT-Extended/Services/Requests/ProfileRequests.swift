@@ -12,19 +12,19 @@ struct UpdateProfileRequest: NetworkRequest {
     let avatar: String
     let website: String
     let likes: [String]
-
+    
     var endpoint: URL? {
         URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
     }
-
+    
     var httpMethod: HttpMethod {
         .put
     }
-
+    
     var contentType: String? {
         "application/x-www-form-urlencoded"
     }
-
+    
     var body: Data? {
         var components = URLComponents()
         components.queryItems = [
@@ -33,7 +33,7 @@ struct UpdateProfileRequest: NetworkRequest {
             URLQueryItem(name: "avatar", value: avatar),
             URLQueryItem(name: "website", value: website)
         ]
-
+        
         if likes.isEmpty {
             components.queryItems?.append(
                 URLQueryItem(name: "likes", value: "null")

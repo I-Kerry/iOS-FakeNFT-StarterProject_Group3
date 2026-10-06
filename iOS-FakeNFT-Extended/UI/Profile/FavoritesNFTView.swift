@@ -32,7 +32,7 @@ struct FavoritesNFTView: View {
             header
             
             ScrollView {
-                if viewModel.nfts.isEmpty {
+                if !viewModel.isLoading && viewModel.nfts.isEmpty {
                     Text("У Вас ещё нет избранных NFT")
                         .font(Font(UIFont.bodyBold))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
@@ -99,16 +99,16 @@ private extension FavoritesNFTView {
                     )
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
             }
-
+            
             if !viewModel.nfts.isEmpty {
                 Spacer()
-
+                
                 Text("Избранные NFT")
                     .font(Font(UIFont.bodyBold))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
-
+                
                 Spacer()
-
+                
                 Color.clear
                     .frame(
                         width: Constants.backIconSize,

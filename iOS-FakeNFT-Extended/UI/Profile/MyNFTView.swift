@@ -29,7 +29,7 @@ struct MyNFTView: View {
             header
             
             ScrollView {
-                if viewModel.nfts.isEmpty {
+                if !viewModel.isLoading && viewModel.nfts.isEmpty {
                     Text("У Вас ещё нет NFT")
                         .font(Font(UIFont.bodyBold))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
@@ -85,17 +85,17 @@ struct MyNFTView: View {
                 viewModel.sortType = .price
                 viewModel.sortNFTs()
             }
-
+            
             Button("По рейтингу") {
                 viewModel.sortType = .rating
                 viewModel.sortNFTs()
             }
-
+            
             Button("По названию") {
                 viewModel.sortType = .name
                 viewModel.sortNFTs()
             }
-
+            
             Button("Закрыть", role: .cancel) {}
         }
     }
@@ -114,16 +114,16 @@ private extension MyNFTView {
                     ))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
             }
-
+            
             if !viewModel.nfts.isEmpty {
                 Spacer()
-
+                
                 Text("Мои NFT")
                     .font(Font(UIFont.bodyBold))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
-
+                
                 Spacer()
-
+                
                 Button {
                     isSortDialogPresented = true
                 } label: {
