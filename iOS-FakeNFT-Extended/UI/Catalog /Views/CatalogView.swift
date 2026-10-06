@@ -1,11 +1,14 @@
 import SwiftUI
 
 struct CatalogView: View {
+	let servicesAssembly: ServicesAssembly
+	
 	@State private var viewModel: CatalogViewModel
 	@State private var isShowingSortMenu = false
 	
 	init(servicesAssembly: ServicesAssembly) {
-		_viewModel = State(wrappedValue: CatalogViewModel(service: servicesAssembly.nftService))
+		self.servicesAssembly = servicesAssembly
+		_viewModel = State(initialValue: CatalogViewModel(service: servicesAssembly.nftService))
 	}
 	
 	var body: some View {
@@ -31,20 +34,33 @@ struct CatalogView: View {
 					.padding(.top, 44)
 					.padding(.bottom, 20)
 					
-					ScrollView {
-						LazyVStack(spacing: 8) {
-							ForEach(viewModel.collections) { collection in
-								NavigationLink(destination: CollectionDetailView(collection: collection)) {
-									CatalogRowView(collection: collection)
+					List {
+						ForEach(viewModel.collections) { collection in
+							ZStack {
+								NavigationLink(destination: CollectionDetailView(collection: collection, servicesAssembly: servicesAssembly)) {
+									EmptyView()
 								}
-								.buttonStyle(PlainButtonStyle())
+								.opacity(0)
+								CatalogRowView(collection: collection)
 							}
+							.listRowInsets(EdgeInsets())
+							.listRowSeparator(.hidden)
+							.listRowBackground(Color.clear)
+							.padding(.horizontal, 16)
+							.padding(.bottom, 8)
 						}
-						.padding([.horizontal, .bottom], 16)
 					}
+					.listStyle(.plain)
 					.scrollIndicators(.hidden)
 				}
 				.ignoresSafeArea(edges: .top)
+				
+				if viewModel.isLoading {
+					ProgressView()
+						.scaleEffect(1.5)
+						.frame(maxWidth: .infinity, maxHeight: .infinity)
+						.background(Color(.systemBackground).opacity(0.3))
+				}
 				
 				if isShowingSortMenu {
 					Color(.bgSortMenu)
@@ -133,11 +149,16 @@ struct CatalogView: View {
 			}
 			.alert("Ошибка", isPresented: $viewModel.showNetworkAlert) {
 				Button("Повторить") {
-					viewModel.fetchCatalogData()
+					Task {
+						await viewModel.fetchCatalogData()
+					}
 				}
 				Button("Отмена", role: .cancel) { }
 			} message: {
 				Text(viewModel.alertErrorMessage)
+			}
+			.task {
+				await viewModel.fetchCatalogData()
 			}
 		}
 	}
@@ -148,9 +169,29 @@ struct CatalogRowView: View {
 	
 	var body: some View {
 		VStack(alignment: .leading, spacing: 4) {
-			Color.gray.opacity(0.2)
-				.frame(height: 140)
-				.clipShape(RoundedRectangle(cornerRadius: 12))
+			if let coverString = collection.cover, let url = URL(string: coverString) {
+				AsyncImage(url: url) { phase in
+					switch phase {
+					case .success(let image):
+						image
+							.resizable()
+							.aspectRatio(contentMode: .fill)
+							.frame(height: 140)
+							.clipShape(RoundedRectangle(cornerRadius: 12))
+					case .failure:
+						placeholderView
+					case .empty:
+						ZStack {
+							placeholderView
+							ProgressView()
+						}
+					@unknown default:
+						placeholderView
+					}
+				}
+			} else {
+				placeholderView
+			}
 			
 			HStack {
 				Text("\(collection.name) (\(collection.nftCount))")
@@ -163,5 +204,11 @@ struct CatalogRowView: View {
 			.padding(.bottom, 8)
 		}
 		.frame(height: 179)
+	}
+	
+	private var placeholderView: some View {
+		Color.gray.opacity(0.2)
+			.frame(height: 140)
+			.clipShape(RoundedRectangle(cornerRadius: 12))
 	}
 }

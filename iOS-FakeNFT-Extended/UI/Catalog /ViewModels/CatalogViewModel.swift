@@ -18,7 +18,6 @@ final class CatalogViewModel {
 	private let service: NftService
 	private let storage = UserDefaultsService.shared
 	
-	@ObservationIgnored
 	private var currentSortType: SortType {
 		didSet {
 			storage.selectedSortType = currentSortType.rawValue
@@ -30,8 +29,6 @@ final class CatalogViewModel {
 		
 		let savedRawValue = storage.selectedSortType
 		currentSortType = SortType(rawValue: savedRawValue) ?? .none
-		
-		fetchCatalogData()
 	}
 	
 	func sortByNftCount() {
@@ -47,30 +44,33 @@ final class CatalogViewModel {
 	private func applyCurrentSort() {
 		switch currentSortType {
 		case .name:
-			collections = collections.sorted { $0.name < $1.name }
+			let sorted = collections.sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
+			self.collections = sorted
 		case .nftCount:
-			collections = collections.sorted { $0.nftCount > $1.nftCount }
+			let sorted = collections.sorted { $0.nftCount > $1.nftCount }
+			self.collections = sorted
 		case .none:
 			break
 		}
 	}
 	
-	func fetchCatalogData() {
+	func fetchCatalogData() async {
 		guard !isLoading else { return }
 		isLoading = true
 		
-		Task { [weak self] in
-			guard let self else { return }
-			do {
-				try await Task.sleep(nanoseconds: 1_500_000_000)
-				loadLocalMockData()
-			} catch {
-				alertErrorMessage = error.localizedDescription
-				showNetworkAlert = true
-				isLoading = false
-			}
+		do {
+			let fetchedCollections = try await service.loadCollections()
+			
+			self.collections = fetchedCollections
+			self.isLoading = false
+			self.applyCurrentSort()
+		} catch {
+			self.alertErrorMessage = error.localizedDescription
+			self.showNetworkAlert = true
+			self.isLoading = false
 		}
 	}
+	
 	
 	private func loadLocalMockData() {
 		guard let url = Bundle.main.url(forResource: "collections_mock", withExtension: "json") else {

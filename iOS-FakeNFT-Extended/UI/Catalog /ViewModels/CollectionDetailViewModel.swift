@@ -4,13 +4,48 @@ import Observation
 @Observable
 @MainActor
 final class CollectionDetailViewModel {
+	private(set) var nfts: [String: Nft] = [:]
+	var isLoading: Bool = false
+	
 	var likedNftIds: Set<String> = []
 	var cartNftIds: Set<String> = []
 	
-	init() {
+	private let service: NftService
+	
+	init(service: NftService) {
+		self.service = service
 	}
 	
-	// MARK: - Likes Logic
+	func loadNfts(ids: [String]) {
+		guard !ids.isEmpty else { return }
+		isLoading = true
+		
+		Task {
+			await withTaskGroup(of: (String, Nft?).self) { group in
+				for id in ids {
+					guard nfts[id] == nil else { continue }
+					
+					group.addTask {
+						do {
+							let nft = try await self.service.loadNft(id: id)
+							return (id, nft)
+						} catch {
+							print("❌ Ошибка загрузки отдельного NFT \(id): \(error)")
+							return (id, nil)
+						}
+					}
+				}
+				
+				for await (id, nft) in group {
+					if let nft = nft {
+						self.nfts[id] = nft
+					}
+				}
+			}
+			isLoading = false
+		}
+	}
+	
 	func isLiked(nftId: String) -> Bool {
 		likedNftIds.contains(nftId)
 	}
@@ -23,7 +58,6 @@ final class CollectionDetailViewModel {
 		}
 	}
 	
-	// MARK: - Cart Logic
 	func isInCart(nftId: String) -> Bool {
 		cartNftIds.contains(nftId)
 	}

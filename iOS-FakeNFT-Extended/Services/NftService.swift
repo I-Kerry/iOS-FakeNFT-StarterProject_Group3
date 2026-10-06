@@ -2,6 +2,7 @@ import Foundation
 
 protocol NftService: Sendable {
 	func loadNft(id: String) async throws -> Nft
+	func loadCollections() async throws -> [NFTCollection]
 }
 
 final class NftServiceImpl: NftService {
@@ -13,6 +14,10 @@ final class NftServiceImpl: NftService {
 	
 	func loadNft(id: String) async throws -> Nft {
 		try await actor.loadNft(id: id)
+	}
+	
+	func loadCollections() async throws -> [NFTCollection] {
+		try await actor.loadCollections()
 	}
 }
 
@@ -34,5 +39,11 @@ private actor NftServiceActor {
 		let nft: Nft = try await networkClient.send(request: request)
 		await storage.saveNft(nft)
 		return nft
+	}
+	
+	func loadCollections() async throws -> [NFTCollection] {
+		let request = CatalogRequest()
+		let collections: [NFTCollection] = try await networkClient.send(request: request)
+		return collections
 	}
 }

@@ -45,8 +45,6 @@ actor DefaultNetworkClient: NetworkClient {
 		return try await parse(data: data)
 	}
 	
-	// MARK: - Private
-	
 	private func create(request: NetworkRequest) throws -> URLRequest {
 		guard let endpoint = request.endpoint else {
 			throw NetworkClientError.incorrectRequest("Empty endpoint")

@@ -7,8 +7,15 @@ struct CollectionDetailView: View {
 	}
 	
 	let collection: NFTCollection
+	let servicesAssembly: ServicesAssembly
 	
-	@State private var viewModel = CollectionDetailViewModel()
+	@State private var viewModel: CollectionDetailViewModel
+	
+	init(collection: NFTCollection, servicesAssembly: ServicesAssembly) {
+		self.collection = collection
+		self.servicesAssembly = servicesAssembly
+		self._viewModel = State(wrappedValue: CollectionDetailViewModel(service: servicesAssembly.nftService))
+	}
 	
 	@State private var isShowingAuthorWebView = false
 	@State private var webViewProgress: Double = 0.0
@@ -32,11 +39,28 @@ struct CollectionDetailView: View {
 		.scrollIndicators(.hidden)
 		.navigationBarBackButtonHidden(true)
 		.navigationBarHidden(true)
+		.task {
+			viewModel.loadNfts(ids: collection.nfts ?? [])
+		}
 	}
 	
 	private var headerCoverView: some View {
 		ZStack(alignment: .topLeading) {
-			Color.gray.opacity(0.2)
+			if let coverString = collection.cover, let url = URL(string: coverString) {
+				AsyncImage(url: url) { phase in
+					switch phase {
+					case .success(let image):
+						image
+							.resizable()
+							.aspectRatio(contentMode: .fill)
+							.frame(height: 310)
+							.clipped()
+					case .failure, .empty:
+						placeholderCover
+					@unknown default:
+						placeholderCover
+					}
+				}
 				.frame(height: 310)
 				.clipShape(
 					.rect(
@@ -46,6 +70,9 @@ struct CollectionDetailView: View {
 						topTrailingRadius: 0
 					)
 				)
+			} else {
+				placeholderCover
+			}
 			
 			Button {
 				dismiss()
@@ -62,6 +89,11 @@ struct CollectionDetailView: View {
 			.padding(.leading, 9)
 		}
 		.ignoresSafeArea(edges: .top)
+	}
+	
+	private var placeholderCover: some View {
+		Color.gray.opacity(0.2)
+			.frame(height: 310)
 	}
 	
 	private var collectionInfoSection: some View {
@@ -91,7 +123,7 @@ struct CollectionDetailView: View {
 			.padding(.horizontal, 16)
 			.padding(.top, 13)
 			.sheet(isPresented: $isShowingAuthorWebView) {
-				if let authorURL = URL(string: collection.author) {
+				if let authorString = collection.author, let authorURL = URL(string: authorString) {
 					ZStack(alignment: .top) {
 						WebView(url: authorURL, progress: $webViewProgress, isLoading: $isWebViewLoading)
 							.ignoresSafeArea()
@@ -106,10 +138,11 @@ struct CollectionDetailView: View {
 					}
 				} else {
 					Text("Неверная ссылка на автора")
+						.padding()
 				}
 			}
 			
-			Text(collection.description)
+			Text(collection.description ?? "Описание отсутствует")
 				.font(.system(size: 13, weight: .regular))
 				.tracking(-0.08)
 				.foregroundStyle(.primary)
@@ -121,15 +154,19 @@ struct CollectionDetailView: View {
 	
 	private var nftGridSection: some View {
 		LazyVGrid(columns: columns, spacing: 9) {
-			ForEach(collection.nfts, id: \.self) { nftId in
-				NFTItemView(
-					nftId: nftId,
-					rating: 4,
-					isLiked: viewModel.isLiked(nftId: nftId),
-					isInCart: viewModel.isInCart(nftId: nftId),
-					onLikeTapped: { viewModel.toggleLike(for: nftId) },
-					onCartTapped: { viewModel.toggleCart(for: nftId) }
-				)
+			ForEach(collection.nfts ?? [], id: \.self) { nftId in
+				let currentNft = viewModel.nfts[nftId]
+				
+				NavigationLink(destination: Text("Экран NFT (Реализуется наставником)")) {
+					NFTItemView(
+						nft: currentNft,
+						isLiked: viewModel.isLiked(nftId: nftId),
+						isInCart: viewModel.isInCart(nftId: nftId),
+						onLikeTapped: { viewModel.toggleLike(for: nftId) },
+						onCartTapped: { viewModel.toggleCart(for: nftId) }
+					)
+				}
+				.buttonStyle(PlainButtonStyle())
 			}
 		}
 		.padding(.horizontal, 16)
@@ -139,13 +176,19 @@ struct CollectionDetailView: View {
 
 #Preview {
 	NavigationStack {
-		CollectionDetailView(collection: NFTCollection(
-			id: "1",
-			name: "Peach",
-			cover: "https://yandex.net",
-			nfts: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
-			description: "Пушистые шедевры цифрового искусства. Коллекция Персик объединяет самых нежных и грациозных представителей кошачьего мира.",
-			author: "https://yandex.ru"
-		))
+		CollectionDetailView(
+			collection: NFTCollection(
+				id: "1",
+				name: "Peach",
+				cover: "https://yandex.net",
+				nfts: ["1", "2", "3"],
+				description: "Пушистые шедевры цифрового искусства.",
+				author: "https://yandex.ru"
+			),
+			servicesAssembly: ServicesAssembly(
+				networkClient: DefaultNetworkClient(),
+				nftStorage: NftStorageImpl()
+			)
+		)
 	}
 }

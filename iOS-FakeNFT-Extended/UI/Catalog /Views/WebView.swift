@@ -14,13 +14,7 @@ struct WebView: UIViewRepresentable {
 		let webView = WKWebView()
 		webView.navigationDelegate = context.coordinator
 		
-		context.coordinator.observation = webView.observe(\.estimatedProgress, options: .new) { _, change in
-			if let newValue = change.newValue {
-				DispatchQueue.main.async {
-					self.progress = newValue
-				}
-			}
-		}
+		context.coordinator.setupObservation(for: webView)
 		
 		let request = URLRequest(url: url)
 		webView.load(request)
@@ -29,8 +23,17 @@ struct WebView: UIViewRepresentable {
 	}
 	
 	func updateUIView(_ uiView: WKWebView, context: Context) {
+		if let currentWebViewURL = uiView.url, currentWebViewURL.absoluteString == url.absoluteString {
+			return
+		}
+		
+		if !uiView.isLoading {
+			let request = URLRequest(url: url)
+			uiView.load(request)
+		}
 	}
 	
+	@MainActor
 	class Coordinator: NSObject, WKNavigationDelegate {
 		var parent: WebView
 		var observation: NSKeyValueObservation?
@@ -39,36 +42,33 @@ struct WebView: UIViewRepresentable {
 			self.parent = parent
 		}
 		
-		func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-			DispatchQueue.main.async {
-				self.parent.isLoading = true
+		func setupObservation(for webView: WKWebView) {
+			observation = webView.observe(\.estimatedProgress, options: .new) { [weak self] _, change in
+				guard let self = self, let newValue = change.newValue else { return }
+				Task { @MainActor in
+					self.parent.progress = newValue
+				}
 			}
 		}
 		
+		func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+			parent.isLoading = true
+		}
+		
 		func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-			DispatchQueue.main.async {
-				self.parent.isLoading = false
-			}
+			parent.isLoading = false
 		}
 		
 		func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
 			let nsError = error as NSError
-			if nsError.code == NSURLErrorCancelled {
-				return
-			}
-			DispatchQueue.main.async {
-				self.parent.isLoading = false
-			}
+			if nsError.code == NSURLErrorCancelled { return }
+			parent.isLoading = false
 		}
 		
 		func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
 			let nsError = error as NSError
-			if nsError.code == NSURLErrorCancelled {
-				return
-			}
-			DispatchQueue.main.async {
-				self.parent.isLoading = false
-			}
+			if nsError.code == NSURLErrorCancelled { return }
+			parent.isLoading = false
 		}
 		
 		deinit {

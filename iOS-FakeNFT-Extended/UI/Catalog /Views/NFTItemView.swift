@@ -5,8 +5,7 @@ struct NFTItemView: View {
 		static let heartFill = "heart.fill"
 	}
 	
-	let nftId: String
-	let rating: Int
+	let nft: Nft?
 	let isLiked: Bool
 	let isInCart: Bool
 	let onLikeTapped: () -> Void
@@ -27,9 +26,22 @@ struct NFTItemView: View {
 	
 	private var previewSection: some View {
 		ZStack(alignment: .topTrailing) {
-			Color.gray.opacity(0.3)
-				.frame(width: 108, height: 108)
-				.clipShape(RoundedRectangle(cornerRadius: 12))
+			if let urlString = nft?.images.first {
+				AsyncImage(url: urlString) { phase in
+					switch phase {
+					case .success(let image):
+						image
+							.resizable()
+							.aspectRatio(contentMode: .fill)
+							.frame(width: 108, height: 108)
+							.clipShape(RoundedRectangle(cornerRadius: 12))
+					default:
+						placeholderImage
+					}
+				}
+			} else {
+				placeholderImage
+			}
 			
 			Button {
 				onLikeTapped()
@@ -48,10 +60,11 @@ struct NFTItemView: View {
 	private var ratingSection: some View {
 		HStack(spacing: 2) {
 			ForEach(0..<5) { index in
-				Image(systemName: index < rating ? "star.fill" : "star")
+				let currentRating = nft?.rating ?? 0
+				Image(systemName: index < currentRating ? "star.fill" : "star")
 					.resizable()
 					.frame(width: 12, height: 12)
-					.foregroundColor(index < rating ? .yellow : .gray.opacity(0.5))
+					.foregroundColor(index < currentRating ? .yellow : .gray.opacity(0.5))
 			}
 		}
 		.frame(height: 12)
@@ -61,13 +74,14 @@ struct NFTItemView: View {
 	private var infoAndCartSection: some View {
 		HStack(alignment: .center, spacing: 0) {
 			VStack(alignment: .leading, spacing: 4) {
-				Text("Archie")
-					.font(.system(size: 17, weight: .bold))
+				Text(nft?.name ?? "Загрузка...")
+					.font(.system(size: 15, weight: .bold))
 					.tracking(0)
 					.foregroundStyle(.primary)
+					.lineLimit(1)
 					.frame(height: 22)
 				
-				Text("1 ETH")
+				Text("\(String(format: "%.2f", nft?.price ?? 0.0)) ETH")
 					.font(.system(size: 10, weight: .medium))
 					.tracking(-0.24)
 					.foregroundStyle(.primary)
@@ -90,15 +104,10 @@ struct NFTItemView: View {
 		.frame(width: 108, height: 40)
 		.padding(.top, 4)
 	}
-}
-
-#Preview {
-	NFTItemView(
-		nftId: "1",
-		rating: 3,
-		isLiked: true,
-		isInCart: false,
-		onLikeTapped: {},
-		onCartTapped: {}
-	)
+	
+	private var placeholderImage: some View {
+		Color.gray.opacity(0.3)
+			.frame(width: 108, height: 108)
+			.clipShape(RoundedRectangle(cornerRadius: 12))
+	}
 }
