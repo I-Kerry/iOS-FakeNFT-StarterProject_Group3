@@ -146,6 +146,7 @@ struct ProfileView: View {
                                             Color(uiColor: .yaBlackLight)
                                         )
                                 }
+                                .buttonStyle(.plain)
                             }
                         }
                 }
@@ -155,13 +156,7 @@ struct ProfileView: View {
             MyNFTView(
                 viewModel: MyNFTViewModel(
                     nftService: services.nftService,
-                    profileService: services.profileService,
-                    nftIDs: viewModel.profile?.nfts ?? [],
-                    likedNFTIDs: Set(viewModel.profile?.likes ?? []),
-                    profile: viewModel.profile,
-                    onProfileUpdated: { updatedProfile in
-                        viewModel.profile = updatedProfile
-                    }
+                    nftIDs: viewModel.profile?.nfts ?? []
                 )
             )
             .toolbar(.hidden, for: .tabBar)

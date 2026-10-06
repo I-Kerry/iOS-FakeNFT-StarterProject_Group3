@@ -10,8 +10,7 @@ struct MyNFTView: View {
         static let sortIconSize: CGFloat = 24
         
         static let rowSpacing: CGFloat = 32
-        
-        static let contentTopPadding: CGFloat = 36
+        static let contentTopPadding: CGFloat = 16
         static let zeroSpacing: CGFloat = 0
     }
     
@@ -28,30 +27,32 @@ struct MyNFTView: View {
         VStack(spacing: Constants.zeroSpacing) {
             header
             
-            ScrollView {
+            List {
                 if !viewModel.isLoading && viewModel.nfts.isEmpty {
                     Text("У Вас ещё нет NFT")
                         .font(Font(UIFont.bodyBold))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .frame(maxWidth: .infinity, minHeight: 600)
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
                 } else {
-                    VStack(spacing: Constants.rowSpacing) {
-                        ForEach(viewModel.nfts, id: \.id) { nft in
-                            NFTRowView(
-                                nft: nft,
-                                isFavorite: viewModel.isFavorite(nft),
-                                onFavoriteTapped: {
-                                    Task {
-                                        await viewModel.toggleFavorite(for: nft)
-                                    }
-                                }
+                    ForEach(viewModel.nfts, id: \.id) { nft in
+                        NFTRowView(nft: nft)
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                            .listRowInsets(
+                                EdgeInsets(
+                                    top: Constants.rowSpacing / 2,
+                                    leading: Constants.horizontalPadding,
+                                    bottom: Constants.rowSpacing / 2,
+                                    trailing: Constants.horizontalPadding
+                                )
                             )
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        }
                     }
                 }
             }
-            .padding(.horizontal, Constants.horizontalPadding)
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
             .padding(.top, Constants.contentTopPadding)
         }
         .background(.background)
@@ -146,7 +147,6 @@ private extension MyNFTView {
     MyNFTView(
         viewModel: MyNFTViewModel(
             nftService: PreviewNftService(),
-            profileService: PreviewProfileService(),
             previewNFTs: [
                 Nft(
                     id: "1",
@@ -181,7 +181,6 @@ private extension MyNFTView {
     MyNFTView(
         viewModel: MyNFTViewModel(
             nftService: PreviewNftService(),
-            profileService: PreviewProfileService(),
             previewNFTs: []
         )
     )
