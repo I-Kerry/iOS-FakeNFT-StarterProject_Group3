@@ -70,26 +70,4 @@ final class CatalogViewModel {
 			self.isLoading = false
 		}
 	}
-	
-	
-	private func loadLocalMockData() {
-		guard let url = Bundle.main.url(forResource: "collections_mock", withExtension: "json") else {
-			alertErrorMessage = "Не удалось найти файл данных"
-			showNetworkAlert = true
-			isLoading = false
-			return
-		}
-		
-		do {
-			let data = try Data(contentsOf: url)
-			let decoded = try JSONDecoder().decode([NFTCollection].self, from: data)
-			collections = decoded
-			isLoading = false
-			applyCurrentSort()
-		} catch {
-			alertErrorMessage = error.localizedDescription
-			showNetworkAlert = true
-			isLoading = false
-		}
-	}
 }
