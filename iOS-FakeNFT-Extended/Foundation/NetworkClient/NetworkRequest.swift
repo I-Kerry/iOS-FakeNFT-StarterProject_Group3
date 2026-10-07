@@ -12,7 +12,6 @@ protocol NetworkRequest {
     var httpMethod: HttpMethod { get }
     var dto: Encodable? { get }
     var formParams: [String: String]? { get }
-//    var formParams: String? { get }
 }
 
 // default values
@@ -23,5 +22,4 @@ extension NetworkRequest {
 
 extension NetworkRequest {
     var formParams: [String: String]? { nil }
-//    var formParams: String? { nil }
 }

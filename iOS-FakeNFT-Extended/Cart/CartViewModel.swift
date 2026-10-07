@@ -59,10 +59,14 @@ final class CartViewModel {
     }
     
     func removeItem(id: String) async {
+        
+        let backUp = nfts
+        nfts.removeAll { $0.id == id }
+        
         do {
             try await cartService.removeItem(itemId: id)
-            nfts.removeAll { $0.id == id }
         } catch {
+            nfts = backUp
             state = .error(error)
         }
     }
