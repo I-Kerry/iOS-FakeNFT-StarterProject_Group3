@@ -8,11 +8,15 @@ final class FavoritesNFTViewModel {
     private let profileService: ProfileService
     private let nftIDs: [String]
     private var likedNFTIDs: Set<String>
+    private var confirmedLikedNFTIDs: Set<String>
     private var profile: Profile?
+    private var isUpdatingLikes = false
+    private var needsLikesUpdate = false
     
     var nfts: [Nft] = []
     var isLoading = false
     var loadError: Error?
+    var saveError: Error?
     var onProfileUpdated: ((Profile) -> Void)?
     
     init(
@@ -29,6 +33,7 @@ final class FavoritesNFTViewModel {
         self.nftIDs = profile?.likes ?? []
         self.nfts = previewNFTs
         self.likedNFTIDs = Set(profile?.likes ?? [])
+        self.confirmedLikedNFTIDs = Set(profile?.likes ?? [])
     }
     
     func loadNFTs() async {
@@ -50,16 +55,26 @@ final class FavoritesNFTViewModel {
     func toggleFavorite(for nft: Nft) async {
         if likedNFTIDs.contains(nft.id) {
             likedNFTIDs.remove(nft.id)
-            nfts.removeAll { $0.id == nft.id }
         } else {
             likedNFTIDs.insert(nft.id)
         }
+        
+        needsLikesUpdate = true
+        
+        guard !isUpdatingLikes else { return }
         
         await updateLikes()
     }
     
     func updateLikes() async {
         guard let currentProfile = profile else { return }
+        
+        isUpdatingLikes = true
+        needsLikesUpdate = false
+        
+        defer {
+            isUpdatingLikes = false
+        }
         
         do {
             let updatedProfile = try await profileService.updateProfile(
@@ -71,9 +86,16 @@ final class FavoritesNFTViewModel {
             )
             
             profile = updatedProfile
+            confirmedLikedNFTIDs = Set(updatedProfile.likes)
+            nfts.removeAll { !updatedProfile.likes.contains($0.id) }
             onProfileUpdated?(updatedProfile)
         } catch {
-            loadError = error
+            likedNFTIDs = confirmedLikedNFTIDs
+            saveError = error
+        }
+        
+        if needsLikesUpdate {
+            await updateLikes()
         }
     }
 }

@@ -73,13 +73,20 @@ struct FavoritesNFTView: View {
         }
         .alert(
             "Ошибка",
-            isPresented: .constant(viewModel.loadError != nil)
+            isPresented: .constant(
+                viewModel.loadError != nil || viewModel.saveError != nil
+            )
         ) {
             Button("OK") {
                 viewModel.loadError = nil
+                viewModel.saveError = nil
             }
         } message: {
-            Text("Не удалось загрузить избранные NFT")
+            Text(
+                viewModel.saveError != nil
+                ? "Не удалось сохранить изменения избранного"
+                : "Не удалось загрузить избранные NFT"
+            )
         }
     }
 }
