@@ -114,8 +114,7 @@ struct CollectionDetailView: View {
 				Button {
 					isShowingAuthorWebView = true
 				} label: {
-					Text("John Doe")
-						.font(.system(size: 15, weight: .regular))
+					Text(collection.authorName)						.font(.system(size: 15, weight: .regular))
 						.tracking(-0.24)
 						.foregroundStyle(.blue)
 				}

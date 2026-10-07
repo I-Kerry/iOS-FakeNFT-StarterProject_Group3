@@ -11,4 +11,13 @@ struct NFTCollection: Identifiable, Decodable, Sendable {
 	var nftCount: Int {
 		nfts?.count ?? 0
 	}
+	
+	var authorName: String {
+		if let authorURLString = author,
+		   let url = URL(string: authorURLString),
+		   !url.lastPathComponent.isEmpty && url.lastPathComponent != "/" {
+			return url.lastPathComponent.capitalized
+		}
+		return "Creator \(name)"
+	}
 }
