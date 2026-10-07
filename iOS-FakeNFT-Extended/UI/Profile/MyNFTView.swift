@@ -84,17 +84,14 @@ struct MyNFTView: View {
         ) {
             Button("По цене") {
                 viewModel.sortType = .price
-                viewModel.sortNFTs()
             }
             
             Button("По рейтингу") {
                 viewModel.sortType = .rating
-                viewModel.sortNFTs()
             }
             
             Button("По названию") {
                 viewModel.sortType = .name
-                viewModel.sortNFTs()
             }
             
             Button("Закрыть", role: .cancel) {}

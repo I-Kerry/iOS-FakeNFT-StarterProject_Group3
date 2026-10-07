@@ -29,6 +29,7 @@ final class MyNFTViewModel {
                 sortType.rawValue,
                 forKey: Constants.sortTypeKey
             )
+            sortNFTs()
         }
     }
     
