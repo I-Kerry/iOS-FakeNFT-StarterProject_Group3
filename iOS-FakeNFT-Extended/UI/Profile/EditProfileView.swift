@@ -1,5 +1,4 @@
 import SwiftUI
-import Kingfisher
 
 struct EditProfileView: View {
     
@@ -73,18 +72,23 @@ struct EditProfileView: View {
                                         height: Constants.avatarSize
                                     )
                             } else {
-                                KFImage(editViewModel.avatarURL)
-                                    .placeholder {
+                                AsyncImage(url: editViewModel.avatarURL) { phase in
+                                    switch phase {
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+
+                                    default:
                                         Circle()
                                             .fill(.gray.opacity(0.3))
                                     }
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(
-                                        width: Constants.avatarSize,
-                                        height: Constants.avatarSize
-                                    )
-                                    .clipShape(Circle())
+                                }
+                                .frame(
+                                    width: Constants.avatarSize,
+                                    height: Constants.avatarSize
+                                )
+                                .clipShape(Circle())
                             }
                             
                             Image(systemName: "camera.fill")

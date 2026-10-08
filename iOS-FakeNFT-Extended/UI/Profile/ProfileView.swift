@@ -1,5 +1,4 @@
 import SwiftUI
-import Kingfisher
 
 struct ProfileView: View {
     
@@ -46,18 +45,23 @@ struct ProfileView: View {
             .padding(.top, 2)
             
             HStack(spacing: 16) {
-                KFImage(viewModel.profile?.avatar)
-                    .placeholder {
+                AsyncImage(url: viewModel.profile?.avatar) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+
+                    default:
                         Circle()
                             .fill(.gray.opacity(0.3))
                     }
-                    .resizable()
-                    .scaledToFill()
-                    .frame(
-                        width: Constants.profileImageSize,
-                        height: Constants.profileImageSize
-                    )
-                    .clipShape(Circle())
+                }
+                .frame(
+                    width: Constants.profileImageSize,
+                    height: Constants.profileImageSize
+                )
+                .clipShape(Circle())
                 
                 Text(viewModel.profile?.name ?? "")
                     .font(Font(UIFont.headline3))
