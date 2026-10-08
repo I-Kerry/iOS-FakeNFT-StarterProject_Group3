@@ -78,7 +78,7 @@ struct EditProfileView: View {
                                         image
                                             .resizable()
                                             .scaledToFill()
-
+                                        
                                     default:
                                         Circle()
                                             .fill(.gray.opacity(0.3))
@@ -108,7 +108,7 @@ struct EditProfileView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.top, 4)
                     
-                    Text("Имя")
+                    Text(NSLocalizedString("Profile.name", comment: ""))
                         .font(Font(UIFont.headline3))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .padding(.top, 24)
@@ -127,7 +127,7 @@ struct EditProfileView: View {
                         )
                         .padding(.top, 8)
                     
-                    Text("Описание")
+                    Text(NSLocalizedString("Profile.description", comment: ""))
                         .font(Font(UIFont.headline3))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .padding(.top, 24)
@@ -147,7 +147,7 @@ struct EditProfileView: View {
                         )
                         .padding(.top, 8)
                     
-                    Text("Сайт")
+                    Text(NSLocalizedString("Profile.website", comment: ""))
                         .font(Font(UIFont.headline3))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .padding(.top, 24)
@@ -191,7 +191,7 @@ struct EditProfileView: View {
                     }
                 }
             } label: {
-                Text("Сохранить")
+                Text(NSLocalizedString("Profile.save", comment: ""))
                     .font(Font(UIFont.bodyBold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
@@ -220,36 +220,44 @@ struct EditProfileView: View {
         }
         .navigationBarBackButtonHidden(true)
         .confirmationDialog(
-            "Фото профиля",
+            NSLocalizedString("Profile.photo", comment: ""),
             isPresented: $isPhotoMenuPresented,
             titleVisibility: .visible
         ) {
-            Button("Изменить фото") {
+            Button(NSLocalizedString("Profile.changePhoto", comment: "")) {
                 photoURL = editViewModel.avatarURL?.absoluteString ?? ""
                 isPhotoURLAlertPresented = true
             }
             
-            Button("Удалить фото", role: .destructive) {
+            Button(
+                NSLocalizedString("Profile.deletePhoto", comment: ""),
+                role: .destructive
+            ) {
                 editViewModel.isAvatarDeleted = true
             }
             
-            Button("Отмена", role: .cancel) {}
-        }
+            Button(
+                NSLocalizedString("Profile.cancel", comment: ""),
+                role: .cancel
+            ) {}        }
         .alert(
-            "Ссылка на фото",
+            NSLocalizedString("Profile.photoLink", comment: ""),
             isPresented: $isPhotoURLAlertPresented
         ) {
             TextField(
-                "URL фотографии",
+                NSLocalizedString("Profile.photoURLPlaceholder", comment: ""),
                 text: $photoURL
             )
             .keyboardType(.URL)
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
             
-            Button("Отмена", role: .cancel) {}
+            Button(
+                NSLocalizedString("Profile.cancel", comment: ""),
+                role: .cancel
+            ) {}
             
-            Button("Сохранить") {
+            Button(NSLocalizedString("Profile.save", comment: "")) {
                 if let url = URL(string: photoURL) {
                     editViewModel.avatarURL = url
                     editViewModel.isAvatarDeleted = false
@@ -257,22 +265,28 @@ struct EditProfileView: View {
             }
         }
         .alert(
-            "Уверены,\nчто хотите выйти?",
+            NSLocalizedString("Profile.exitConfirmation", comment: ""),
             isPresented: $isDiscardAlertPresented
         ) {
-            Button("Остаться", role: .cancel) {}
+            Button(
+                NSLocalizedString("Profile.stay", comment: ""),
+                role: .cancel
+            ) {}
             
-            Button("Выйти") {
+            Button(NSLocalizedString("Profile.exit", comment: "")) {
                 dismiss()
             }
         }
         .alert(
-            "Ошибка",
+            NSLocalizedString("Error.title", comment: ""),
             isPresented: $isSaveErrorAlertPresented
         ) {
-            Button("ОК", role: .cancel) {}
+            Button(
+                NSLocalizedString("Common.ok", comment: ""),
+                role: .cancel
+            ) {}
         } message: {
-            Text("Не удалось сохранить профиль")
+            Text(NSLocalizedString("Profile.saveError", comment: ""))
         }
     }
 }

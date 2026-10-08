@@ -29,7 +29,7 @@ struct MyNFTView: View {
             
             List {
                 if !viewModel.isLoading && viewModel.nfts.isEmpty {
-                    Text("У Вас ещё нет NFT")
+                    Text(NSLocalizedString("NFT.myEmpty", comment: ""))
                         .font(Font(UIFont.bodyBold))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .frame(maxWidth: .infinity, minHeight: 600)
@@ -65,36 +65,39 @@ struct MyNFTView: View {
             }
         }
         .alert(
-            "Ошибка",
+            NSLocalizedString("Error.title", comment: ""),
             isPresented: .constant(viewModel.loadError != nil)
         ) {
-            Button("OK") {
+            Button(NSLocalizedString("Common.ok", comment: "")) {
                 viewModel.loadError = nil
             }
         } message: {
-            Text("Не удалось загрузить NFT")
+            Text(NSLocalizedString("NFT.loadError", comment: ""))
         }
         .task {
             await viewModel.loadNFTs()
         }
         .confirmationDialog(
-            "Сортировка",
+            NSLocalizedString("NFT.sorting", comment: ""),
             isPresented: $isSortDialogPresented,
             titleVisibility: .visible
         ) {
-            Button("По цене") {
+            Button(NSLocalizedString("NFT.byPrice", comment: "")) {
                 viewModel.sortType = .price
             }
             
-            Button("По рейтингу") {
+            Button(NSLocalizedString("NFT.byRating", comment: "")) {
                 viewModel.sortType = .rating
             }
             
-            Button("По названию") {
+            Button(NSLocalizedString("NFT.byName", comment: "")) {
                 viewModel.sortType = .name
             }
             
-            Button("Закрыть", role: .cancel) {}
+            Button(
+                NSLocalizedString("NFT.close", comment: ""),
+                role: .cancel
+            ) {}
         }
     }
 }
@@ -116,7 +119,7 @@ private extension MyNFTView {
             if !viewModel.nfts.isEmpty {
                 Spacer()
                 
-                Text("Мои NFT")
+                Text(NSLocalizedString("Profile.myNFT", comment: ""))
                     .font(Font(UIFont.bodyBold))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
                 

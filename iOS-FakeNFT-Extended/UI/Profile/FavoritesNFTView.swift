@@ -33,7 +33,7 @@ struct FavoritesNFTView: View {
             
             ScrollView {
                 if !viewModel.isLoading && viewModel.nfts.isEmpty {
-                    Text("У Вас ещё нет избранных NFT")
+                    Text(NSLocalizedString("NFT.favoriteEmpty", comment: ""))
                         .font(Font(UIFont.bodyBold))
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .frame(maxWidth: .infinity, minHeight: 600)
@@ -72,20 +72,23 @@ struct FavoritesNFTView: View {
             }
         }
         .alert(
-            "Ошибка",
+            NSLocalizedString("Error.title", comment: ""),
             isPresented: .constant(
                 viewModel.loadError != nil || viewModel.saveError != nil
             )
         ) {
-            Button("OK") {
+            Button(NSLocalizedString("Common.ok", comment: "")) {
                 viewModel.loadError = nil
                 viewModel.saveError = nil
             }
         } message: {
             Text(
-                viewModel.saveError != nil
-                ? "Не удалось сохранить изменения избранного"
-                : "Не удалось загрузить избранные NFT"
+                NSLocalizedString(
+                    viewModel.saveError != nil
+                    ? "NFT.favoriteSaveError"
+                    : "NFT.favoriteLoadError",
+                    comment: ""
+                )
             )
         }
     }
@@ -110,7 +113,7 @@ private extension FavoritesNFTView {
             if !viewModel.nfts.isEmpty {
                 Spacer()
                 
-                Text("Избранные NFT")
+                Text(NSLocalizedString("Profile.favoriteNFT", comment: ""))
                     .font(Font(UIFont.bodyBold))
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
                 

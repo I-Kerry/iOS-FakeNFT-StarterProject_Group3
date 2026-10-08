@@ -1,6 +1,41 @@
-"Tab.catalog" = "Каталог";
-"Catalog.openNft" = "Открыть Nft";
-"Error.network" = "Произошла ошибка сети";
-"Error.unknown" = "Произошла неизвестная ошибка";
-"Error.repeat" = "Повторить";
-"Error.title" = "Ошибка";
+"Tab.catalog" = "Catalog";
+"Catalog.openNft" = "Open NFT";
+"Error.network" = "A network error occurred";
+"Error.unknown" = "An unknown error occurred";
+"Error.repeat" = "Repeat";
+"Error.title" = "Error";
+
+"Tab.profile" = "Profile";
+
+"Profile.myNFT" = "My NFT";
+"Profile.favoriteNFT" = "Favorite NFT";
+"Profile.name" = "Name";
+"Profile.description" = "Description";
+"Profile.website" = "Website";
+"Profile.save" = "Save";
+"Profile.photo" = "Profile photo";
+"Profile.changePhoto" = "Change photo";
+"Profile.deletePhoto" = "Delete photo";
+"Profile.cancel" = "Cancel";
+"Profile.photoLink" = "Photo link";
+"Profile.photoURLPlaceholder" = "Photo URL";
+"Profile.exitConfirmation" = "Are you sure\nyou want to exit?";
+"Profile.stay" = "Stay";
+"Profile.exit" = "Exit";
+"Profile.loadError" = "Failed to load profile";
+"Profile.saveError" = "Failed to save profile";
+
+"NFT.myEmpty" = "You don't have any NFT yet";
+"NFT.favoriteEmpty" = "You don't have any favorite NFT yet";
+"NFT.loadError" = "Failed to load NFT";
+"NFT.favoriteLoadError" = "Failed to load favorite NFTs";
+"NFT.favoriteSaveError" = "Failed to save favorite changes";
+"NFT.sorting" = "Sorting";
+"NFT.byPrice" = "By price";
+"NFT.byRating" = "By rating";
+"NFT.byName" = "By name";
+"NFT.close" = "Close";
+"NFT.from" = "by";
+"NFT.price" = "Price";
+
+"Common.ok" = "OK";

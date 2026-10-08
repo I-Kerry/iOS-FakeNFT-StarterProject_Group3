@@ -32,7 +32,7 @@ struct NFTRowView: View {
                 rating
                 
                 HStack(spacing: Constants.authorSpacing) {
-                    Text("от")
+                    Text(NSLocalizedString("NFT.from", comment: ""))
                         .font(Font(UIFont.caption1))
                     
                     Text(nft.author)
@@ -43,8 +43,7 @@ struct NFTRowView: View {
             .padding(.trailing, Constants.infoToPriceSpacing)
             
             VStack(alignment: .leading, spacing: Constants.priceSpacing) {
-                Text("Цена")
-                    .font(Font(UIFont.caption2))
+                Text(NSLocalizedString("NFT.price", comment: ""))                    .font(Font(UIFont.caption2))
                 
                 Text("\(nft.price, specifier: "%.2f") ETH")
                     .font(Font(UIFont.bodyBold))

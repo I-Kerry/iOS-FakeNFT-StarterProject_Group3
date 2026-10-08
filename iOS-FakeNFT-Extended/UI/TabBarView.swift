@@ -27,7 +27,7 @@ struct TabBarView: View {
             }
             .tabItem {
                 Label(
-                    "Профиль",
+                    NSLocalizedString("Tab.profile", comment: ""),
                     systemImage: "person.crop.circle"
                 )
             }

@@ -51,7 +51,7 @@ struct ProfileView: View {
                         image
                             .resizable()
                             .scaledToFill()
-
+                        
                     default:
                         Circle()
                             .fill(.gray.opacity(0.3))
@@ -96,7 +96,7 @@ struct ProfileView: View {
                     isMyNFTPresented = true
                 } label: {
                     ProfileNavigationRow(
-                        title: "Мои NFT",
+                        title: NSLocalizedString("Profile.myNFT", comment: ""),
                         count: viewModel.profile?.nfts.count ?? 0
                     )
                 }
@@ -106,7 +106,7 @@ struct ProfileView: View {
                     isFavoritesNFTPresented = true
                 } label: {
                     ProfileNavigationRow(
-                        title: "Избранные NFT",
+                        title: NSLocalizedString("Profile.favoriteNFT", comment: ""),
                         count: viewModel.profile?.likes.count ?? 0
                     )
                 }
@@ -124,14 +124,14 @@ struct ProfileView: View {
             }
         }
         .alert(
-            "Ошибка",
+            NSLocalizedString("Error.title", comment: ""),
             isPresented: .constant(viewModel.loadError != nil)
         ) {
-            Button("OK") {
+            Button(NSLocalizedString("Common.ok", comment: "")) {
                 viewModel.loadError = nil
             }
         } message: {
-            Text("Не удалось загрузить профиль")
+            Text(NSLocalizedString("Profile.loadError", comment: ""))
         }
         .task {
             await viewModel.loadProfile()

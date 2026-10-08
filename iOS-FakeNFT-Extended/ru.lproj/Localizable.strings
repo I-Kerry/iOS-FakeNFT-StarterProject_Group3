@@ -1,0 +1,41 @@
+"Tab.catalog" = "Каталог";
+"Catalog.openNft" = "Открыть NFT";
+"Error.network" = "Произошла ошибка сети";
+"Error.unknown" = "Произошла неизвестная ошибка";
+"Error.repeat" = "Повторить";
+"Error.title" = "Ошибка";
+
+"Tab.profile" = "Профиль";
+
+"Profile.myNFT" = "Мои NFT";
+"Profile.favoriteNFT" = "Избранные NFT";
+"Profile.name" = "Имя";
+"Profile.description" = "Описание";
+"Profile.website" = "Сайт";
+"Profile.save" = "Сохранить";
+"Profile.photo" = "Фото профиля";
+"Profile.changePhoto" = "Изменить фото";
+"Profile.deletePhoto" = "Удалить фото";
+"Profile.cancel" = "Отмена";
+"Profile.photoLink" = "Ссылка на фото";
+"Profile.photoURLPlaceholder" = "URL фотографии";
+"Profile.exitConfirmation" = "Уверены,\nчто хотите выйти?";
+"Profile.stay" = "Остаться";
+"Profile.exit" = "Выйти";
+"Profile.loadError" = "Не удалось загрузить профиль";
+"Profile.saveError" = "Не удалось сохранить профиль";
+
+"NFT.myEmpty" = "У Вас ещё нет NFT";
+"NFT.favoriteEmpty" = "У Вас ещё нет избранных NFT";
+"NFT.loadError" = "Не удалось загрузить NFT";
+"NFT.favoriteLoadError" = "Не удалось загрузить избранные NFT";
+"NFT.favoriteSaveError" = "Не удалось сохранить изменения избранного";
+"NFT.sorting" = "Сортировка";
+"NFT.byPrice" = "По цене";
+"NFT.byRating" = "По рейтингу";
+"NFT.byName" = "По названию";
+"NFT.close" = "Закрыть";
+"NFT.from" = "от";
+"NFT.price" = "Цена";
+
+"Common.ok" = "OK";
