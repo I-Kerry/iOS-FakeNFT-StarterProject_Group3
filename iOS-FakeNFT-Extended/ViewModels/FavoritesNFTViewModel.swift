@@ -87,7 +87,9 @@ final class FavoritesNFTViewModel {
             
             profile = updatedProfile
             confirmedLikedNFTIDs = Set(updatedProfile.likes)
-            nfts.removeAll { !updatedProfile.likes.contains($0.id) }
+            if !needsLikesUpdate {
+                nfts.removeAll { !updatedProfile.likes.contains($0.id) }
+            }
             onProfileUpdated?(updatedProfile)
         } catch {
             likedNFTIDs = confirmedLikedNFTIDs
