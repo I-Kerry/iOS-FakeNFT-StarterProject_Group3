@@ -5,13 +5,13 @@ import Observation
 @Observable
 final class ProfileViewModel {
     private let profileService: ProfileService
-
+    
     var profile: Profile?
     var isLoading = false
     var isSaving = false
     var loadError: Error?
     var saveError: Error?
-
+    
     init(profileService: ProfileService) {
         self.profileService = profileService
     }
@@ -19,13 +19,13 @@ final class ProfileViewModel {
     func loadProfile() async {
         isLoading = true
         loadError = nil
-
+        
         do {
             profile = try await profileService.loadProfile()
         } catch {
             loadError = error
         }
-
+        
         isLoading = false
     }
     
@@ -37,10 +37,10 @@ final class ProfileViewModel {
         website: String
     ) async -> Bool {
         guard let currentProfile = profile else { return false }
-
+        
         isSaving = true
         saveError = nil
-
+        
         do {
             profile = try await profileService.updateProfile(
                 name: name,
