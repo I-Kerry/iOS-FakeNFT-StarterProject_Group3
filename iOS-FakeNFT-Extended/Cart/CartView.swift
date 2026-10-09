@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import ProgressHUD
 
 struct CartView: View {
     @State private var viewModel: CartViewModel
@@ -23,7 +22,7 @@ struct CartView: View {
             ZStack {
                 switch viewModel.state {
                 case .idle, .loading:
-                    EmptyView()
+                    ProgressView()
                 case .data:
                     if viewModel.nfts.isEmpty {
                         Text(Constants.emptyCartTitle)
@@ -46,7 +45,7 @@ struct CartView: View {
                                 onPay: { showCurrencyView = true }
                             )
                             .navigationDestination(isPresented: $showCurrencyView) {
-                                CurrencyPaymentView(viewModel: CurrencyViewModel(service: viewModel.cartService, onCompletePayment: {
+                                CurrencyPaymentView(viewModel: viewModel.makeCurrencyViewModel(onCompletePayment: {
                                     showCurrencyView = false
                                     viewModel.clearCart()
                                 }))
@@ -58,16 +57,9 @@ struct CartView: View {
                 }
             }
             .task { await viewModel.loadCart() }
-            .onChange(of: viewModel.state) { _, state in
-                switch state {
-                case .loading: ProgressHUD.animate()
-                default: ProgressHUD.dismiss()
-                }
-            }
             .blur(radius: nftToDelete != nil ? 10 : 0)
             .toolbar(nftToDelete != nil ? .hidden : .visible, for: .navigationBar)
-            .toolbar(nftToDelete != nil ? .hidden : .visible, for: .tabBar)
-            .toolbar(showCurrencyView ? .hidden : .visible, for: .tabBar)
+            .toolbar(nftToDelete != nil || showCurrencyView ? .hidden : .visible, for: .tabBar)
             .overlay {
                 if let nft = nftToDelete {
                     DeleteConfirmationView(
@@ -112,15 +104,16 @@ struct CartView: View {
 }
 
 private enum Constants {
-    static let emptyCartTitle = "Корзина пуста"
     static let imageWidth: CGFloat = 21
     static let imageHeight: CGFloat = 12.6
     static let imageFrameSize: CGFloat = 42
-    static let contextMenuTitle = "Сортировка"
-    static let byName = "По названию"
-    static let byRating = "По рейтингу"
-    static let byPrice = "По цене"
-    static let close = "Закрыть"
+    
+    static let emptyCartTitle = String(localized: "Cart.isEmpty")
+    static let contextMenuTitle = String(localized: "Cart.sort")
+    static let byName = String(localized: "Cart.byName")
+    static let byRating = String(localized: "Cart.byRating")
+    static let byPrice = String(localized: "Cart.byPrice")
+    static let close = String(localized: "Cart.close")
 }
 
 #Preview("Items") {

@@ -36,7 +36,7 @@ struct DeleteConfirmationView: View {
                     Button(action: onDelete) {
                         Text(Constants.delete)
                         }
-                    .foregroundStyle(.destract)
+                    .foregroundStyle(.destractive)
                     
                     Button(action: onCancel) {
                         Text(Constants.cancel)
@@ -63,9 +63,9 @@ private enum Constants {
     static let buttonHeight: CGFloat = 44
     static let bigPadding: CGFloat = 20
     
-    static let title = "Вы уверены, что хотите\nудалить объект из корзины?"
-    static let delete = "Удалить"
-    static let cancel = "Вернуться"
+    static let title = String(localized: "Delete.confirmation")
+    static let delete = String(localized: "Cart.delete")
+    static let cancel = String(localized: "Cart.return")
 }
 
 #Preview {

@@ -5,7 +5,7 @@
 //  Created by Kirill Maidanovich on 26.09.2026.
 //
 
-import SwiftUI
+import Foundation
 
 final class MockCurrencyService: CartService {
     var currencies: [Currency]

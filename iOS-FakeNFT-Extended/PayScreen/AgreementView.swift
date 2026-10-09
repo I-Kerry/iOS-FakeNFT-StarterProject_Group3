@@ -10,6 +10,7 @@ import SwiftUI
 struct AgreementView: View {
     @State private var showWebView = false
     let onPay: () -> Void
+    var isEnabled = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: Constants.normalSpacing) {
@@ -25,6 +26,7 @@ struct AgreementView: View {
             }
             
             ReusableButton(title: Constants.buttonTitle, action: onPay)
+                .disabled(!isEnabled)
         }
         .padding(Constants.padding)
         .frame(maxWidth: .infinity)
@@ -42,12 +44,12 @@ private enum Constants {
     static let smallSpacing: CGFloat = 5
     static let padding: CGFloat = 16
     
-    static let agreementTitle = "Совершая покупку, вы соглашаетесь с условиями"
-    static let agreementButtonTitle = "Пользовательского соглашения"
-    static let buttonTitle = "Оплатить"
+    static let agreementTitle = String(localized: "Payment.agreement")
+    static let agreementButtonTitle = String(localized: "Payment.agreementTitle")
+    static let buttonTitle = String(localized: "Payment.pay")
     static let urlString = "https://yandex.ru/legal/practicum_termsofuse"
 }
 
 #Preview {
-    AgreementView(onPay: {})
+    AgreementView(onPay: {}, isEnabled: true)
 }

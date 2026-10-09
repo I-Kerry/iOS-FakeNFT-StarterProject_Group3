@@ -27,7 +27,6 @@ struct CartItemView: View {
                         .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
                 }
             }
-            
             VStack(alignment: .leading, spacing: Constants.infoPriceSpacing) {
                 info
                 priceInfo
@@ -73,6 +72,7 @@ struct CartItemView: View {
                 .foregroundStyle(.button)
                 .frame(width: Constants.deleteButtonWidth, height: Constants.deleteButtonHeight)
         }
+        .buttonStyle(.plain)
         .frame(width: Constants.buttonSize, height: Constants.buttonSize)
     }
 }
@@ -91,7 +91,7 @@ private enum Constants {
     static let deleteButtonHeight: CGFloat = 18.56
     static let buttonSize: CGFloat = 40
     
-    static let priceTitle = "Цена"
+    static let priceTitle = String(localized: "Cart.price")
 }
 
 #Preview {

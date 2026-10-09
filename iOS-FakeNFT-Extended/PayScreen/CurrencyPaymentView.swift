@@ -25,7 +25,7 @@ struct CurrencyPaymentView: View {
         ZStack {
             switch viewModel.state {
             case .idle, .loading:
-                EmptyView()
+                ProgressView()
             case .data:
                 ScrollView {
                     LazyVGrid(columns: columns, alignment: .leading, spacing: Constants.vGridSpacing) {
@@ -39,10 +39,17 @@ struct CurrencyPaymentView: View {
                     .padding(Constants.padding)
                 }
                 .safeAreaInset(edge: .bottom) {
-                    AgreementView(onPay: { Task { await viewModel.pay() } })
+                    AgreementView(
+                        onPay: { Task { await viewModel.pay() } },
+                        isEnabled: viewModel.selectedCurrencyID != nil && !viewModel.isPaying)
                 }
             case .error(let error):
                 Text(error.localizedDescription)
+            }
+            if viewModel.isPaying {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(.gray.opacity(0.3))
             }
             
         }
@@ -57,6 +64,19 @@ struct CurrencyPaymentView: View {
                 viewModel.onCompletePayment()
             })
         }
+        .alert(
+            "",
+            isPresented: Binding(
+                get: { viewModel.paymentError != nil },
+                set: { if !$0 { viewModel.paymentError = nil }})) {
+                    
+                        Button("Payment.cancel", role: .cancel, action: { viewModel.paymentError = nil })
+                        Button("Payment.repeat", action: { Task { await viewModel.pay()}})
+                    
+                } message: {
+                    Text("Cart.paymentFailedError")
+                        .font(.bodyBold)
+                }
     }
 }
 
@@ -65,7 +85,7 @@ private enum Constants {
     static let vGridSpacing: CGFloat = 7
     static let padding: CGFloat = 16
     
-    static let navigationTitle = "Выберите способ оплаты"
+    static let navigationTitle = String(localized: "Payment.method")
 }
 
 #Preview {

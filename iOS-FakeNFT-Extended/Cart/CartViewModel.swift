@@ -31,7 +31,7 @@ enum SortOption: String {
 @Observable
 @MainActor
 final class CartViewModel {
-    let cartService: CartService
+    private let cartService: CartService
     var nfts: [Nft] = []
     var state: CartState = .idle
     var sortOption: SortOption {
@@ -59,10 +59,14 @@ final class CartViewModel {
     }
     
     func removeItem(id: String) async {
+        
+        let backUp = nfts
+        nfts.removeAll { $0.id == id }
+        
         do {
             try await cartService.removeItem(itemId: id)
-            nfts.removeAll { $0.id == id }
         } catch {
+            nfts = backUp
             state = .error(error)
         }
     }
@@ -73,7 +77,7 @@ final class CartViewModel {
         case .byPrice:
             nfts.sort { $0.price < $1.price }
         case .byRating:
-            nfts.sort { $0.rating < $1.rating }
+            nfts.sort { $0.rating > $1.rating }
         case .byName:
             nfts.sort { $0.name < $1.name }
         }
@@ -81,5 +85,9 @@ final class CartViewModel {
     
     func clearCart() {
         nfts = []
+    }
+    
+    func makeCurrencyViewModel(onCompletePayment: @escaping () -> Void) -> CurrencyViewModel {
+        CurrencyViewModel(service: cartService, onCompletePayment: onCompletePayment)
     }
 }
