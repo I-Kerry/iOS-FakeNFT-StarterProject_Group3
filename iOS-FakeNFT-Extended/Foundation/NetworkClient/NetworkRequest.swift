@@ -15,7 +15,6 @@ protocol NetworkRequest {
     var contentType: String? { get }
 }
 
-// default values
 extension NetworkRequest {
     var httpMethod: HttpMethod { .get }
     var dto: Encodable? { nil }
