@@ -27,27 +27,27 @@ struct NFTRowView: View {
             
             VStack(alignment: .leading, spacing: Constants.infoSpacing) {
                 Text(nft.name)
-                    .font(Font(UIFont.bodyBold))
+                    .font(.bodyBold)
                 
                 rating
                 
                 HStack(spacing: Constants.authorSpacing) {
                     Text(NSLocalizedString("NFT.from", comment: ""))
-                        .font(Font(UIFont.caption1))
+                        .font(.caption1)
                     
                     Text(nft.author)
-                        .font(Font(UIFont.caption2))
+                        .font(.caption2)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.trailing, Constants.infoToPriceSpacing)
             
             VStack(alignment: .leading, spacing: Constants.priceSpacing) {
-                Text(NSLocalizedString("NFT.price", comment: ""))                    .font(Font(UIFont.caption2))
+                Text(NSLocalizedString("NFT.price", comment: ""))
+                    .font(.caption2)
                 
                 Text("\(nft.price, specifier: "%.2f") ETH")
-                    .font(Font(UIFont.bodyBold))
-                    .lineLimit(1)
+                    .font(.bodyBold)                    .lineLimit(1)
                     .fixedSize()
             }
             .frame(width: Constants.priceWidth, alignment: .leading)

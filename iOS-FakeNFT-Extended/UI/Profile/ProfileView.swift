@@ -64,7 +64,7 @@ struct ProfileView: View {
                 .clipShape(Circle())
                 
                 Text(viewModel.profile?.name ?? "")
-                    .font(Font(UIFont.headline3))
+                    .font(.headline3)
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
                 
                 Spacer()
@@ -74,14 +74,14 @@ struct ProfileView: View {
             
             VStack(alignment: .leading, spacing: 8) {
                 Text(viewModel.profile?.description ?? "")
-                    .font(Font(UIFont.caption2))
+                    .font(.caption2)
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
                 
                 Button {
                     isWebViewPresented = true
                 } label: {
                     Text(viewModel.profile?.website.absoluteString ?? "")
-                        .font(Font(UIFont.caption1))
+                        .font(.caption1)
                         .foregroundStyle(Color(uiColor: .blueUniversal))
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -195,7 +195,7 @@ private struct ProfileNavigationRow: View {
     var body: some View {
         HStack {
             Text("\(title) (\(count))")
-                .font(Font(UIFont.bodyBold))
+                .font(.bodyBold)
                 .foregroundStyle(Color(uiColor: .yaBlackLight))
             
             Spacer()

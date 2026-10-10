@@ -34,7 +34,7 @@ struct FavoritesNFTView: View {
             ScrollView {
                 if !viewModel.isLoading && viewModel.nfts.isEmpty {
                     Text(NSLocalizedString("NFT.favoriteEmpty", comment: ""))
-                        .font(Font(UIFont.bodyBold))
+                        .font(.bodyBold)
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .frame(maxWidth: .infinity, minHeight: 600)
                 } else {
@@ -114,7 +114,7 @@ private extension FavoritesNFTView {
                 Spacer()
                 
                 Text(NSLocalizedString("Profile.favoriteNFT", comment: ""))
-                    .font(Font(UIFont.bodyBold))
+                    .font(.bodyBold)
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
                 
                 Spacer()

@@ -31,14 +31,14 @@ struct FavoriteNFTCardView: View {
             
             VStack(alignment: .leading, spacing: Constants.infoSpacing) {
                 Text(nft.name)
-                    .font(Font(UIFont.bodyBold))
+                    .font(.bodyBold)
                     .lineLimit(2)
                 
                 rating
                     .padding(.bottom, Constants.ratingToPriceSpacing)
                 
                 Text("\(nft.price, specifier: "%.2f") ETH")
-                    .font(Font(UIFont.bodyRegular))
+                    .font(.bodyRegular)
                     .lineLimit(1)
                     .fixedSize()
             }

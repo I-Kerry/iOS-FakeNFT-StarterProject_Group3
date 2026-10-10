@@ -30,7 +30,7 @@ struct MyNFTView: View {
             List {
                 if !viewModel.isLoading && viewModel.nfts.isEmpty {
                     Text(NSLocalizedString("NFT.myEmpty", comment: ""))
-                        .font(Font(UIFont.bodyBold))
+                        .font(.bodyBold)
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .frame(maxWidth: .infinity, minHeight: 600)
                         .listRowSeparator(.hidden)
@@ -120,7 +120,7 @@ private extension MyNFTView {
                 Spacer()
                 
                 Text(NSLocalizedString("Profile.myNFT", comment: ""))
-                    .font(Font(UIFont.bodyBold))
+                    .font(.bodyBold)
                     .foregroundStyle(Color(uiColor: .yaBlackLight))
                 
                 Spacer()

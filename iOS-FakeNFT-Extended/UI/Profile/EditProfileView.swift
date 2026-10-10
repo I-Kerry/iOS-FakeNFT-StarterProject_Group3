@@ -109,12 +109,12 @@ struct EditProfileView: View {
                     .padding(.top, 4)
                     
                     Text(NSLocalizedString("Profile.name", comment: ""))
-                        .font(Font(UIFont.headline3))
+                        .font(.headline3)
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .padding(.top, 24)
                     
                     TextField("", text: $editViewModel.name)
-                        .font(Font(UIFont.bodyRegular))
+                        .font(.bodyRegular)
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, Constants.horizontalPadding)
@@ -128,12 +128,12 @@ struct EditProfileView: View {
                         .padding(.top, 8)
                     
                     Text(NSLocalizedString("Profile.description", comment: ""))
-                        .font(Font(UIFont.headline3))
+                        .font(.headline3)
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .padding(.top, 24)
                     
                     TextEditor(text: $editViewModel.description)
-                        .font(Font(UIFont.bodyRegular))
+                        .font(.bodyRegular)
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .scrollContentBackground(.hidden)
                         .padding(.horizontal, 12)
@@ -148,7 +148,7 @@ struct EditProfileView: View {
                         .padding(.top, 8)
                     
                     Text(NSLocalizedString("Profile.website", comment: ""))
-                        .font(Font(UIFont.headline3))
+                        .font(.headline3)
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .padding(.top, 24)
                     
@@ -156,7 +156,7 @@ struct EditProfileView: View {
                         .keyboardType(.URL)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
-                        .font(Font(UIFont.bodyRegular))
+                        .font(.bodyRegular)
                         .foregroundStyle(Color(uiColor: .yaBlackLight))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, Constants.horizontalPadding)
@@ -192,7 +192,7 @@ struct EditProfileView: View {
                 }
             } label: {
                 Text(NSLocalizedString("Profile.save", comment: ""))
-                    .font(Font(UIFont.bodyBold))
+                    .font(.bodyBold)
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: Constants.saveButtonHeight)
