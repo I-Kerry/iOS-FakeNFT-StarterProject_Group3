@@ -1,9 +1,11 @@
 import Foundation
 import Observation
+import OSLog
 
 @Observable
 @MainActor
 final class CollectionDetailViewModel {
+	private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Catalog", category: "CollectionDetail")
 	private(set) var nfts: [String: Nft] = [:]
 	var isLoading: Bool = false
 	
@@ -30,7 +32,7 @@ final class CollectionDetailViewModel {
 							let nft = try await self.service.loadNft(id: id)
 							return (id, nft)
 						} catch {
-							print("❌ Ошибка загрузки отдельного NFT \(id): \(error)")
+							self.logger.error("Ошибка загрузки отдельного NFT \(id): \(error.localizedDescription)")
 							return (id, nil)
 						}
 					}

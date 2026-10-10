@@ -3,6 +3,8 @@ import SwiftUI
 struct NFTItemView: View {
 	private enum AssetImages {
 		static let heartFill = "heart.fill"
+		static let starFill = "star.fill"
+		static let starEmpty = "star"
 	}
 	
 	let nft: Nft?
@@ -26,8 +28,8 @@ struct NFTItemView: View {
 	
 	private var previewSection: some View {
 		ZStack(alignment: .topTrailing) {
-			if let urlString = nft?.images.first {
-				AsyncImage(url: urlString) { phase in
+			if let url = nft?.imageURLs.first {
+						AsyncImage(url: url) { phase in
 					switch phase {
 					case .success(let image):
 						image
@@ -58,18 +60,18 @@ struct NFTItemView: View {
 	}
 	
 	private var ratingSection: some View {
-		HStack(spacing: 2) {
-			ForEach(0..<5) { index in
-				let currentRating = nft?.rating ?? 0
-				Image(systemName: index < currentRating ? "star.fill" : "star")
-					.resizable()
-					.frame(width: 12, height: 12)
-					.foregroundColor(index < currentRating ? .yellow : .gray.opacity(0.5))
+			HStack(spacing: 2) {
+				ForEach(0..<5) { index in
+					let currentRating = nft?.rating ?? 0
+					Image(systemName: index < currentRating ? AssetImages.starFill : AssetImages.starEmpty)
+						.resizable()
+						.frame(width: 12, height: 12)
+						.foregroundColor(index < currentRating ? .yellow : .gray.opacity(0.5))
+				}
 			}
+			.frame(height: 12)
+			.padding(.top, 8)
 		}
-		.frame(height: 12)
-		.padding(.top, 8)
-	}
 	
 	private var infoAndCartSection: some View {
 		HStack(alignment: .center, spacing: 0) {

@@ -44,7 +44,7 @@ struct WebView: UIViewRepresentable {
 		
 		func setupObservation(for webView: WKWebView) {
 			observation = webView.observe(\.estimatedProgress, options: .new) { [weak self] _, change in
-				guard let self = self, let newValue = change.newValue else { return }
+				guard let self, let newValue = change.newValue else { return }
 				Task { @MainActor in
 					self.parent.progress = newValue
 				}
