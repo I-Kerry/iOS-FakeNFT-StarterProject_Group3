@@ -1,15 +1,39 @@
 import SwiftUI
 
+@MainActor
 struct CollectionDetailView: View {
-	// MARK: - Constants
+	private enum Constants {
+		static let coverHeight: CGFloat = 310
+		static let backButtonIconWidth: CGFloat = 8.97
+		static let backButtonIconHeight: CGFloat = 15.59
+		static let backButtonFrameSize: CGFloat = 24
+		static let backButtonTopPadding: CGFloat = 55
+		static let backButtonLeadingPadding: CGFloat = 9
+		static let placeholderOpacity: Double = 0.2
+		static let gridSpacing: CGFloat = 9
+		static let infoHorizontalPadding: CGFloat = 16
+		static let infoTopPadding: CGFloat = 16
+		static let authorTopPadding: CGFloat = 13
+		static let authorSpacing: CGFloat = 4
+		static let descriptionTopPadding: CGFloat = 8
+		static let lineSpacing: CGFloat = 5
+		static let gridVerticalPadding: CGFloat = 24
+	}
+	
 	private enum AssetImages {
 		static let backButton = "chevron.backward"
 	}
 	
-	// MARK: - Properties
 	let collection: NFTCollection
+	let servicesAssembly: ServicesAssembly
 	
-	@State private var viewModel = CollectionDetailViewModel()
+	@State private var viewModel: CollectionDetailViewModel
+	
+	init(collection: NFTCollection, servicesAssembly: ServicesAssembly) {
+		self.collection = collection
+		self.servicesAssembly = servicesAssembly
+		self._viewModel = State(wrappedValue: CollectionDetailViewModel(service: servicesAssembly.nftService))
+	}
 	
 	@State private var isShowingAuthorWebView = false
 	@State private var webViewProgress: Double = 0.0
@@ -17,16 +41,19 @@ struct CollectionDetailView: View {
 	@Environment(\.dismiss) private var dismiss
 	
 	private let columns = [
-		GridItem(.flexible(), spacing: 9),
-		GridItem(.flexible(), spacing: 9),
-		GridItem(.flexible(), spacing: 9)
+		GridItem(.flexible(), spacing: Constants.gridSpacing),
+		GridItem(.flexible(), spacing: Constants.gridSpacing),
+		GridItem(.flexible(), spacing: Constants.gridSpacing)
 	]
 	
-	// MARK: - Body
 	var body: some View {
 		ScrollView {
 			VStack(alignment: .leading, spacing: 0) {
 				headerCoverView
+					.overlay(alignment: .topLeading) {
+						backButtonOverlay
+					}
+				
 				collectionInfoSection
 				nftGridSection
 			}
@@ -34,14 +61,29 @@ struct CollectionDetailView: View {
 		.scrollIndicators(.hidden)
 		.navigationBarBackButtonHidden(true)
 		.navigationBarHidden(true)
+		.task {
+			viewModel.loadNfts(ids: collection.nfts ?? [])
+		}
 	}
-	
-	// MARK: - Subviews
 	
 	private var headerCoverView: some View {
 		ZStack(alignment: .topLeading) {
-			Color.gray.opacity(0.2)
-				.frame(height: 310)
+			if let coverString = collection.cover, let url = URL(string: coverString) {
+				AsyncImage(url: url) { phase in
+					switch phase {
+					case .success(let image):
+						image
+							.resizable()
+							.aspectRatio(contentMode: .fill)
+							.frame(height: Constants.coverHeight)
+							.clipped()
+					case .failure, .empty:
+						placeholderCover
+					@unknown default:
+						placeholderCover
+					}
+				}
+				.frame(height: Constants.coverHeight)
 				.clipShape(
 					.rect(
 						topLeadingRadius: 0,
@@ -50,22 +92,38 @@ struct CollectionDetailView: View {
 						topTrailingRadius: 0
 					)
 				)
-			
+			} else {
+				placeholderCover
+			}
+		}
+		.ignoresSafeArea(edges: .top)
+	}
+	
+	private var backButtonOverlay: some View {
+		HStack {
 			Button {
 				dismiss()
 			} label: {
 				Image(systemName: AssetImages.backButton)
 					.resizable()
 					.aspectRatio(contentMode: .fit)
-					.frame(width: 8.97, height: 15.59)
+					.frame(width: Constants.backButtonIconWidth, height: Constants.backButtonIconHeight)
 					.font(.system(size: 24, weight: .medium))
 			}
-			.frame(width: 24, height: 24)
+			.frame(width: Constants.backButtonFrameSize, height: Constants.backButtonFrameSize)
 			.foregroundStyle(.primary)
-			.padding(.top, 55)
-			.padding(.leading, 9)
+			.padding(.top, Constants.backButtonTopPadding)
+			.padding(.leading, Constants.backButtonLeadingPadding)
+			
+			Spacer()
 		}
 		.ignoresSafeArea(edges: .top)
+		.zIndex(1)
+	}
+	
+	private var placeholderCover: some View {
+		Color.gray.opacity(Constants.placeholderOpacity)
+			.frame(height: Constants.coverHeight)
 	}
 	
 	private var collectionInfoSection: some View {
@@ -74,10 +132,10 @@ struct CollectionDetailView: View {
 				.font(.system(size: 22, weight: .bold))
 				.tracking(0.35)
 				.foregroundStyle(.primary)
-				.padding(.horizontal, 16)
-				.padding(.top, 16)
+				.padding(.horizontal, Constants.infoHorizontalPadding)
+				.padding(.top, Constants.infoTopPadding)
 			
-			HStack(alignment: .firstTextBaseline, spacing: 4) {
+			HStack(alignment: .firstTextBaseline, spacing: Constants.authorSpacing) {
 				Text("Автор коллекции:")
 					.font(.system(size: 13, weight: .regular))
 					.tracking(-0.08)
@@ -86,16 +144,16 @@ struct CollectionDetailView: View {
 				Button {
 					isShowingAuthorWebView = true
 				} label: {
-					Text("John Doe")
+					Text(collection.authorName)
 						.font(.system(size: 15, weight: .regular))
 						.tracking(-0.24)
 						.foregroundStyle(.blue)
 				}
 			}
-			.padding(.horizontal, 16)
-			.padding(.top, 13)
+			.padding(.horizontal, Constants.infoHorizontalPadding)
+			.padding(.top, Constants.authorTopPadding)
 			.sheet(isPresented: $isShowingAuthorWebView) {
-				if let authorURL = URL(string: collection.author) {
+				if let authorString = collection.author, let authorURL = URL(string: authorString) {
 					ZStack(alignment: .top) {
 						WebView(url: authorURL, progress: $webViewProgress, isLoading: $isWebViewLoading)
 							.ignoresSafeArea()
@@ -110,47 +168,57 @@ struct CollectionDetailView: View {
 					}
 				} else {
 					Text("Неверная ссылка на автора")
+						.padding()
 				}
 			}
 			
-			Text(collection.description)
+			Text(collection.description ?? "Описание отсутствует")
 				.font(.system(size: 13, weight: .regular))
 				.tracking(-0.08)
 				.foregroundStyle(.primary)
-				.lineSpacing(5)
-				.padding(.horizontal, 16)
-				.padding(.top, 8)
+				.lineSpacing(Constants.lineSpacing)
+				.padding(.horizontal, Constants.infoHorizontalPadding)
+				.padding(.top, Constants.descriptionTopPadding)
 		}
 	}
 	
 	private var nftGridSection: some View {
-		LazyVGrid(columns: columns, spacing: 9) {
-			ForEach(collection.nfts, id: \.self) { nftId in
-				NFTItemView(
-					nftId: nftId,
-					rating: 4,
-					isLiked: viewModel.isLiked(nftId: nftId),
-					isInCart: viewModel.isInCart(nftId: nftId),
-					onLikeTapped: { viewModel.toggleLike(for: nftId) },
-					onCartTapped: { viewModel.toggleCart(for: nftId) }
-				)
+		LazyVGrid(columns: columns, spacing: Constants.gridSpacing) {
+			ForEach(collection.nfts ?? [], id: \.self) { nftId in
+				let currentNft = viewModel.nfts[nftId]
+				
+				NavigationLink(destination: Text("Экран NFT (Реализуется наставником)")) {
+					NFTItemView(
+						nft: currentNft,
+						isLiked: viewModel.isLiked(nftId: nftId),
+						isInCart: viewModel.isInCart(nftId: nftId),
+						onLikeTapped: { viewModel.toggleLike(for: nftId) },
+						onCartTapped: { viewModel.toggleCart(for: nftId) }
+					)
+				}
+				.buttonStyle(PlainButtonStyle())
 			}
 		}
-		.padding(.horizontal, 16)
-		.padding(.vertical, 24)
+		.padding(.horizontal, Constants.infoHorizontalPadding)
+		.padding(.vertical, Constants.gridVerticalPadding)
 	}
 }
 
-// MARK: - Preview
 #Preview {
 	NavigationStack {
-		CollectionDetailView(collection: NFTCollection(
-			id: "1",
-			name: "Peach",
-			cover: "https://yandex.net",
-			nfts: ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
-			description: "Пушистые шедевры цифрового искусства. Коллекция Персик объединяет самых нежных и грациозных представителей кошачьего мира.",
-			author: "https://yandex.ru"
-		))
+		CollectionDetailView(
+			collection: NFTCollection(
+				id: "1",
+				name: "Peach",
+				cover: "https://yandex.net",
+				nfts: ["1", "2", "3"],
+				description: "Пушистые шедевры цифрового искусства.",
+				author: "https://yandex.ru"
+			),
+			servicesAssembly: ServicesAssembly(
+				networkClient: DefaultNetworkClient(),
+				nftStorage: NftStorageImpl()
+			)
+		)
 	}
 }
