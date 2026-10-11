@@ -9,7 +9,7 @@ struct TestCatalogView: View {
             showNft()
         } label: {
             Text(Constants.openNftTitle)
-                .tint(.blue)
+                .tint(Color.yaBlue)
         }
         .backgroundStyle(.background)
         .sheet(isPresented: $presentingNft) {

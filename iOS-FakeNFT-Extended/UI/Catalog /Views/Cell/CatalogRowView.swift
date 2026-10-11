@@ -42,7 +42,7 @@ struct CatalogRowView: View {
 			HStack {
 				Text("\(collection.name) (\(collection.nftCount))")
 					.font(.system(size: 17, weight: .bold))
-					.foregroundStyle(.primary)
+					.foregroundStyle( Color.yaBlack)
 				Spacer()
 			}
 			.frame(height: RowConstants.titleHeight)
@@ -53,7 +53,7 @@ struct CatalogRowView: View {
 	}
 	
 	private var placeholderView: some View {
-		Color.gray.opacity(RowConstants.placeholderOpacity)
+		Color.yaLightGray.opacity(RowConstants.placeholderOpacity)
 			.frame(height: RowConstants.imageHeight)
 			.clipShape(RoundedRectangle(cornerRadius: RowConstants.cornerRadius))
 	}

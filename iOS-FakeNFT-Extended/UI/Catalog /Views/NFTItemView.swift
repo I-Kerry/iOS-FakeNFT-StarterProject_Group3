@@ -13,8 +13,6 @@ struct NFTItemView: View {
 	let onLikeTapped: () -> Void
 	let onCartTapped: () -> Void
 	
-	private let activeHeartColor = Color(red: 245/255, green: 107/255, blue: 108/255)
-	
 	var body: some View {
 		VStack(alignment: .leading, spacing: 0) {
 			previewSection
@@ -29,7 +27,7 @@ struct NFTItemView: View {
 	private var previewSection: some View {
 		ZStack(alignment: .topTrailing) {
 			if let url = nft?.imageURLs.first {
-						AsyncImage(url: url) { phase in
+				AsyncImage(url: url) { phase in
 					switch phase {
 					case .success(let image):
 						image
@@ -52,7 +50,7 @@ struct NFTItemView: View {
 					.resizable()
 					.aspectRatio(contentMode: .fit)
 					.frame(width: 21, height: 18)
-					.foregroundColor(isLiked ? activeHeartColor : .white)
+					.foregroundColor(isLiked ? Color.yaRed : .white)
 			}
 			.frame(width: 40, height: 40)
 			.offset(x: -3, y: 3)
@@ -60,18 +58,18 @@ struct NFTItemView: View {
 	}
 	
 	private var ratingSection: some View {
-			HStack(spacing: 2) {
-				ForEach(0..<5) { index in
-					let currentRating = nft?.rating ?? 0
-					Image(systemName: index < currentRating ? AssetImages.starFill : AssetImages.starEmpty)
-						.resizable()
-						.frame(width: 12, height: 12)
-						.foregroundColor(index < currentRating ? .yellow : .gray.opacity(0.5))
-				}
+		HStack(spacing: 2) {
+			ForEach(0..<5) { index in
+				let currentRating = nft?.rating ?? 0
+				Image(systemName: index < currentRating ? AssetImages.starFill : AssetImages.starEmpty)
+					.resizable()
+					.frame(width: 12, height: 12)
+				.foregroundColor(index < currentRating ? .yellow : .yaLightGray)
 			}
-			.frame(height: 12)
-			.padding(.top, 8)
 		}
+		.frame(height: 12)
+		.padding(.top, 8)
+	}
 	
 	private var infoAndCartSection: some View {
 		HStack(alignment: .center, spacing: 0) {
@@ -79,14 +77,14 @@ struct NFTItemView: View {
 				Text(nft?.name ?? "Загрузка...")
 					.font(.system(size: 15, weight: .bold))
 					.tracking(0)
-					.foregroundStyle(.primary)
+					.foregroundStyle(Color.yaBlack)
 					.lineLimit(1)
 					.frame(height: 22)
 				
 				Text("\(String(format: "%.2f", nft?.price ?? 0.0)) ETH")
 					.font(.system(size: 10, weight: .medium))
 					.tracking(-0.24)
-					.foregroundStyle(.primary)
+					.foregroundStyle(Color.yaBlack)
 					.frame(height: 12)
 			}
 			
@@ -99,7 +97,7 @@ struct NFTItemView: View {
 					.resizable()
 					.aspectRatio(contentMode: .fit)
 					.frame(width: 19, height: 19)
-					.foregroundStyle(.primary)
+					.foregroundStyle(Color.yaBlack)
 			}
 			.frame(width: 40, height: 40)
 		}
@@ -108,7 +106,7 @@ struct NFTItemView: View {
 	}
 	
 	private var placeholderImage: some View {
-		Color.gray.opacity(0.3)
+		Color.yaLightGray.opacity(0.3)
 			.frame(width: 108, height: 108)
 			.clipShape(RoundedRectangle(cornerRadius: 12))
 	}

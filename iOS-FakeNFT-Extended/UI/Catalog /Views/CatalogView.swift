@@ -42,7 +42,7 @@ struct CatalogView: View {
 								.frame(width: Constants.sortIconWidth, height: Constants.sortIconHeight)
 						}
 						.frame(width: Constants.sortButtonSize, height: Constants.sortButtonSize)
-						.foregroundStyle(.primary)
+						.foregroundStyle( Color.yaBlack)
 					}
 					.padding(.trailing, Constants.headerTrailingPadding)
 					.padding(.top, Constants.topHeaderPadding)

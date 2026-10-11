@@ -111,7 +111,7 @@ struct CollectionDetailView: View {
 					.font(.system(size: 24, weight: .medium))
 			}
 			.frame(width: Constants.backButtonFrameSize, height: Constants.backButtonFrameSize)
-			.foregroundStyle(.primary)
+			.foregroundStyle( Color.yaBlack)
 			.padding(.top, Constants.backButtonTopPadding)
 			.padding(.leading, Constants.backButtonLeadingPadding)
 			
@@ -122,7 +122,7 @@ struct CollectionDetailView: View {
 	}
 	
 	private var placeholderCover: some View {
-		Color.gray.opacity(Constants.placeholderOpacity)
+		Color.yaLightGray.opacity(Constants.placeholderOpacity)
 			.frame(height: Constants.coverHeight)
 	}
 	
@@ -131,7 +131,7 @@ struct CollectionDetailView: View {
 			Text(collection.name)
 				.font(.system(size: 22, weight: .bold))
 				.tracking(0.35)
-				.foregroundStyle(.primary)
+				.foregroundStyle( Color.yaBlack)
 				.padding(.horizontal, Constants.infoHorizontalPadding)
 				.padding(.top, Constants.infoTopPadding)
 			
@@ -139,7 +139,7 @@ struct CollectionDetailView: View {
 				Text("Автор коллекции:")
 					.font(.system(size: 13, weight: .regular))
 					.tracking(-0.08)
-					.foregroundStyle(.primary)
+					.foregroundStyle( Color.yaBlack)
 				
 				Button {
 					isShowingAuthorWebView = true
@@ -147,7 +147,7 @@ struct CollectionDetailView: View {
 					Text(collection.authorName)
 						.font(.system(size: 15, weight: .regular))
 						.tracking(-0.24)
-						.foregroundStyle(.blue)
+						.foregroundStyle( Color.yaBlue)
 				}
 			}
 			.padding(.horizontal, Constants.infoHorizontalPadding)
@@ -161,7 +161,7 @@ struct CollectionDetailView: View {
 						if isWebViewLoading {
 							ProgressView(value: webViewProgress, total: 1.0)
 								.progressViewStyle(.linear)
-								.tint(.blue)
+								.tint(Color.yaBlue)
 								.background(Color.clear)
 								.frame(height: 4)
 						}
@@ -175,7 +175,7 @@ struct CollectionDetailView: View {
 			Text(collection.description ?? "Описание отсутствует")
 				.font(.system(size: 13, weight: .regular))
 				.tracking(-0.08)
-				.foregroundStyle(.primary)
+				.foregroundStyle(Color.yaBlack)
 				.lineSpacing(Constants.lineSpacing)
 				.padding(.horizontal, Constants.infoHorizontalPadding)
 				.padding(.top, Constants.descriptionTopPadding)

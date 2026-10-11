@@ -45,7 +45,7 @@ struct CatalogSortMenuView: View {
 						Text("Сортировка")
 							.font(.system(size: 13, weight: .regular))
 							.tracking(-0.08)
-							.foregroundStyle(MenuColors.titleGray)
+							.foregroundStyle(Color.yaLightGray)
 					}
 					.frame(height: MenuConstants.titleHeight)
 					
