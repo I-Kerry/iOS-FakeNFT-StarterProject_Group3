@@ -186,15 +186,24 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		0DBD5B9D306D5390008677B3 /* Profile */ = {
+		0D3D65CB307C000400765AA6 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0D375692306ABB0F004FDE44 /* EditProfileView.swift */,
-				0D375694306ABF9B004FDE44 /* MyNFTView.swift */,
 				0D375696306AC166004FDE44 /* FavoritesNFTView.swift */,
+				0D375694306ABF9B004FDE44 /* MyNFTView.swift */,
+				0D375692306ABB0F004FDE44 /* EditProfileView.swift */,
 				0D375684306A7827004FDE44 /* ProfileView.swift */,
 				0D81E1413073D16800121644 /* NFTRowView.swift */,
 				0D81E1453073FCF900121644 /* FavoriteNFTCardView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		0DBD5B9D306D5390008677B3 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				0D3D65CB307C000400765AA6 /* Views */,
+				0D375689306A87F9004FDE44 /* ViewModels */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -231,7 +240,6 @@
 				ABC5E19A2C31F687002B4068 /* Foundation */,
 				ABC5E19E2C31F6C1002B4068 /* Models */,
 				ABC5E1A92C31FABA002B4068 /* Services */,
-				0D375689306A87F9004FDE44 /* ViewModels */,
 				ABC5E1B32C31FC03002B4068 /* UI */,
 				ABC5E16F2C31F5AF002B4068 /* Assets.xcassets */,
 				ABC5E1712C31F5AF002B4068 /* Preview Content */,
