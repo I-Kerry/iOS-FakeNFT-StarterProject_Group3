@@ -8,10 +8,13 @@ struct TabBarView: View {
 		let appearance = UITabBarAppearance()
 		appearance.configureWithDefaultBackground()
 
-		appearance.stackedLayoutAppearance.normal.iconColor = .yaBlackLight
-		appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
-			.foregroundColor: UIColor.yaBlackLight
-		]
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor(
+            named: "BlackUniversal"
+        )
+
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
+            .foregroundColor: UIColor(named: "BlackUniversal") ?? .black
+        ]
 
 		UITabBar.appearance().standardAppearance = appearance
 	}

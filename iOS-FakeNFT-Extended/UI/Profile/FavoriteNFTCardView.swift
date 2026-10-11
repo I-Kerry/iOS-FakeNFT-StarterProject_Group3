@@ -79,7 +79,7 @@ private extension FavoriteNFTCardView {
 			Button(action: onFavoriteTapped) {
 				Image(systemName: "heart.fill")
 					.font(.system(size: Constants.heartSize))
-					.foregroundStyle(Color(uiColor: .redUniversal))
+                    .foregroundStyle(Color("RedUniversal"))
 					.padding(.top, Constants.heartTopPadding)
 					.padding(.trailing, Constants.heartTrailingPadding)
 			}        }

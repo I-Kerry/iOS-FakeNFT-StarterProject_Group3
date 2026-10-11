@@ -35,7 +35,7 @@ struct FavoritesNFTView: View {
 				if !viewModel.isLoading && viewModel.nfts.isEmpty {
 					Text(NSLocalizedString("NFT.favoriteEmpty", comment: ""))
 						.font(.bodyBold)
-						.foregroundStyle(Color(uiColor: .yaBlackLight))
+                        .foregroundStyle(Color("BlackUniversal"))
 						.frame(maxWidth: .infinity, minHeight: 600)
 				} else {
 					LazyVGrid(
@@ -107,7 +107,7 @@ private extension FavoritesNFTView {
 							weight: .medium
 						)
 					)
-					.foregroundStyle(Color(uiColor: .yaBlackLight))
+                    .foregroundStyle(Color("BlackUniversal"))
 			}
 			
 			if !viewModel.nfts.isEmpty {
@@ -115,7 +115,7 @@ private extension FavoritesNFTView {
 				
 				Text(NSLocalizedString("Profile.favoriteNFT", comment: ""))
 					.font(.bodyBold)
-					.foregroundStyle(Color(uiColor: .yaBlackLight))
+                    .foregroundStyle(Color("BlackUniversal"))
 				
 				Spacer()
 				

@@ -190,7 +190,6 @@
 				0D375694306ABF9B004FDE44 /* MyNFTView.swift */,
 				0D375696306AC166004FDE44 /* FavoritesNFTView.swift */,
 				0D375684306A7827004FDE44 /* ProfileView.swift */,
-				0D375690306A9E57004FDE44 /* WebView.swift */,
 				0D81E1413073D16800121644 /* NFTRowView.swift */,
 				0D81E1453073FCF900121644 /* FavoriteNFTCardView.swift */,
 			);
@@ -347,6 +346,7 @@
 				C5CF948130602EC80048C967 /* Catalog  */,
 				0DBD5B9D306D5390008677B3 /* Profile */,
 				ABC5E16D2C31F5AF002B4068 /* ContentView.swift */,
+				0D375690306A9E57004FDE44 /* WebView.swift */,
 				ABC5E1B42C31FC57002B4068 /* TabBarView.swift */,
 				ABC5E1B82C31FD51002B4068 /* TestCatalogView.swift */,
 				ABC5E1E72C320610002B4068 /* NftDetailBridgeView.swift */,

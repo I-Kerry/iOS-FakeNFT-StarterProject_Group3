@@ -49,7 +49,7 @@ struct EditProfileView: View {
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.system(size: Constants.backIconSize))
-                        .foregroundStyle(Color(uiColor: .yaBlackLight))
+                        .foregroundStyle(Color("BlackUniversal"))
                 }
                 .disabled(viewModel.isSaving)
                 
@@ -93,14 +93,12 @@ struct EditProfileView: View {
                             
                             Image(systemName: "camera.fill")
                                 .font(.system(size: Constants.cameraIconSize))
-                                .foregroundStyle(Color(uiColor: .yaBlackLight))
+                                .foregroundStyle(Color("BlackUniversal"))
                                 .frame(
                                     width: Constants.cameraButtonSize,
                                     height: Constants.cameraButtonSize
                                 )
-                                .background(
-                                    Color(uiColor: .yaLightGrayLight)
-                                )
+                                .background(Color("LightGrayUniversal"))
                                 .clipShape(Circle())
                         }
                     }
@@ -110,16 +108,16 @@ struct EditProfileView: View {
                     
                     Text(NSLocalizedString("Profile.name", comment: ""))
                         .font(.headline3)
-                        .foregroundStyle(Color(uiColor: .yaBlackLight))
+                        .foregroundStyle(Color("BlackUniversal"))
                         .padding(.top, 24)
                     
                     TextField("", text: $editViewModel.name)
                         .font(.bodyRegular)
-                        .foregroundStyle(Color(uiColor: .yaBlackLight))
+                        .foregroundStyle(Color("BlackUniversal"))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, Constants.horizontalPadding)
                         .frame(height: Constants.textFieldHeight)
-                        .background(Color(uiColor: .yaLightGrayLight))
+                        .background(Color("LightGrayUniversal"))
                         .clipShape(
                             RoundedRectangle(
                                 cornerRadius: Constants.fieldCornerRadius
@@ -129,17 +127,17 @@ struct EditProfileView: View {
                     
                     Text(NSLocalizedString("Profile.description", comment: ""))
                         .font(.headline3)
-                        .foregroundStyle(Color(uiColor: .yaBlackLight))
+                        .foregroundStyle(Color("BlackUniversal"))
                         .padding(.top, 24)
                     
                     TextEditor(text: $editViewModel.description)
                         .font(.bodyRegular)
-                        .foregroundStyle(Color(uiColor: .yaBlackLight))
+                        .foregroundStyle(Color("BlackUniversal"))
                         .scrollContentBackground(.hidden)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 10)
                         .frame(height: Constants.descriptionHeight)
-                        .background(Color(uiColor: .yaLightGrayLight))
+                        .background(Color("LightGrayUniversal"))
                         .clipShape(
                             RoundedRectangle(
                                 cornerRadius: Constants.fieldCornerRadius
@@ -149,7 +147,7 @@ struct EditProfileView: View {
                     
                     Text(NSLocalizedString("Profile.website", comment: ""))
                         .font(.headline3)
-                        .foregroundStyle(Color(uiColor: .yaBlackLight))
+                        .foregroundStyle(Color("BlackUniversal"))
                         .padding(.top, 24)
                     
                     TextField("", text: $editViewModel.website)
@@ -157,11 +155,11 @@ struct EditProfileView: View {
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .font(.bodyRegular)
-                        .foregroundStyle(Color(uiColor: .yaBlackLight))
+                        .foregroundStyle(Color("BlackUniversal"))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, Constants.horizontalPadding)
                         .frame(height: Constants.textFieldHeight)
-                        .background(Color(uiColor: .yaLightGrayLight))
+                        .background(Color("LightGrayUniversal"))
                         .clipShape(
                             RoundedRectangle(
                                 cornerRadius: Constants.fieldCornerRadius
@@ -196,9 +194,8 @@ struct EditProfileView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: Constants.saveButtonHeight)
-                    .background(
-                        Color(uiColor: .yaBlackLight)
-                            .opacity(editViewModel.canSave ? 1 : 0)
+                    .background(Color("BlackUniversal")
+                        .opacity(editViewModel.canSave ? 1 : 0)
                     )
                     .clipShape(
                         RoundedRectangle(
