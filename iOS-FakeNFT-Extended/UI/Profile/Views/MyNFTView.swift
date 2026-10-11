@@ -1,37 +1,37 @@
 import SwiftUI
 
 struct MyNFTView: View {
-    
+
     private enum Constants {
         static let horizontalPadding: CGFloat = 16
         static let headerHeight: CGFloat = 42
-        
+
         static let backIconSize: CGFloat = 20
         static let sortIconSize: CGFloat = 24
-        
+
         static let rowSpacing: CGFloat = 32
         static let contentTopPadding: CGFloat = 16
         static let zeroSpacing: CGFloat = 0
     }
-    
+
     @Environment(\.dismiss) private var dismiss
-    
+
     @State private var viewModel: MyNFTViewModel
     @State private var isSortDialogPresented = false
-    
+
     init(viewModel: MyNFTViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
-    
+
     var body: some View {
         VStack(spacing: Constants.zeroSpacing) {
             header
-            
+
             List {
                 if !viewModel.isLoading && viewModel.nfts.isEmpty {
                     Text(NSLocalizedString("NFT.myEmpty", comment: ""))
                         .font(.bodyBold)
-                        .foregroundStyle(Color("BlackUniversal"))
+                        .foregroundStyle(Color.yaBlack)
                         .frame(maxWidth: .infinity, minHeight: 600)
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color.clear)
@@ -85,15 +85,15 @@ struct MyNFTView: View {
             Button(NSLocalizedString("NFT.byPrice", comment: "")) {
                 viewModel.sortType = .price
             }
-            
+
             Button(NSLocalizedString("NFT.byRating", comment: "")) {
                 viewModel.sortType = .rating
             }
-            
+
             Button(NSLocalizedString("NFT.byName", comment: "")) {
                 viewModel.sortType = .name
             }
-            
+
             Button(
                 NSLocalizedString("NFT.close", comment: ""),
                 role: .cancel
@@ -113,18 +113,18 @@ private extension MyNFTView {
                         size: Constants.backIconSize,
                         weight: .medium
                     ))
-                    .foregroundStyle(Color("BlackUniversal"))
+                    .foregroundStyle(Color.yaBlack)
             }
-            
+
             if !viewModel.nfts.isEmpty {
                 Spacer()
-                
+
                 Text(NSLocalizedString("Profile.myNFT", comment: ""))
                     .font(.bodyBold)
-                    .foregroundStyle(Color("BlackUniversal"))
-                
+                    .foregroundStyle(Color.yaBlack)
+
                 Spacer()
-                
+
                 Button {
                     isSortDialogPresented = true
                 } label: {
@@ -133,7 +133,7 @@ private extension MyNFTView {
                             size: Constants.sortIconSize,
                             weight: .medium
                         ))
-                        .foregroundStyle(Color("BlackUniversal"))
+                        .foregroundStyle(Color.yaBlack)
                 }
             }
         }

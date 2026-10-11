@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ProfileView: View {
-    
+
     private enum Constants {
         static let editIconSize: CGFloat = 26
         static let profileImageSize: CGFloat = 70
@@ -9,24 +9,24 @@ struct ProfileView: View {
         static let chevronSize: CGFloat = 14
         static let horizontalPadding: CGFloat = 16
     }
-    
+
     @Environment(ServicesAssembly.self) private var services
-    
+
     @State private var viewModel: ProfileViewModel
     @State private var isWebViewPresented = false
     @State private var isMyNFTPresented = false
     @State private var isFavoritesNFTPresented = false
-    
+
     init(viewModel: ProfileViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
-            
+
             HStack {
                 Spacer()
-                
+
                 NavigationLink {
                     if let profile = viewModel.profile {
                         EditProfileView(
@@ -38,12 +38,12 @@ struct ProfileView: View {
                 } label: {
                     Image(systemName: "square.and.pencil")
                         .font(.system(size: Constants.editIconSize))
-                        .foregroundStyle(Color("BlackUniversal"))
+                        .foregroundStyle(Color.yaBlack)
                 }
             }
             .padding(.horizontal, Constants.horizontalPadding)
             .padding(.top, 2)
-            
+
             HStack(spacing: 16) {
                 AsyncImage(url: viewModel.profile?.avatar) { phase in
                     switch phase {
@@ -51,7 +51,7 @@ struct ProfileView: View {
                         image
                             .resizable()
                             .scaledToFill()
-                        
+
                     default:
                         Circle()
                             .fill(.gray.opacity(0.3))
@@ -62,27 +62,27 @@ struct ProfileView: View {
                     height: Constants.profileImageSize
                 )
                 .clipShape(Circle())
-                
+
                 Text(viewModel.profile?.name ?? "")
                     .font(.headline3)
-                    .foregroundStyle(Color("BlackUniversal"))
-                
+                    .foregroundStyle(Color.yaBlack)
+
                 Spacer()
             }
             .padding(.horizontal, Constants.horizontalPadding)
             .padding(.top, 20)
-            
+
             VStack(alignment: .leading, spacing: 8) {
                 Text(viewModel.profile?.description ?? "")
                     .font(.caption2)
-                    .foregroundStyle(Color("BlackUniversal"))
-                
+                    .foregroundStyle(Color.yaBlack)
+
                 Button {
                     isWebViewPresented = true
                 } label: {
                     Text(viewModel.profile?.website.absoluteString ?? "")
                         .font(.caption1)
-                        .foregroundStyle(Color("BlueUniversal"))
+                        .foregroundStyle(Color.yaBlue)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -90,7 +90,7 @@ struct ProfileView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, Constants.horizontalPadding)
             .padding(.top, 20)
-            
+
             VStack(spacing: 0) {
                 Button {
                     isMyNFTPresented = true
@@ -101,7 +101,7 @@ struct ProfileView: View {
                     )
                 }
                 .buttonStyle(.plain)
-                
+
                 Button {
                     isFavoritesNFTPresented = true
                 } label: {
@@ -113,7 +113,7 @@ struct ProfileView: View {
                 .buttonStyle(.plain)
             }
             .padding(.top, 40)
-            
+
             Spacer()
         }
         .background(.background)
@@ -151,7 +151,8 @@ struct ProfileView: View {
                                 isWebViewPresented = false
                             } label: {
                                 Image(systemName: "chevron.left")
-                                .foregroundStyle(Color("BlackUniversal"))							}
+                                    .foregroundStyle(Color.yaBlack)
+                            }
                             .buttonStyle(.plain)
                         }
                     }
@@ -184,24 +185,24 @@ struct ProfileView: View {
 }
 
 private struct ProfileNavigationRow: View {
-    
+
     let title: String
     let count: Int
-    
+
     private enum Constants {
         static let chevronSize: CGFloat = 14
         static let horizontalPadding: CGFloat = 16
         static let rowHeight: CGFloat = 54
     }
-    
+
     var body: some View {
         HStack {
             Text("\(title) (\(count))")
                 .font(.bodyBold)
-                .foregroundStyle(Color("BlackUniversal"))
-            
+                .foregroundStyle(Color.yaBlack)
+
             Spacer()
-            
+
             Image(systemName: "chevron.right")
                 .font(
                     .system(
@@ -209,7 +210,7 @@ private struct ProfileNavigationRow: View {
                         weight: .medium
                     )
                 )
-                .foregroundStyle(Color("BlackUniversal"))
+                .foregroundStyle(Color.yaBlack)
         }
         .foregroundStyle(.primary)
         .padding(.horizontal, Constants.horizontalPadding)
