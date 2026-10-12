@@ -15,7 +15,7 @@ struct DeleteConfirmationView: View {
     
     var body: some View {
         VStack(alignment: .center) {
-            AsyncImage(url: nft.images.first) { phase in
+            AsyncImage(url: nft.imageURLs.first) { phase in
                 switch phase {
                 case .success(let image):
                     image.resizable()
@@ -72,10 +72,11 @@ private enum Constants {
     DeleteConfirmationView(nft: Nft(
         id: "1",
         name: "NFT 1",
-        images: [URL(string: "https://picsum.photos/400/400?random=1")!],
+        imageURLs: [URL(string: "https://picsum.photos/400/400?random=1")!],
         rating: 5,
         price: 1.5,
-        author: "Автор 1"
+        author: "Автор 1",
+        description: ""
     ), onDelete: {}, onCancel: {})
     .preferredColorScheme(.light)
 }

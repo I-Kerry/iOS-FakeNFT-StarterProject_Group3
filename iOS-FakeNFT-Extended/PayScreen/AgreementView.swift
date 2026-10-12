@@ -9,6 +9,9 @@ import SwiftUI
 
 struct AgreementView: View {
     @State private var showWebView = false
+    @State private var progress: Double = 0
+    @State private var isLoading = false
+    
     let onPay: () -> Void
     var isEnabled = false
     
@@ -33,7 +36,7 @@ struct AgreementView: View {
         .background(.graySecondaryBackground)
         .sheet(isPresented: $showWebView) {
             if let url = URL(string: Constants.urlString) {
-                WebView(url: url)
+                WebView(url: url, progress: $progress, isLoading: $isLoading)
             }
         }
     }

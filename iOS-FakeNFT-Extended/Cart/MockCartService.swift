@@ -42,26 +42,29 @@ final class MockCartService: CartService {
         Nft(
             id: "1",
             name: "NFT 1",
-            images: [URL(string: "https://picsum.photos/400/400?random=1")!],
+            imageURLs: [URL(string: "https://picsum.photos/400/400?random=1")!],
             rating: 5,
             price: 1.5,
-            author: "Автор 1"
+            author: "Автор 1",
+            description: ""
         ),
         Nft(
             id: "2",
             name: "NFT 2",
-            images: [URL(string: "https://picsum.photos/400/400?random=2")!],
+            imageURLs: [URL(string: "https://picsum.photos/400/400?random=2")!],
             rating: 4,
             price: 2.5,
-            author: "Автор 2"
+            author: "Автор 2",
+            description: ""
         ),
         Nft(
             id: "3",
             name: "NFT 3",
-            images: [URL(string: "https://picsum.photos/400/400?random=3")!],
+            imageURLs: [URL(string: "https://picsum.photos/400/400?random=3")!],
             rating: 3,
             price: 0.75,
-            author: "Автор 3"
+            author: "Автор 3",
+            description: ""
         )
     ]
 }

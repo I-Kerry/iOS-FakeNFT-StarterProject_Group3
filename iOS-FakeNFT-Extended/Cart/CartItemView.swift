@@ -13,7 +13,7 @@ struct CartItemView: View {
 
     var body: some View {
         HStack {
-            AsyncImage(url: nft.images.first) { phase in
+            AsyncImage(url: nft.imageURLs.first) { phase in
                 switch phase {
                 case .success(let image):
                     image.resizable()
@@ -95,5 +95,5 @@ private enum Constants {
 }
 
 #Preview {
-    CartItemView(nft: Nft(id: "1", name: "lol", images: [URL(string: "https://picsum.photos/400/400?random=2")!], rating: 4, price: 5.39, author: "Alonso"), onDelete: {})
+    CartItemView(nft: Nft(id: "1", name: "lol", imageURLs: [URL(string: "https://picsum.photos/400/400?random=2")!], rating: 4, price: 5.39, author: "Alonso", description: ""), onDelete: {})
 }
