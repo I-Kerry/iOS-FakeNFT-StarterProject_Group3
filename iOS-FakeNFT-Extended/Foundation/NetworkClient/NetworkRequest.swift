@@ -13,6 +13,7 @@ protocol NetworkRequest {
     var dto: Encodable? { get }
     var body: Data? { get }
     var contentType: String? { get }
+    var formParams: [String: String]? { get }
 }
 
 extension NetworkRequest {
@@ -20,4 +21,5 @@ extension NetworkRequest {
     var dto: Encodable? { nil }
     var body: Data? { nil }
     var contentType: String? { nil }
+    var formParams: [String: String]? { nil }
 }
