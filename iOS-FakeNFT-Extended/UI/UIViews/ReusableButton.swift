@@ -1,10 +1,3 @@
-//
-//  ReusableButton.swift
-//  iOS-FakeNFT-Extended
-//
-//  Created by Kirill Maidanovich on 18.09.2026.
-//
-
 import SwiftUI
 
 struct ReusableButton: View {
