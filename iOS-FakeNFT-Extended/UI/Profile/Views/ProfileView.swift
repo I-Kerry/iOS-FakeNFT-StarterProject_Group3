@@ -16,6 +16,8 @@ struct ProfileView: View {
     @State private var isWebViewPresented = false
     @State private var isMyNFTPresented = false
     @State private var isFavoritesNFTPresented = false
+    @State private var isLoadErrorAlertPresented = false
+    
 
     init(viewModel: ProfileViewModel) {
         _viewModel = State(initialValue: viewModel)
@@ -125,10 +127,21 @@ struct ProfileView: View {
         }
         .alert(
             NSLocalizedString("Error.title", comment: ""),
-            isPresented: .constant(viewModel.loadError != nil)
+            isPresented: $isLoadErrorAlertPresented
         ) {
-            Button(NSLocalizedString("Common.ok", comment: "")) {
+            Button(
+                NSLocalizedString("Profile.cancel", comment: ""),
+                role: .cancel
+            ) {
                 viewModel.loadError = nil
+            }
+
+            Button(NSLocalizedString("Error.repeat", comment: "")) {
+                viewModel.loadError = nil
+
+                Task {
+                    await viewModel.loadProfile()
+                }
             }
         } message: {
             Text(NSLocalizedString("Profile.loadError", comment: ""))
@@ -136,10 +149,12 @@ struct ProfileView: View {
         .task {
             await viewModel.loadProfile()
         }
+        .onChange(of: viewModel.loadError != nil) { _, hasError in
+            isLoadErrorAlertPresented = hasError
+        }
         .sheet(isPresented: $isWebViewPresented) {
             if let website = viewModel.profile?.website {
                 NavigationStack {
-                    // ИСПРАВЛЕНИЕ ОШИБКИ: Передали константные Binding-параметры прогресса загрузки 🌟
                     WebView(
                         url: website,
                         progress: .constant(0.0),

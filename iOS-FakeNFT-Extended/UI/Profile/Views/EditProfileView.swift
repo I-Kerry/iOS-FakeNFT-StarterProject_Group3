@@ -1,49 +1,49 @@
 import SwiftUI
 
 struct EditProfileView: View {
-
+    
     private enum Constants {
         static let avatarSize: CGFloat = 73
-
+        
         static let cameraButtonSize: CGFloat = 23
-
+        
         static let backIconSize: CGFloat = 24
-
+        
         static let cameraIconSize: CGFloat = 12
-
+        
         static let textFieldHeight: CGFloat = 44
-
+        
         static let descriptionHeight: CGFloat = 132
-
+        
         static let saveButtonHeight: CGFloat = 60
-
+        
         static let fieldCornerRadius: CGFloat = 12
-
+        
         static let buttonCornerRadius: CGFloat = 16
-
+        
         static let horizontalPadding: CGFloat = 16
     }
-
+    
     @State private var viewModel: ProfileViewModel
-
+    
     @Environment(\.dismiss) private var dismiss
-
+    
     @State private var editViewModel: EditProfileViewModel
-
+    
     @State private var isPhotoMenuPresented = false
     @State private var isPhotoURLAlertPresented = false
     @State private var isDiscardAlertPresented = false
     @State private var isSaveErrorAlertPresented = false
-
+    
     @State private var photoURL = ""
-
+    
     init(profile: Profile, viewModel: ProfileViewModel) {
         _viewModel = State(initialValue: viewModel)
         _editViewModel = State(
             initialValue: EditProfileViewModel(profile: profile)
         )
     }
-
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -59,12 +59,12 @@ struct EditProfileView: View {
                         .foregroundStyle(Color.yaBlack)
                 }
                 .disabled(viewModel.isSaving)
-
+                
                 Spacer()
             }
             .padding(.horizontal, Constants.horizontalPadding)
             .padding(.top, 8)
-
+            
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     Button {
@@ -85,7 +85,7 @@ struct EditProfileView: View {
                                         image
                                             .resizable()
                                             .scaledToFill()
-
+                                        
                                     default:
                                         Circle()
                                             .fill(.gray.opacity(0.3))
@@ -97,7 +97,7 @@ struct EditProfileView: View {
                                 )
                                 .clipShape(Circle())
                             }
-
+                            
                             Image(systemName: "camera.fill")
                                 .font(.system(size: Constants.cameraIconSize))
                                 .foregroundStyle(Color.yaBlack)
@@ -112,12 +112,12 @@ struct EditProfileView: View {
                     .buttonStyle(.plain)
                     .frame(maxWidth: .infinity)
                     .padding(.top, 4)
-
+                    
                     Text(NSLocalizedString("Profile.name", comment: ""))
                         .font(.headline3)
                         .foregroundStyle(Color.yaBlack)
                         .padding(.top, 24)
-
+                    
                     TextField("", text: $editViewModel.name)
                         .font(.bodyRegular)
                         .foregroundStyle(Color.yaBlack)
@@ -131,12 +131,12 @@ struct EditProfileView: View {
                             )
                         )
                         .padding(.top, 8)
-
+                    
                     Text(NSLocalizedString("Profile.description", comment: ""))
                         .font(.headline3)
                         .foregroundStyle(Color.yaBlack)
                         .padding(.top, 24)
-
+                    
                     TextEditor(text: $editViewModel.description)
                         .font(.bodyRegular)
                         .foregroundStyle(Color.yaBlack)
@@ -151,12 +151,12 @@ struct EditProfileView: View {
                             )
                         )
                         .padding(.top, 8)
-
+                    
                     Text(NSLocalizedString("Profile.website", comment: ""))
                         .font(.headline3)
                         .foregroundStyle(Color.yaBlack)
                         .padding(.top, 24)
-
+                    
                     TextField("", text: $editViewModel.website)
                         .keyboardType(.URL)
                         .textInputAutocapitalization(.never)
@@ -177,7 +177,7 @@ struct EditProfileView: View {
                 .padding(.horizontal, Constants.horizontalPadding)
             }
             .disabled(viewModel.isSaving)
-
+            
             Button {
                 Task {
                     let isSaved = await viewModel.updateProfile(
@@ -188,7 +188,7 @@ struct EditProfileView: View {
                         : editViewModel.avatarURL?.absoluteString ?? "",
                         website: editViewModel.website
                     )
-
+                    
                     if isSaved {
                         dismiss()
                     } else {
@@ -233,14 +233,14 @@ struct EditProfileView: View {
                 photoURL = editViewModel.avatarURL?.absoluteString ?? ""
                 isPhotoURLAlertPresented = true
             }
-
+            
             Button(
                 NSLocalizedString("Profile.deletePhoto", comment: ""),
                 role: .destructive
             ) {
                 editViewModel.isAvatarDeleted = true
             }
-
+            
             Button(
                 NSLocalizedString("Profile.cancel", comment: ""),
                 role: .cancel
@@ -257,12 +257,12 @@ struct EditProfileView: View {
             .keyboardType(.URL)
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
-
+            
             Button(
                 NSLocalizedString("Profile.cancel", comment: ""),
                 role: .cancel
             ) {}
-
+            
             Button(NSLocalizedString("Profile.save", comment: "")) {
                 if let url = URL(string: photoURL) {
                     editViewModel.avatarURL = url
@@ -278,7 +278,7 @@ struct EditProfileView: View {
                 NSLocalizedString("Profile.stay", comment: ""),
                 role: .cancel
             ) {}
-
+            
             Button(NSLocalizedString("Profile.exit", comment: "")) {
                 dismiss()
             }
@@ -288,9 +288,30 @@ struct EditProfileView: View {
             isPresented: $isSaveErrorAlertPresented
         ) {
             Button(
-                NSLocalizedString("Common.ok", comment: ""),
+                NSLocalizedString("Profile.cancel", comment: ""),
                 role: .cancel
             ) {}
+            
+            Button(NSLocalizedString("Error.repeat", comment: "")) {
+                isSaveErrorAlertPresented = false
+                
+                Task {
+                    let isSaved = await viewModel.updateProfile(
+                        name: editViewModel.name,
+                        description: editViewModel.description,
+                        avatar: editViewModel.isAvatarDeleted
+                        ? ""
+                        : editViewModel.avatarURL?.absoluteString ?? "",
+                        website: editViewModel.website
+                    )
+                    
+                    if isSaved {
+                        dismiss()
+                    } else {
+                        isSaveErrorAlertPresented = true
+                    }
+                }
+            }
         } message: {
             Text(NSLocalizedString("Profile.saveError", comment: ""))
         }
