@@ -18,6 +18,7 @@ struct MyNFTView: View {
     
     @State private var viewModel: MyNFTViewModel
     @State private var isSortDialogPresented = false
+    @State private var isLoadErrorAlertPresented = false
     
     init(viewModel: MyNFTViewModel) {
         _viewModel = State(initialValue: viewModel)
@@ -64,18 +65,33 @@ struct MyNFTView: View {
                     .scaleEffect(1.2)
             }
         }
+        
         .alert(
             NSLocalizedString("Error.title", comment: ""),
-            isPresented: .constant(viewModel.loadError != nil)
+            isPresented: $isLoadErrorAlertPresented
         ) {
-            Button(NSLocalizedString("Common.ok", comment: "")) {
+            Button(
+                NSLocalizedString("Profile.cancel", comment: ""),
+                role: .cancel
+            ) {
                 viewModel.loadError = nil
+            }
+            
+            Button(NSLocalizedString("Error.repeat", comment: "")) {
+                viewModel.loadError = nil
+                
+                Task {
+                    await viewModel.loadNFTs()
+                }
             }
         } message: {
             Text(NSLocalizedString("NFT.loadError", comment: ""))
         }
         .task {
             await viewModel.loadNFTs()
+        }
+        .onChange(of: viewModel.loadError != nil) { _, hasError in
+            isLoadErrorAlertPresented = hasError
         }
         .confirmationDialog(
             NSLocalizedString("NFT.sorting", comment: ""),
