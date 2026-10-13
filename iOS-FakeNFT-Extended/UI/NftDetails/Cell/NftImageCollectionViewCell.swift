@@ -39,7 +39,16 @@ final class NftImageCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     // MARK: - Functions
 
     func configure(with cellModel: NftDetailCellModel) {
-        imageView.kf.setImage(with: cellModel.url)
+        let url = cellModel.url
+        imageView.image = nil
+        
+        URLSession.shared.dataTask(with: url) { [weak self] data, _, _ in
+            guard let self else { return }
+            guard let data, let image = UIImage(data: data) else { return }
+            DispatchQueue.main.async {
+                self.imageView.image = image
+            }
+        }.resume()
     }
 }
 

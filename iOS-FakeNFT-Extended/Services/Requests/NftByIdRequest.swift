@@ -44,7 +44,7 @@ enum CartRequest: NetworkRequest {
     
     var contentType: String? {
         switch self {
-        case .updateOrder(let nftIds):
+        case .updateOrder:
             return "application/x-www-form-urlencoded"
         default:
             return nil
