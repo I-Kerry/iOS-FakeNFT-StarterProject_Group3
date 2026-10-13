@@ -1,10 +1,3 @@
-//
-//  CurrencyView.swift
-//  iOS-FakeNFT-Extended
-//
-//  Created by Kirill Maidanovich on 25.09.2026.
-//
-
 import SwiftUI
 
 struct CurrencyPaymentView: View {

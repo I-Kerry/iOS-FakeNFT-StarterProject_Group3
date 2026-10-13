@@ -1,10 +1,3 @@
-//
-//  DeleteConfirmationView.swift
-//  iOS-FakeNFT-Extended
-//
-//  Created by Kirill Maidanovich on 23.09.2026.
-//
-
 import SwiftUI
 
 struct DeleteConfirmationView: View {

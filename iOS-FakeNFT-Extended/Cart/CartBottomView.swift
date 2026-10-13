@@ -1,10 +1,3 @@
-//
-//  CartBottomView.swift
-//  iOS-FakeNFT-Extended
-//
-//  Created by Kirill Maidanovich on 21.09.2026.
-//
-
 import SwiftUI
 
 struct CartBottomView: View {

@@ -1,10 +1,3 @@
-//
-//  MockCurrencyService.swift
-//  iOS-FakeNFT-Extended
-//
-//  Created by Kirill Maidanovich on 26.09.2026.
-//
-
 import Foundation
 
 final class MockCurrencyService: CartService {
