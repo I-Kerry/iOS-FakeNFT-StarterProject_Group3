@@ -6,11 +6,26 @@ struct iOS_FakeNFT_ExtendedApp: App {
 		networkClient: DefaultNetworkClient(),
 		nftStorage: NftStorageImpl()
 	)
-	
-	var body: some Scene {
-		WindowGroup {
-			TabBarView()
-				.environment(servicesAssembly)
-		}
-	}
+    
+    @State private var showSplash = true
+    
+    var body: some Scene {
+        WindowGroup {
+            if showSplash {
+                SplashView()
+                    .onAppear {
+                        Task {
+                            try? await Task.sleep(for: .seconds(2))
+                            withAnimation(.easeInOut(duration: 1)) {
+                                showSplash = false
+                            }
+                        }
+                    }
+                
+            } else {
+                TabBarView()
+                    .environment(servicesAssembly)
+            }
+        }
+    }
 }
