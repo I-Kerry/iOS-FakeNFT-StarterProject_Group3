@@ -21,7 +21,7 @@ struct DeleteConfirmationView: View {
             
             Text(Constants.title)
                 .font(.caption2)
-                .foregroundStyle(.button)
+                .foregroundStyle(Color.yaBlack)
                 .padding(.top, Constants.smallPadding)
                 .multilineTextAlignment(.center)
             HStack(alignment: .center, spacing: Constants.spacing) {
@@ -29,16 +29,16 @@ struct DeleteConfirmationView: View {
                     Button(action: onDelete) {
                         Text(Constants.delete)
                         }
-                    .foregroundStyle(.destractive)
+                    .foregroundStyle(Color.yaRed)
                     
                     Button(action: onCancel) {
                         Text(Constants.cancel)
                         }
-                    .foregroundStyle(.textMain)
+                    .foregroundStyle(Color.white)
                 }
                 .font(.bodyRegular)
                 .frame(width: Constants.buttonWidth, height: Constants.buttonHeight)
-                .background(.button)
+                .background(Color.yaBlack)
                 .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
             }
             .padding(.top, Constants.bigPadding)

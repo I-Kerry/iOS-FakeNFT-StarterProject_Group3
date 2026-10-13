@@ -28,8 +28,7 @@ struct CatalogSortMenuView: View {
 	
 	var body: some View {
 		ZStack {
-			Color(.bgSortMenu)
-				.opacity(MenuConstants.backgroundOpacity)
+			Color.yaBlack				.opacity(MenuConstants.backgroundOpacity)
 				.ignoresSafeArea()
 				.onTapGesture {
 					withAnimation(.easeInOut(duration: MenuConstants.animationDuration)) {

@@ -7,7 +7,7 @@ struct RatingView: View {
         HStack(spacing: 2) {
             ForEach(1...5, id: \.self) { star in
                 Image(systemName: star <= rating ? Constants.starfilled : Constants.starEmptied)
-                    .foregroundStyle(star <= rating ? .starColored : .starUncolored)
+					.foregroundStyle(star <= rating ? Color.yaYellow : Color.yaLightGray)
                     .font(.system(size: 12))
             }
         }

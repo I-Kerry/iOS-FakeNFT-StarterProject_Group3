@@ -20,7 +20,7 @@ struct CartView: View {
                     if viewModel.nfts.isEmpty {
                         Text(Constants.emptyCartTitle)
                             .font(.bodyBold)
-                            .foregroundStyle(.button)
+							.foregroundStyle(Color.yaBlack)
                     } else {
                         List(viewModel.nfts) { nft in
                             CartItemView(nft: nft) {
@@ -75,9 +75,9 @@ struct CartView: View {
                         Button {
                             showSortSheet = true
                         } label: {
-                            Image(.contextMenu)
+                            Image("sort_icon")
                                 .renderingMode(.template)
-                                .foregroundStyle(.button)
+                                .foregroundStyle(Color.yaBlack)
                                 .frame(width: Constants.imageWidth, height: Constants.imageHeight)
                         }
                         .frame(width: Constants.imageFrameSize, height: Constants.imageFrameSize)

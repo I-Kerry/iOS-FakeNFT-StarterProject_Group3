@@ -12,7 +12,7 @@ struct PaymentSuccessView: View {
             Text(Constants.paymentSuccess)
                 .font(.headline3)
                 .multilineTextAlignment(.center)
-                .foregroundStyle(.button)
+                .foregroundStyle(Color.yaBlack)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .safeAreaInset(edge: .bottom) {

@@ -7,10 +7,10 @@ struct ReusableButton: View {
         Button(action: action) {
             Text(title)
                 .buttonStyle(.plain)
-                .foregroundStyle(.textMain)
+				.foregroundStyle(Color.white)
                 .font(.bodyBold)
                 .frame(width: Constants.width, height: Constants.height)
-                .background(Color.button)
+                .background(Color.yaBlack)
                 .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
         }
     }
