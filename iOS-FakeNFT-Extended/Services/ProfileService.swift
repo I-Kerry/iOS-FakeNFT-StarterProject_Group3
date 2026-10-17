@@ -1,0 +1,44 @@
+import Foundation
+
+protocol ProfileService: Sendable {
+    func loadProfile() async throws -> Profile
+    
+    func updateProfile(
+        name: String,
+        description: String,
+        avatar: String,
+        website: String,
+        likes: [String]
+    ) async throws -> Profile
+}
+
+actor ProfileServiceImpl: ProfileService {
+    private let networkClient: NetworkClient
+    
+    init(networkClient: NetworkClient) {
+        self.networkClient = networkClient
+    }
+    
+    func loadProfile() async throws -> Profile {
+        let request = ProfileRequest()
+        return try await networkClient.send(request: request)
+    }
+    
+    func updateProfile(
+        name: String,
+        description: String,
+        avatar: String,
+        website: String,
+        likes: [String]
+    ) async throws -> Profile {
+        let request = UpdateProfileRequest(
+            name: name,
+            description: description,
+            avatar: avatar,
+            website: website,
+            likes: likes
+        )
+        
+        return try await networkClient.send(request: request)
+    }
+}

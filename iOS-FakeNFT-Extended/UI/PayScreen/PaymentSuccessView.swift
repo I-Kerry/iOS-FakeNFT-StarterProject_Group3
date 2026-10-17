@@ -1,0 +1,36 @@
+import SwiftUI
+
+struct PaymentSuccessView: View {
+    var backToCart: () -> Void
+    
+    var body: some View {
+        
+        VStack(alignment: .center, spacing: Constants.spacing) {
+            Image(.paymentSuccess)
+                .resizable()
+                .frame(width: Constants.imageFrame, height: Constants.imageFrame)
+            Text(Constants.paymentSuccess)
+                .font(.headline3)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(Color.yaBlack)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .safeAreaInset(edge: .bottom) {
+            ReusableButton(title: Constants.backTitle) {
+                backToCart()
+            }
+        }
+    }
+}
+
+private enum Constants {
+    static let spacing: CGFloat = 20
+    static let imageFrame: CGFloat = 278
+    
+    static let paymentSuccess = String(localized: "Payment.success")
+    static let backTitle = String(localized: "Payment.backToCart")
+}
+
+#Preview {
+    PaymentSuccessView(backToCart: {})
+}

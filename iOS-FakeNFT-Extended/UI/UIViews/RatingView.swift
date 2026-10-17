@@ -1,0 +1,28 @@
+import SwiftUI
+
+struct RatingView: View {
+    let rating: Int
+    
+    var body: some View {
+        HStack(spacing: 2) {
+            ForEach(1...5, id: \.self) { star in
+                Image(systemName: star <= rating ? Constants.starfilled : Constants.starEmptied)
+					.foregroundStyle(star <= rating ? Color.yaYellow : Color.yaLightGray)
+                    .font(.system(size: 12))
+            }
+        }
+    }
+}
+
+private enum Constants {
+    static let starfilled = "star.fill"
+    static let starEmptied = "star"
+}
+
+#Preview {
+    ZStack {
+        Color.red
+        RatingView(rating: 4)
+    }
+    
+}

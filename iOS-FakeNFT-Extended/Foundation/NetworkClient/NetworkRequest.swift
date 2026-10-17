@@ -11,10 +11,15 @@ protocol NetworkRequest {
     var endpoint: URL? { get }
     var httpMethod: HttpMethod { get }
     var dto: Encodable? { get }
+    var body: Data? { get }
+    var contentType: String? { get }
+    var formParams: [String: String]? { get }
 }
 
-// default values
 extension NetworkRequest {
     var httpMethod: HttpMethod { .get }
     var dto: Encodable? { nil }
+    var body: Data? { nil }
+    var contentType: String? { nil }
+    var formParams: [String: String]? { nil }
 }

@@ -1,0 +1,34 @@
+import SwiftUI
+
+struct ReusableButton: View {
+    let title: String
+    var action: () -> Void = {}
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .buttonStyle(.plain)
+				.foregroundStyle(Color.white)
+                .font(.bodyBold)
+                .frame(width: Constants.width, height: Constants.height)
+                .background(Color.yaBlack)
+                .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius))
+        }
+    }
+}
+
+private enum Constants {
+    static let width: CGFloat = 343
+    static let height: CGFloat = 60
+    static let cornerRadius: CGFloat = 16
+}
+
+#Preview("light") {
+    ReusableButton(title: "Оплатить", action: {})
+        .disabled(true)
+        .preferredColorScheme(.light)
+}
+
+#Preview("Dark") {
+    ReusableButton(title: "Оплатить", action: {})
+        .preferredColorScheme(.dark)
+}
